@@ -1,0 +1,86 @@
+<PreferenceScreen
+  xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <PreferenceCategory
+    android:title="광고 요청"
+  >
+    <SwitchPreference
+      android:key="target"
+      android:title="테스트 서버"
+      android:defaultValue="true"
+    >
+
+    </SwitchPreference>
+
+  </PreferenceCategory>
+
+  <PreferenceCategory
+    android:title="컴패니언 설정">
+
+    <SwitchPreference
+      android:key="companion_size"
+      android:title="컴패니언 사이즈 자동"
+      android:defaultValue="true"
+    />
+
+    <EditTextPreference
+      android:key="companion_width"
+      android:title="컴패니언 넓이"
+      android:inputType="numberDecimal"
+      android:digits="0123456789"
+    />
+
+    <EditTextPreference
+      android:key="companion_height"
+      android:title="컴패니언 높이"
+      android:inputType="numberDecimal"
+      android:digits="0123456789"
+    />
+  </PreferenceCategory>
+
+  <PreferenceCategory
+    android:title="광고 설정">
+
+    <ListPreference
+      android:entries="@array/product_type"
+      android:entryValues="@array/product_type_values"
+      android:key="product_type"
+      android:title="광고 상품"
+      android:defaultValue="DILO_PLUS"
+    />
+
+    <ListPreference
+      android:entries="@array/fill_type"
+      android:entryValues="@array/fill_type_values"
+      android:key="fill_type"
+      android:title="광고 갯수"
+      android:defaultValue="MULTI"
+    />
+
+    <EditTextPreference
+      android:key="duration"
+      android:title="광고 길이 (초)"
+      android:inputType="numberDecimal"
+      android:digits="0123456789"
+      android:defaultValue="15"
+    />
+
+  </PreferenceCategory>
+
+  <PreferenceCategory
+    android:title="요청 키">
+
+    <EditTextPreference
+      android:key="package_name"
+      android:title="패키지 명"
+      android:defaultValue="com.queen.sampleapp"
+    />
+
+    <EditTextPreference
+      android:key="epi_code"
+      android:title="에피소드"
+      android:defaultValue="test_live"
+    />
+  </PreferenceCategory>
+
+</PreferenceScreen>

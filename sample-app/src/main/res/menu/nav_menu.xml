@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content">
+
+  <item
+    android:id="@+id/page_home"
+    android:enabled="true"
+    android:icon="@drawable/baseline_home_black_18dp"
+    android:title="홈"/>
+
+  <item
+    android:id="@+id/page_log"
+    android:enabled="true"
+    android:icon="@drawable/baseline_description_black_18dp"
+    android:title="로그"/>
+
+  <item
+    android:id="@+id/page_pref"
+    android:enabled="true"
+    android:icon="@drawable/baseline_settings_black_18dp"
+    android:title="설정"/>
+</menu>

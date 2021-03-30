@@ -1,0 +1,624 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="StickySelectionHighlights">
+    <option name="editorHighlights">
+      <map>
+        <entry key="$PROJECT_DIR$/.gitignore">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/README.md">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/build.gradle">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/build.gradle">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/build/generated/source/buildConfig/debug/kr/co/dilo/sdk/BuildConfig.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/proguard-rules.pro">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/AndroidManifest.xml">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/assets/view.html">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/java/kr/co/dilo/sdk/AdManager.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/java/kr/co/dilo/sdk/AdView.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/java/kr/co/dilo/sdk/DiloError.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/java/kr/co/dilo/sdk/DiloService.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/java/kr/co/dilo/sdk/DiloUtil.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/java/kr/co/dilo/sdk/RequestParam.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/java/kr/co/dilo/sdk/ad/Ad.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/java/kr/co/dilo/sdk/ad/AdInfo.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/java/kr/co/dilo/sdk/ad/AdManager.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/java/kr/co/dilo/sdk/ad/AdManagerListener.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/java/kr/co/dilo/sdk/ad/AdRequest.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/java/kr/co/dilo/sdk/ad/AdResponse.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/java/kr/co/dilo/sdk/ad/AdView.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/java/kr/co/dilo/sdk/ad/Companion.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/java/kr/co/dilo/sdk/ad/DiloService.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/java/kr/co/dilo/sdk/ad/DiloSetting.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/java/kr/co/dilo/sdk/ad/DiloUtil.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/java/kr/co/dilo/sdk/ad/Media.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/java/kr/co/dilo/sdk/ad/Progress.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/java/kr/co/dilo/sdk/ad/RequestParam.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/java/kr/co/dilo/sdk/ad/TrackingEvent.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/java/kr/co/dilo/sdk/listener/DiloListener.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/java/kr/co/dilo/sdk/listener/EventListener.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/java/kr/co/dilo/sdk/model/Ad.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/java/kr/co/dilo/sdk/model/AdInfo.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/java/kr/co/dilo/sdk/model/AdResponse.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/java/kr/co/dilo/sdk/model/TrackingEvent.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/java/kr/co/dilo/sdk/parser/VastParser.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/java/kr/co/dilo/sdk/service/AdManager.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/java/kr/co/dilo/sdk/service/DiloPlayer.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/java/kr/co/dilo/sdk/service/DiloService.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/java/kr/co/dilo/sdk/service/DiloUtil.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/java/kr/co/dilo/sdk/type/AdType.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/java/kr/co/dilo/sdk/type/AppType.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/java/kr/co/dilo/sdk/type/FillType.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/java/kr/co/dilo/sdk/type/ProductType.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/java/kr/co/dilo/sdk/type/ResponseType.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/java/kr/co/dilo/sdk/type/TrackingEventName.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/java/kr/co/dilo/sdk/util/BrowserUtil.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/java/kr/co/dilo/sdk/util/DiloConst.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/java/kr/co/dilo/sdk/util/DiloUtil.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/java/kr/co/dilo/sdk/util/HTMLTemplateUtil.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/java/kr/co/dilo/sdk/util/NotificationHelper.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/java/kr/co/dilo/sdk/util/NotificationUtil.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/java/kr/co/dilo/sdk/util/TimeUtil.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/res/layout/notification_player.xml">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/dilo-sdk/src/main/res/values/styles.xml">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/build.gradle">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/androidTest/java/kr/co/dilo/sample/app/ExampleInstrumentedTest.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/AndroidManifest.xml">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/java/com/example/andriod_test/ContentActivity.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/java/com/example/andriod_test/LogActivity.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/java/com/example/andriod_test/LogFregment.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/java/com/example/andriod_test/MainActivity.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/java/com/example/andriod_test/SettingDialog.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/java/com/example/andriod_test/SettingsFragment.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/java/com/example/andriod_test/ViewPager2Adapter.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/java/com/example/andriod_test/fragment/ContentFragment.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/java/com/example/andriod_test/fragment/ContentRecyclerViewAdapter.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/java/com/example/andriod_test/fragment/HomeFragment.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/java/com/example/andriod_test/fragment/LogFragment.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/java/com/example/andriod_test/fragment/OnBackPressedListener.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/java/com/example/andriod_test/fragment/SettingsFragment.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/java/com/example/andriod_test/fragment/dummy/DummyContent.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/java/com/example/andriod_test/fregment/ContentRecyclerViewAdapter.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/java/com/example/andriod_test/fregment/HomeFragment.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/java/com/example/andriod_test/fregment/LogFragment.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/java/com/example/andriod_test/fregment/LogFregment.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/java/com/example/andriod_test/fregment/LoggableFragment.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/java/com/example/andriod_test/fregment/SettingsFragment.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/java/com/example/andriod_test/fregment/dummy/DummyContent.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/java/com/example/andriod_test/model/DumpContent.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/java/com/example/andriod_test/recycler/model/Adapter.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/java/com/example/andriod_test/recycler/model/DumpContent.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/java/com/example/andriod_test/recycler/model/ViewHolder.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/java/com/example/andriod_test/util/LogListener.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/java/com/example/andriod_test/util/MessageEvent.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/java/kr/co/dilo/sample/app/ContentActivity.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/java/kr/co/dilo/sample/app/MainActivity.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/java/kr/co/dilo/sample/app/content/ContentRecyclerViewAdapter.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/java/kr/co/dilo/sample/app/fragment/ContentActivity.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/java/kr/co/dilo/sample/app/fragment/ContentFragment.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/java/kr/co/dilo/sample/app/fragment/ContentRecyclerViewAdapter.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/java/kr/co/dilo/sample/app/fragment/HomeFragment.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/java/kr/co/dilo/sample/app/fragment/LogFragment.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/java/kr/co/dilo/sample/app/fragment/SettingsFragment.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/java/kr/co/dilo/sample/app/fragment/dummy/DummyContent.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/java/kr/co/dilo/sample/app/util/DiloSampleAppUtil.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/res/drawable/close_button.xml">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/res/drawable/skip_button.xml">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/res/drawable/text_box.xml">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/res/layout/activity_content.xml">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/res/layout/activity_log.xml">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/res/layout/activity_main.xml">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/res/layout/activity_main1.xml">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/res/layout/content.xml">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/res/layout/dialog_setting.xml">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/res/layout/fragment_content.xml">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/res/layout/fragment_content_small.xml">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/res/layout/fragment_home.xml">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/res/layout/fragment_home_list.xml">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/res/layout/fragment_log.xml">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/res/layout/home_list_footer.xml">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/res/layout/nav_manu.xml">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/res/layout/nav_menu.xml">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/res/menu/nav_menu.xml">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/res/values-xxhdpi/dimens.xml">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/res/values-xxxhdpi/dimens.xml">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/res/values/arrays.xml">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/res/values/dimens.xml">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/res/values/styles.xml">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/res/xml/network_security_config.xml">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/res/xml/root_preferences.xml">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/sample-app/src/main/res/xml/settings_preferences.xml">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/settings.gradle">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
