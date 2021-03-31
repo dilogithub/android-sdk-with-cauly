@@ -373,18 +373,18 @@ class MyActivity extends AppCompatActivity {
 ### 광고 액션
 액션<br>(prefix:DiloUtil.ACTION_)|설명|전달<br>데이터 클래스|비고
 ---|---|:---:|---
-RELOAD_COMPANION|컴패니언 리로드 액션| | ※ 비고 : Companion 광고를 노출/숨김 처리 하는 것은<br>AdManager를 초기화 하고 광고를 요청한 뷰에서는 자동으로 처리되지만,<br>Task Kill 등으로 뷰가 사라졌을 경우에는<br>AdManager를 다시 초기화 후에 BroadcastReceiver에서<br>이 액션을 받아 리로드하여야합니다
-ON_SKIP_ENABLED|광고 스킵 가능 액션|
-ON_AD_SKIPPED|사용자의<br>광고 스킵 액션|
-ON_AD_COMPLETED|광고 재생 완료 액션|
-ON_ALL_AD_COMPLETED|모든 광고<br>재생 완료 액션|
-ON_AD_READY|광고 재생 준비<br>완료 액션| | ※ 비고 : 이 액션을 수신 시 AdManager의 start()메소드를 호출하여<br>광고를 시작하여야합니다
-ON_NO_FILL|요청한 조건에 맞는<br>광고 없음 액션|
-ON_AD_START|광고 재생 시작 액션|AdInfo| * [5. 데이터 클래스 명세 참고](#5-데이터-클래스-명세)
-ON_TIME_UPDATE|광고 진행 사항<br>업데이트 액션|Progress| * [5. 데이터 클래스 명세 참고](#5-데이터-클래스-명세)
-ON_PAUSE|광고 일시 중지 액션|
-ON_RESUME|광고 재개 액션|
-ON_ERROR|에러 발생 액션|DiloError| * [5. 데이터 클래스 명세 참고](#5-데이터-클래스-명세)
+RELOAD_COMPANION|컴패니언 리로드| | Companion이 있는 광고에서 Companion이 노출됨(또는 노출해야 함)<br><br><b>※ 비고 : Companion 광고를 노출/숨김 처리 하는 것은<br><code>AdManager</code>를 초기화 하고 광고를 요청한 뷰에서는<br>자동으로 처리되지만,<br>Task Kill 등으로 뷰가 완전히 사라졌을 경우에는<br><code>AdManager</code>를 다시 초기화 후에<br>BroadcastReceiver에서 이 액션을 받아 <code>AdManager</code>의<br><code>reloadCompanion(AdView, ViewGroup)</code>을 호출하여<br>리로드하여야합니다</b>
+ON_SKIP_ENABLED|광고 스킵 가능| |광고 스킵 가능한 시점 도달
+ON_AD_SKIPPED|광고 스킵| | 사용자가 버튼을 눌러 광고를 Skip 또는<br>매체사에서 <code>AdManager</code>의 <code>skip()</code> 메소드 호출
+ON_NO_FILL|광고 없음| |요청에 맞는 조건의 광고가 없음
+ON_AD_READY|광고 재생<br>준비 완료| | 광고가 로드되어 재생 준비가 완료됨<br><br><b>※ 비고 : 이 액션을 수신 시 <code>AdManager</code>의 <code>start()</code>메소드를 호출하여<br>광고를 시작하여야합니다</b>
+ON_AD_START|광고 재생 시작| [AdInfo](#i-class-adinfo)|광고 재생이 시작됨
+ON_TIME_UPDATE|광고 진행 사항<br>업데이트| [Progress](#ii-class-progress)| 광고 진행사항이 업데이트 됨<br><br><b>※ 비고 : 이 액션은 광고가 재생중일 때 200ms마다 호출됩니다</b>
+ON_AD_COMPLETED|광고 재생 완료| |하나의 광고가 재생 완료될 때마다 호출
+ON_ALL_AD_COMPLETED|모든 광고<br>재생 완료| |모든 광고가 재생 완료되면 한 번 호출
+ON_PAUSE|광고 일시 중지| |매체사에서 광고 재생 중 <code>AdManager</code>의 <code>playOrPause()</code> 호출<br>또는 사용자가 Notification에서 일시 중지 버튼 누름
+ON_RESUME|광고 재개| |매체사에서 광고 일시 중지 중 <code>AdManager</code>의 <code>playOrPause()</code> 호출<br>또는 사용자가 Notification에서 재개 버튼 누름
+ON_ERROR|에러 발생| [DiloError](#iii-class-diloerror)| 광고 요청/로드 또는 재생에 문제가 발생
 
 ### 광고 액션 수신 예제
 ```java
@@ -394,9 +394,9 @@ class MyActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        adManager = new AdManager(this);
         registerReceiver(diloActionReceiver, DiloUtil.DILO_INTENT_FILTER);
         
+        adManager = new AdManager(this);
         // 광고 요청 생략
     }
 
