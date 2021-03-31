@@ -373,12 +373,12 @@ class MyActivity extends AppCompatActivity {
 ### 광고 액션
 액션<br>(prefix:DiloUtil.ACTION_)|설명|전달<br>데이터 클래스|비고
 ---|---|:---:|---
-RELOAD_COMPANION|컴패니언 리로드 액션| | ※ 비고 : Companion 광고를 노출/숨김 처리 하는 것은<br>AdManager를 초기화 하고 광고를 요청한 뷰에서는 자동으로 되지만,<br>Task Kill 등으로 뷰가 사라졌을 경우에는<br>AdManager를 다시 초기화 후에 BroadcastReceiver에서<br>이 액션을 받아 리로드하여야합니다
+RELOAD_COMPANION|컴패니언 리로드 액션| | ※ 비고 : Companion 광고를 노출/숨김 처리 하는 것은<br>AdManager를 초기화 하고 광고를 요청한 뷰에서는 자동으로 처리되지만,<br>Task Kill 등으로 뷰가 사라졌을 경우에는<br>AdManager를 다시 초기화 후에 BroadcastReceiver에서<br>이 액션을 받아 리로드하여야합니다
 ON_SKIP_ENABLED|광고 스킵 가능 액션|
 ON_AD_SKIPPED|사용자의<br>광고 스킵 액션|
 ON_AD_COMPLETED|광고 재생 완료 액션|
 ON_ALL_AD_COMPLETED|모든 광고<br>재생 완료 액션|
-ON_AD_READY|광고 재생 준비<br>완료 액션| | ※ 비고 : 이 액션을 수신 시 AdManager의 start()메소드를 호출하여 광고를 시작하여야합니다
+ON_AD_READY|광고 재생 준비<br>완료 액션| | ※ 비고 : 이 액션을 수신 시 AdManager의 start()메소드를 호출하여<br>광고를 시작하여야합니다
 ON_NO_FILL|요청한 조건에 맞는<br>광고 없음 액션|
 ON_AD_START|광고 재생 시작 액션|AdInfo| * [5. 데이터 클래스 명세 참고](#5-데이터-클래스-명세)
 ON_TIME_UPDATE|광고 진행 사항<br>업데이트 액션|Progress| * [5. 데이터 클래스 명세 참고](#5-데이터-클래스-명세)
