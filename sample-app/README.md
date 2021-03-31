@@ -1,4 +1,4 @@
-# Dilo Android SDK
+# Dilo Android SDK 연동 가이드
 version 0.0.1
 
 * 본 문서의 내용은 Sample App을 기반으로 작성하였습니다. 해당 App의 코드를 함께 참고하시기를 권고합니다
@@ -41,7 +41,7 @@ version 0.0.1
 
 ## [1. 시작하기](#목차)
 ### [Dilo SDK 추가](#목차)
-* 최상위 level build.gradle에 maven repository 추가
+* 최상위 level <code>build.gradle</code>에 maven repository 추가
 ```
 allprojects {
     repositories {
@@ -60,9 +60,10 @@ allprojects {
     }
 }
 ```
-* App level build.gradle에 디펜던시 추가
+* App level <code>build.gradle</code>에 디펜던시 추가
 ```
 dependencies {    
+    ...
     implementation 'kr.co.dilo:dilo-sdk:0.0.1'
 }
 ```
@@ -75,15 +76,14 @@ dependencies {
         package="kr.co.dilo.sample.app"
 >
     ...
+    <!-- 필요 권한 설정 -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    
+    <!-- 네트워크 보안 설정 (targetSdkVersion 28 이상) -->
+    <!-- 광고 노출 및 클릭이 정상적으로 동작하기 위해서 cleartext 네트워크 설정 필요 -->
+    <application android:usesCleartextTraffic="true" />
 </manifest>
-```
-
-네트워크 보안 설정 (targetSdkVersion 28 이상)
-* 광고 노출 및 클릭이 정상적으로 동작하기 위해서 cleartext 네트워크 설정 필요
-```xml
-<application android:usesCleartextTraffic="true" />
 ```
 
 ## [2. 광고 설정](#목차)
@@ -95,7 +95,7 @@ dependencies {
 <!--
      eg) Companion을 보여줄 레이아웃을 'kr.co.dilo.sdk.AdView'로 추가
          Companion 부모 레이아웃의 크기를 1000px * 1000px로 설정
-         닫기버튼을 위하여 RelativeLayout 추가
+         닫기 버튼을 할당하기 위한 RelativeLayout 추가
 -->
 <FrameLayout
         android:layout_width="1000px"
@@ -120,6 +120,7 @@ dependencies {
     </RelativeLayout>
 </FrameLayout>
 ```
+
 ### [ii. 광고 Skip기능 제공을 위한 Button 할당 (옵션)](#목차)
 * App에서 광고 Skip기능을 제공할 경우 SKIP 버튼(Button)을 선언합니다.
 * Dilo SDK는 Skip 가능한 시점에만 해당 버튼을 Visible 처리합니다.
@@ -329,13 +330,13 @@ class MyActivity extends AppCompatActivity {
 
         // 30초를 채우는 n개의 audio(Companion 없는)광고 요청
         requestParamBuilder =
-            new RequestParam.Builder(this)
-                .productType(RequestParam.ProductType.DILO)     // Audio 광고
-                .fillType(RequestParam.FillType.MULTI)          // n개의 광고
-                .drs(30)                                        // 30초
-                .epiCode("test_live")                           // 앱코드 설정
-                .bundleId("com.queen.sampleapp")                // 패키지 설정
-                .iconResourceId(R.drawable.notification_icon);  // Notification 아이콘 설정
+                new RequestParam.Builder(this)
+                        .productType(RequestParam.ProductType.DILO)     // Audio 광고
+                        .fillType(RequestParam.FillType.MULTI)          // n개의 광고
+                        .drs(30)                                        // 30초
+                        .epiCode("test_live")                           // 앱코드 설정
+                        .bundleId("com.queen.sampleapp")                // 패키지 설정
+                        .iconResourceId(R.drawable.notification_icon);  // Notification 아이콘 설정
 
         adManager.loadAd(requestParamBuilder.build());
 
@@ -347,18 +348,18 @@ class MyActivity extends AppCompatActivity {
 
         // 랜덤 시간 1개의 광고를 요청
         requestParamBuilder =
-            new RequestParam.Builder(this)
-                .productType(RequestParam.ProductType.DILO_PLUS_ONLY) // Audio + Companion 광고
-                .fillType(RequestParam.FillType.SINGLE_ANY)           // 랜덤 1개 광고
-                .companionAdView(companionAdView)                     // Companion View 설정
-                .closeButton(companionCloseButton)                    // 닫기 버튼 설정
-                .skipButton(skipButton)                               // Skip 버튼 설정
-                .notificationContentIntent(notificationIntent)        // Notification Click PendingIntent 설정
-                .epiCode("test_live")                                 // 앱코드 설정
-                .bundleId("com.queen.sampleapp")                      // 패키지 설정
-                .drs(30)                                              // RequestParam.FillType.SINGLE_ANY 시 duration은 무시됩니다
-                .usePauseInNotification(usePauseInNotification)       // Notification 사용자 일시정지/재개 기능 설정
-                .iconResourceId(R.drawable.notification_icon);        // Notification 아이콘 설정
+                new RequestParam.Builder(this)
+                        .productType(RequestParam.ProductType.DILO_PLUS_ONLY) // Audio + Companion 광고
+                        .fillType(RequestParam.FillType.SINGLE_ANY)           // 랜덤 1개 광고
+                        .companionAdView(companionAdView)                     // Companion View 설정
+                        .closeButton(companionCloseButton)                    // 닫기 버튼 설정
+                        .skipButton(skipButton)                               // Skip 버튼 설정
+                        .drs(30)                                              // RequestParam.FillType.SINGLE_ANY 시 duration은 무시됩니다
+                        .epiCode("test_live")                                 // 앱코드 설정
+                        .bundleId("com.queen.sampleapp")                      // 패키지 설정
+                        .notificationContentIntent(notificationIntent)        // Notification Click PendingIntent 설정
+                        .usePauseInNotification(usePauseInNotification)       // Notification 사용자 일시정지/재개 기능 설정
+                        .iconResourceId(R.drawable.notification_icon);        // Notification 아이콘 설정
 
         adManager.loadAd(requestParamBuilder.build());
     }
@@ -366,20 +367,20 @@ class MyActivity extends AppCompatActivity {
 ```
 
 ## [4. 광고 액션 수신](#목차)
-* 광고에 대한 액션 수신은 <code>BroadcastReceiver</code>를 통해 가능합니다
-* 액션 목록은 다음과 같습니다
-* 아래의 모든 액션은 DiloUtil.DILO_INTENT_FILTER에 등록되어 있으니 registerReceiver시 IntentFilter로 등록 권고드립니다
+* Dilo SDK에서 보내는 광고에 대한 액션 수신은 <code>BroadcastReceiver</code>를 통해 가능합니다
+* 아래의 모든 액션은 <code>DiloUtil.DILO_INTENT_FILTER</code>에 등록되어 있으니 registerReceiver시 IntentFilter로 등록하거나 필요한 액션만 등록해서 사용하시면 됩니다
+* 액션 목록은 아래와 같습니다
 
 ### [광고 액션](#목차)
 액션<br>(prefix:DiloUtil.ACTION_)|설명|전달<br>데이터 클래스|비고
 ---|---|:---:|---
-RELOAD_COMPANION|컴패니언 리로드| | Companion이 있는 광고에서 Companion이 노출됨(또는 노출해야 함)<br><br><b>※ 비고 : Companion 광고를 노출/숨김 처리 하는 것은<br><code>AdManager</code>를 초기화 하고 광고를 요청한 뷰에서는<br>자동으로 처리되지만,<br>Task Kill 등으로 뷰가 완전히 사라졌을 경우에는<br><code>AdManager</code>를 다시 초기화 후에<br>BroadcastReceiver에서 이 액션을 받아 <code>AdManager</code>의<br><code>reloadCompanion(AdView, ViewGroup)</code>을 호출하여<br>리로드하여야합니다</b>
+RELOAD_COMPANION|컴패니언 리로드| | Companion이 있는 광고에서 Companion이 노출됨(또는 노출해야 함)<br><br>**※ 비고 : Companion 광고를 노출/숨김 처리 하는 것은<br><code>AdManager</code>를 초기화 하고 광고를 요청한 뷰에서는<br>자동으로 처리되지만,<br>Task Kill 등으로 뷰가 완전히 사라졌을 경우에는<br><code>AdManager</code>를 다시 초기화 후에<br>BroadcastReceiver에서 이 액션을 받아 <code>AdManager</code>의<br><code>reloadCompanion(AdView, ViewGroup)</code>을 호출하여<br>리로드하여야합니다**
 ON_SKIP_ENABLED|광고 스킵 가능| |광고 스킵 가능한 시점 도달
-ON_AD_SKIPPED|광고 스킵| | 사용자가 버튼을 눌러 광고를 Skip 또는<br>매체사에서 <code>AdManager</code>의 <code>skip()</code> 메소드 호출
+ON_AD_SKIPPED|광고 스킵| | 사용자가 Skip 버튼을 눌러 광고를 Skip 또는<br>매체사에서 <code>AdManager</code>의 <code>skip()</code> 메소드 호출
 ON_NO_FILL|광고 없음| |요청에 맞는 조건의 광고가 없음
-ON_AD_READY|광고 재생<br>준비 완료| | 광고가 로드되어 재생 준비가 완료됨<br><br><b>※ 비고 : 이 액션을 수신 시 <code>AdManager</code>의 <code>start()</code>메소드를 호출하여<br>광고를 시작하여야합니다</b>
+ON_AD_READY|광고 재생<br>준비 완료| | 광고가 로드되어 재생 준비가 완료됨<br><br>**※ 비고 : 이 액션을 수신 시 <code>AdManager</code>의 <code>start()</code>메소드를 호출하여<br>광고를 시작하여야합니다**
 ON_AD_START|광고 재생 시작| [AdInfo](#i-class-adinfo)|광고 재생이 시작됨
-ON_TIME_UPDATE|광고 진행 사항<br>업데이트| [Progress](#ii-class-progress)| 광고 진행사항이 업데이트 됨<br><br><b>※ 비고 : 이 액션은 광고가 재생중일 때 200ms마다 호출됩니다</b>
+ON_TIME_UPDATE|광고 진행 사항<br>업데이트| [Progress](#ii-class-progress)| 광고 진행사항이 업데이트 됨<br><br>**※ 비고 : 이 액션은 광고가 재생중일 때 200ms마다 호출됩니다**
 ON_AD_COMPLETED|광고 재생 완료| |하나의 광고가 재생 완료될 때마다 호출
 ON_ALL_AD_COMPLETED|모든 광고<br>재생 완료| |모든 광고가 재생 완료되면 한 번 호출
 ON_PAUSE|광고 일시 중지| |매체사에서 광고 재생 중 <code>AdManager</code>의 <code>playOrPause()</code> 호출<br>또는 사용자가 Notification에서 일시 중지 버튼 누름
@@ -395,7 +396,7 @@ class MyActivity extends AppCompatActivity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         registerReceiver(diloActionReceiver, DiloUtil.DILO_INTENT_FILTER);
-        
+
         adManager = new AdManager(this);
         // 광고 요청 생략
     }
@@ -735,18 +736,22 @@ class DiloUtil {
     // 데이터 가져오기위한 키 정의
     /**
      * 에피소드 코드
+     * String epiCode = intent.getStringExtra(DiloUtil.INTENT_KEY_EPI_CODE);
      */
     public static final String INTENT_KEY_EPI_CODE;
     /**
      * 광고 진행 정보
+     * Progress progress = (Progress) intent.getSerializableExtra(DiloUtil.INTENT_KEY_PROGRESS);
      */
     public static final String INTENT_KEY_PROGRESS;
     /**
      * 에러
+     * DiloError error = (DiloError) intent.getSerializableExtra(DiloUtil.INTENT_KEY_ERROR);
      */
     public static final String INTENT_KEY_ERROR;
     /**
      * 광고 정보
+     * AdInfo adInfo = (AdInfo) intent.getSerializableExtra(DiloUtil.INTENT_KEY_AD_INFO);
      */
     public static final String INTENT_KEY_AD_INFO;
 
@@ -761,11 +766,11 @@ class DiloUtil {
 
 ## [6. Dilo SDK 동작](#목차)
 ### [i. Companion에 대한 동작](#목차)
-1. Companion이 있는 광고 재생 시 자동으로 Companion View와 닫기 버튼을 <b>Visible</b> 처리합니다
-2. Companion이 있는 광고가 끝나고 Companion이 없는(Audio만 재생되는) 광고 재생 시 자동으로 Companion View와 닫기 버튼을 <b>Gone</b> 처리합니다
-3. 사용자가 Companion 클릭 시 Landing에 대한 처리가 <b>자동</b>으로 이루어집니다
-4. 사용자가 Companion 내의 opt-out 클릭 시에 대한 처리가 <b>자동</b>으로 이루어집니다
-5. Skip 가능한 광고의 경우 Skip 가능 시점에만 Skip 버튼을 <b>Visible</b> 처리합니다
+1. Companion이 있는 광고 재생 시 자동으로 Companion View와 닫기 버튼을 **Visible** 처리합니다
+2. Companion이 있는 광고가 끝나고 Companion이 없는(Audio만 재생되는) 광고 재생 시 자동으로 Companion View와 닫기 버튼을 **Gone** 처리합니다
+3. 사용자가 Companion 클릭 시 Landing에 대한 처리가 **자동**으로 이루어집니다
+4. 사용자가 Companion 내의 opt-out 클릭 시에 대한 처리가 **자동**으로 이루어집니다
+5. Skip 가능한 광고의 경우 Skip 가능 시점에만 Skip 버튼을 **Visible** 처리합니다
 
 ### [ii. Tracking에 대한 동작](#목차)
 * Dilo SDK에서는 아래와 같은 이벤트에 대하여 자동으로 Tracking합니다
@@ -798,12 +803,12 @@ GAIN|최초 포커스를 얻거나 다시 얻었을 때| |이전 볼륨으로 �
 > <code>RequestParam</code>의 <code>usePauseInNotification</code> (사용자 일시 중지 허용)값에 따른 Notification 동작에 대한 설명입니다
 
 <code>usePauseInNotification = true</code> 설정 시 (기본)
-* 사용자가 Notification에서 버튼을 눌러 Dilo광고를 <b>일시중지/재개 할 수</b> 있습니다
+* 사용자가 Notification에서 버튼을 눌러 Dilo광고를 **일시중지/재개 할 수** 있습니다
 
   ![noti1](image/noti1.jpg)
 
 <code>usePauseInNotification = false</code> 설정 시
-* Notification에 일시중지/재개 버튼이 <b>사라</b>집니다
+* Notification에 일시중지/재개 버튼이 **사라**집니다
 
   ![noti2](image/noti2.jpg)
 
