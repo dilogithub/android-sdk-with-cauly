@@ -8,28 +8,29 @@ version 0.0.1
    * Dilo SDK 추가
    * AndroidManifest.xml 속성 지정
 2. [광고 설정](#2-광고-설정)
-    1. Companion 광고를 위한 레이아웃 설정 (옵션)<br>
-    2. 광고 Skip기능 제공을 위한 Button 할당 (옵션)
+    1. [Companion 광고를 위한 레이아웃 설정 (옵션)](#i-companion-광고를-위한-레이아웃-설정-옵션)<br>
+    2. [광고 Skip기능 제공을 위한 Button 할당 (옵션)](#ii-광고-skip기능-제공을-위한-button-할당-옵션)
 3. [광고 요청](#3-광고-요청)
-    1. Class <code>AdManager</code>
-    2. Class <code>RequestParam</code>, <code>RequestParam.Builder</code>
-    3. 광고 요청 예시
+    1. [Class <code>AdManager</code>]
+    2. [Class <code>RequestParam</code>, <code>RequestParam.Builder</code>]
+    3. [광고 요청 예시](#iii-광고-요청-예시)
    
 4. [광고 액션 수신](#4-광고-액션-수신)
     1. 광고 액션
     2. 광고 액션 수신 예제
 5. [데이터 클래스 명세](#5-데이터-클래스-명세)
-    1. Class <code>AdInfo</code>
-    2. Class <code>Progress</code>
-    3. Class <code>DiloError</code>
-    4. Class <code>DiloUtil</code>
+    1. [Class <code>AdInfo</code>](#i-class-adinfo)
+    2. [Class <code>Progress</code>](#ii-class-progress)
+    3. [Class <code>DiloError</code>](#iii-class-diloerror)
+    4. [Class <code>DiloUtil</code>](#iv-class-diloutil)
 
 6. [딜로 SDK 동작](#6-Dilo-SDK-동작)
-   1. Companion에 대한 동작
-   2. Tracking에 대한 동작
-   3. Audio Focus에 대한 동작
-   4. Notification에 대한 동작
+   1. [Companion에 대한 동작](#i-companion에-대한-동작)
+   2. [Tracking에 대한 동작](#ii-tracking에-대한-동작)
+   3. [Audio Focus에 대한 동작](#iii-audio-focus에-대한-동작)
+   4. [Notification에 대한 동작](#iv-notification에-대한-동작)
 
+[문의](#문의)
 
 # 1. 시작하기
 Dilo SDK 추가
@@ -138,7 +139,8 @@ AndroidManifest.xml 속성 지정
 ```
 
 # 3. 광고 요청
-### i. 광고 요청 및 제어에 대한 전반적인 사항은 <code>AdManager</code> 클래스를 통해 수행합니다
+### i. Class <code>AdManager</code>
+* 광고 요청 및 제어에 대한 전반적인 사항은 <code>AdManager</code> 클래스를 통해 수행합니다
 
 ```java
 class AdManager {
@@ -189,7 +191,8 @@ class AdManager {
     public void loadAd(@NonNull RequestParam requestParam);
 }
 ```
-### ii. App은 원하는 광고 형태를 <code>RequestParam.Builder</code> 클래스를 통해 <code>RequestParam</code>에 설정한 후<br>
+### ii. Class <code>RequestParam</code>, <code>RequestParam.Builder</code>
+* App은 원하는 광고 형태를 <code>RequestParam.Builder</code> 클래스를 통해 <code>RequestParam</code>에 설정한 후<br>
 <code>AdManager</code>에 전달하여 광고를 요청합니다
 ```java
 class RequestParam {
