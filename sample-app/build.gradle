@@ -51,6 +51,6 @@ dependencies {
 
     implementation 'androidx.viewpager2:viewpager2:1.0.0'
 
-    implementation 'kr.co.dilo:dilo-sdk-test:0.0.0.1'
+    implementation 'kr.co.dilo:dilo-sdk-test:0.0.1'
 
 }

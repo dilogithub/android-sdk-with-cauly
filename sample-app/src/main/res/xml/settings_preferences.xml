@@ -1,6 +1,7 @@
 <PreferenceScreen
   xmlns:android="http://schemas.android.com/apk/res/android">
 
+  <!-- 배포 코드에서는 아래 광고 요청 PreferenceCategory 블럭 주석 -->
   <PreferenceCategory
     android:title="광고 요청"
   >
@@ -81,6 +82,27 @@
       android:title="에피소드"
       android:defaultValue="test_live"
     />
+  </PreferenceCategory>
+
+  <PreferenceCategory
+          android:title="기타"
+  >
+    <SwitchPreference
+            android:key="use_pause_in_notification"
+            android:title="노티 일시정지 사용"
+            android:defaultValue="true"
+    >
+
+    </SwitchPreference>
+
+  </PreferenceCategory>
+
+  <PreferenceCategory
+          android:title="정보"
+  >
+    <Preference
+            android:key="sdk_version"
+            android:title="SDK 버전" />
   </PreferenceCategory>
 
 </PreferenceScreen>

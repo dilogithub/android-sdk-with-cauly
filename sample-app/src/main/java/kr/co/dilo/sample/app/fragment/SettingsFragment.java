@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.preference.*;
 import kr.co.dilo.sample.app.R;
 import kr.co.dilo.sdk.DiloConst;
+import kr.co.dilo.sdk.DiloUtil;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
 
@@ -18,6 +19,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     EditTextPreference epiCode;
     SwitchPreference target;
     SwitchPreference companionSize;
+    SwitchPreference usePauseInNotification;
+    Preference sdkVersion;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -30,8 +33,16 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         duration = findPreference("duration");
         packageName = findPreference("package_name");
         epiCode = findPreference("epi_code");
+
         target = findPreference("target");
+//        target = null;
         companionSize = findPreference("companion_size");
+        usePauseInNotification = findPreference("use_pause_in_notification");
+        sdkVersion = findPreference("sdk_version");
+
+        if (sdkVersion != null) {
+            sdkVersion.setSummary(DiloUtil.getSDKVersion());
+        }
 
         prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
@@ -63,8 +74,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             epiCode.setSummary(prefs.getString("epi_code", "300"));
         }
 
-        target.setSummary(prefs.getBoolean("target", false)? DiloConst.AD_TEST_URL : DiloConst.AD_URL);
-        target.setTitle(prefs.getBoolean("target", false)? "테스트 서버":"운영 서버");
+        if (target != null) {
+            target.setSummary(prefs.getBoolean("target", false) ? DiloConst.AD_TEST_URL : DiloConst.AD_URL);
+            target.setTitle(prefs.getBoolean("target", false) ? "테스트 서버" : "운영 서버");
+        }
 
         boolean autoCompanionSize = prefs.getBoolean("companion_size", false);
         companionWidth.setEnabled(!autoCompanionSize);
@@ -77,6 +90,11 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     SharedPreferences.OnSharedPreferenceChangeListener prefListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            if(key.equals("target")) {
+                target.setSummary(prefs.getBoolean("target", false)? DiloConst.AD_TEST_URL : DiloConst.AD_URL);
+                target.setTitle(prefs.getBoolean("target", false)? "테스트 서버":"운영 서버");
+            }
+
             if(key.equals("companion_width")){
                 companionWidth.setSummary(prefs.getString("companion_width", "300"));
             }
@@ -103,11 +121,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
             if(key.equals("epi_code")){
                 epiCode.setSummary(prefs.getString("epi_code", "test_live"));
-            }
-
-            if(key.equals("target")) {
-                target.setSummary(prefs.getBoolean("target", false)? DiloConst.AD_TEST_URL : DiloConst.AD_URL);
-                target.setTitle(prefs.getBoolean("target", false)? "테스트 서버":"운영 서버");
             }
 
             if(key.equals("companion_size")) {

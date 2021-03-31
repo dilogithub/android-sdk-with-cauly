@@ -1,6 +1,5 @@
 # Dilo Android SDK
 
----
 * 최신 버전의 SDK 사용을 권장합니다.
 
 * 최신 버전의 Android Studio 사용을 권장합니다. Eclipse에 대한 기술 지원은 하지 않습니다.
@@ -9,7 +8,6 @@
 
 ## Release Note
 
----
 * 0.0.1 (2021/04/01)
 
 ## 문의
