@@ -30,6 +30,7 @@ version 0.0.1
     * [Tracking에 대한 동작](#ii-tracking에-대한-동작)
     * [Audio Focus에 대한 동작](#iii-audio-focus에-대한-동작)
     * [Notification에 대한 동작](#iv-notification에-대한-동작)
+    * [Audio 재생에 대한 동작](#v-audio-재생에-대한-동작)
 
 [문의](#문의)
 
@@ -812,5 +813,15 @@ GAIN|최초 포커스를 얻거나 다시 얻었을 때| |이전 볼륨으로 �
 
   ![noti2](image/noti2.jpg)
 
+### [v. Audio 재생에 대한 동작](#목차)
+> Dilo SDK에서는 광고 오디오 음원을 Service로 재생하여 App이 종료되어도 광고가 재생될 수 있도록 구현하였습니다
+> 
+> * Service는 광고가 모두 종료된 후 destroy됩니다
+> 
+> 하지만 아래와 같은 상황에서 Dilo SDK Service(광고 재생)가 Android 시스템에 의해 강제 종료될 수 있습니다
+> 1. App의 "배터리 사용 관리" 설정의 백그라운드에서 실행이 꺼져있음
+> ![background_off](image/background_off.jpg)
+> 2. App의 "배터리 사용 관리" 설정의 배터리 사용량 최적화가 켜져있음
+> ![battery_opt](image/battery_opt.jpg){: width="100px" height="100px"}
 ## [문의](#목차)
 > Dilo SDK 탑재 및 서비스 이용에 관한 문의는 [dilo@dilo.co.kr](mailto:dilo@dilo.co.kr)로 문의 주시기 바랍니다
