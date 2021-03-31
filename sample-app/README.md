@@ -5,19 +5,19 @@ version 0.0.1
 
 ## 목차
 1. [시작하기](#1-시작하기)
-   * Dilo SDK 추가
-   * AndroidManifest.xml 속성 지정
+   * [Dilo SDK 추가](#dilo-sdk-추가)
+   * [AndroidManifest.xml 속성 지정](#androidmanifest.xml-속성-지정)
 2. [광고 설정](#2-광고-설정)
     1. [Companion 광고를 위한 레이아웃 설정 (옵션)](#i-companion-광고를-위한-레이아웃-설정-옵션)<br>
     2. [광고 Skip기능 제공을 위한 Button 할당 (옵션)](#ii-광고-skip기능-제공을-위한-button-할당-옵션)
 3. [광고 요청](#3-광고-요청)
-    1. [Class <code>AdManager</code>]
-    2. [Class <code>RequestParam</code>, <code>RequestParam.Builder</code>]
+    1. [Class <code>AdManager</code>](#i-class-admanager)
+    2. [Class <code>RequestParam</code>, <code>RequestParam.Builder</code>](#ii-class-requestparam-requestparambuilder)
     3. [광고 요청 예시](#iii-광고-요청-예시)
    
 4. [광고 액션 수신](#4-광고-액션-수신)
-    1. 광고 액션
-    2. 광고 액션 수신 예제
+    1. [광고 액션](#광고-액션)
+    2. [광고 액션 수신 예제](#광고-액션-수신-예제)
 5. [데이터 클래스 명세](#5-데이터-클래스-명세)
     1. [Class <code>AdInfo</code>](#i-class-adinfo)
     2. [Class <code>Progress</code>](#ii-class-progress)
@@ -33,7 +33,7 @@ version 0.0.1
 [문의](#문의)
 
 # 1. 시작하기
-Dilo SDK 추가
+### Dilo SDK 추가
 * 최상위 level build.gradle에 maven repository 추가
 ```
 allprojects {
@@ -60,7 +60,7 @@ dependencies {
 }
 ```
 
-AndroidManifest.xml 속성 지정
+### AndroidManifest.xml 속성 지정
 * 필수 퍼미션 추가
 ```xml
 <manifest 
@@ -344,6 +344,7 @@ class MyActivity {
 * 액션 목록은 다음과 같습니다
 * 아래의 모든 액션은 DiloUtil.DILO_INTENT_FILTER에 등록되어 있으니 registerReceiver시 IntentFilter로 등록 권고드립니다
 
+#### 광고 액션
 액션<br>(prefix:DiloUtil.ACTION_)|설명|전달<br>데이터 클래스|데이터 가져오는 샘플 코드 (onReceive) / 비고
 ---|---|:---:|---
 RELOAD_COMPANION|컴패니언 리로드 액션| | ※ 비고 : Companion 광고를 노출/숨김 처리 하는 것은 AdManager를 초기화 하고 광고를 요청한 뷰에서는 자동으로 되지만,<br>Task Kill 등으로 뷰가 사라졌을 경우에는 AdManager를 다시 초기화 후에<br>BroadcastReceiver에서 이 액션을 받아 리로드하여야합니다
@@ -360,7 +361,7 @@ ON_RESUME|광고 재개 액션|
 ON_ERROR|에러 발생 액션|DiloError|(DiloError) intent.getSerializableExtra(DiloUtil.INTENT_KEY_ERROR);
 
 
-> 광고 액션 수신 예제
+#### 광고 액션 수신 예제
 ```java
 class MyActivity {
     
