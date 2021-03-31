@@ -5,20 +5,20 @@ version 0.0.1
 
 ## 목차
 1. [시작하기](#1-시작하기)
-* Dilo SDK 추가
-* AndroidManifest.xml 속성 지정
+   * Dilo SDK 추가
+   * AndroidManifest.xml 속성 지정
 
 2. [광고 설정](#2-광고-설정)
-
+   
     A. Companion 광고를 위한 레이아웃 설정 (옵션)
     
     B. 광고 Skip기능 제공을 위한 Button 할당 (옵션)
    
 3. [광고 요청](#3-광고-요청)
    
-    A. <code>AdManager</code> class
+    A. Class <code>AdManager</code>
    
-    B. <code>RequestParam</code>, <code>RequestParam.Builder</code> class
+    B. Class <code>RequestParam</code>, <code>RequestParam.Builder</code>
    
     C. 광고 요청 예시
    
@@ -38,7 +38,7 @@ version 0.0.1
    
     D. Class <code>DiloUtil</code>
 
-6. [딜로 SDK 동작](#6-딜로-SDK-동작)
+6. [딜로 SDK 동작](#6-Dilo-SDK-동작)
 
 
 # 1. 시작하기
@@ -225,7 +225,7 @@ class RequestParam {
         public Builder drs(@NonNull int duration);
 
         /**
-         * 광고 유형을 설정합니다
+         * 광고 상품 유형을 설정합니다
          */
         public Builder productType(@NonNull ProductType productType);
 
@@ -275,7 +275,10 @@ class RequestParam {
         public Builder notificationContentIntent(@Nullable PendingIntent intent);
     }
 
-    enum ProductType {
+   /**
+    * 광고 상품 유형
+    */
+   enum ProductType {
         /**
          * Audio 광고
          */
@@ -290,7 +293,10 @@ class RequestParam {
         DILO_PLUS_ONLY("DILO_PLUS_ONLY")
     }
 
-    enum FillType {
+   /**
+    * 광고 채우기 유형
+    */
+   enum FillType {
         /**
          * 1개의 광고 요청 타입
          *      ※ Duration 은 6, 10, 15 중 하나이어야 합니다.
@@ -343,10 +349,11 @@ class MyActivity {
 # 4. 광고 액션 수신
 * 광고에 대한 액션 수신은 <code>BroadcastReceiver</code>를 통해 가능합니다
 * 액션 목록은 다음과 같습니다
+* 아래의 모든 액션은 DiloUtil.DILO_INTENT_FILTER에 등록되어 있으니 registerReceiver시 IntentFilter로 등록 권고드립니다
 
 액션<br>(prefix:DiloUtil.ACTION_)|설명|전달<br>데이터 클래스|데이터 가져오는 샘플 코드 (onReceive) / 비고
 ---|---|:---:|---
-RELOAD_COMPANION|컴패니언 리로드 액션| | <font color="red">※ 비고 : Companion 광고를 노출/숨김 처리 하는 것은 AdManager를 초기화 하고 광고를 요청한 뷰에서는 자동으로 되지만,<br>Task Kill 등으로 뷰가 사라졌을 경우에는 AdManager를 다시 초기화 후에<br>BroadcastReceiver에서 이 액션을 받아 리로드하여야합니다</font>
+RELOAD_COMPANION|컴패니언 리로드 액션| | ※ 비고 : Companion 광고를 노출/숨김 처리 하는 것은 AdManager를 초기화 하고 광고를 요청한 뷰에서는 자동으로 되지만,<br>Task Kill 등으로 뷰가 사라졌을 경우에는 AdManager를 다시 초기화 후에<br>BroadcastReceiver에서 이 액션을 받아 리로드하여야합니다
 ON_SKIP_ENABLED|광고 스킵 가능 액션|
 ON_AD_SKIPPED|사용자의<br>광고 스킵 액션|
 ON_AD_COMPLETED|광고 재생 완료 액션|
@@ -359,14 +366,16 @@ ON_PAUSE|광고 일시 중지 액션|
 ON_RESUME|광고 재개 액션|
 ON_ERROR|에러 발생 액션|DiloError|(DiloError) intent.getSerializableExtra(DiloUtil.INTENT_KEY_ERROR);
 
-* 위의 모든 액션은 DiloUtil.DILO_INTENT_FILTER에 등록되어 있으니 registerReceiver시 IntentFilter로 등록하면 됩니다
 
 > 광고 액션 수신 예제
 ```java
 class MyActivity {
     
+    private AdManager adManager;
+    
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        adManager = new AdManager(this);
         registerReceiver(diloActionReceiver, DiloUtil.DILO_INTENT_FILTER);
     }
     
@@ -377,6 +386,7 @@ class MyActivity {
     }
 
     BroadcastReceiver diloActionReceiver = new BroadcastReceiver() {
+        
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent != null) {
@@ -481,14 +491,14 @@ class MyActivity {
 A. Class <code>AdInfo</code>
 > 광고 정보 클래스
 > 
-> <code>BroadcastReceiver</code>의 <code>onReceive</code>의 <code>intent.getAction()==DiloUtil.ACTION_ON_AD_START</code>(광고 시작됨) 에서 INTENT_KEY_AD_INFO Key로 전달<br>
+> <code>BroadcastReceiver</code>의 <code>onReceive</code>의 <code>intent.getAction()==DiloUtil.ACTION_ON_AD_START</code>(광고 시작됨) 에서 <code>DiloUtil.INTENT_KEY_AD_INFO</code> Key로 가져온 후 Cast<br>
 > 
 > ```java
 > switch(intent.getAction()) {
 >     case DiloUtil.ACTION_ON_AD_START:
 >         AdInfo adInfo = (AdInfo) intent.getSerializableExtra(DiloUtil.INTENT_KEY_AD_INFO);
->   ...
->   break;
+>         ...
+>         break;
 > }
 > ```
 > 
@@ -536,13 +546,13 @@ class AdInfo implements Serializable {
 B. Class <code>Progress</code>
 > 광고 진행 정보 클래스
 > 
-> <code>BroadcastReceiver</code>의 <code>onReceive</code>의 <code>intent.getAction()==DiloUtil.ACTION_ON_TIME_UPDATE</code>(광고 진행사항 업데이트) 에서 INTENT_KEY_PROGRESS Key로 전달
+> <code>BroadcastReceiver</code>의 <code>onReceive</code>의 <code>intent.getAction()==DiloUtil.ACTION_ON_TIME_UPDATE</code>(광고 진행사항 업데이트) 에서 <code>DiloUtil.INTENT_KEY_PROGRESS</code> Key로 가져온 후 Cast
 > ```java
 > switch(intent.getAction()) {
 >     case DiloUtil.ACTION_ON_TIME_UPDATE:
 >         Progress progress = (Progress) intent.getSerializableExtra(DiloUtil.INTENT_KEY_PROGRESS);
->   ...
->   break;
+>         ...
+>         break;
 > }
 > ```
 
@@ -573,13 +583,13 @@ class Progress implements Serializable {
 C. Class <code>DiloError</code>
 > 오류 정보 클래스
 >
-> <code>BroadcastReceiver</code>의 <code>onReceive</code>의 <code>intent.getAction()==DiloUtil.ACTION_ON_ERROR</code>(오류 발생) 에서 INTENT_KEY_ERROR Key로 전달<br>
+> <code>BroadcastReceiver</code>의 <code>onReceive</code>의 <code>intent.getAction()==DiloUtil.ACTION_ON_ERROR</code>(오류 발생) 에서 <code>DiloUtil.INTENT_KEY_ERROR</code> Key로 가져온 후 Cast<br>
 > ```java
 > switch(intent.getAction()) {
 >     case DiloUtil.ACTION_ON_ERROR:
 >         DiloError error = (DiloError) intent.getSerializableExtra(DiloUtil.INTENT_KEY_ERROR);
->   ...
->   break;
+>         ...
+>         break;
 > }
 > ```
 ```java
@@ -618,7 +628,7 @@ D. Class <code>DiloUtil</code>
 > 유틸성 변수/메소드 정의 클래스
 ```java
 class DiloUtil {
-
+    // 액션 정의
     /**
      * 컴패니언 리로드 액션
      */
@@ -672,7 +682,7 @@ class DiloUtil {
      */
     public static final IntentFilter DILO_INTENT_FILTER;
 
-    // 데이터 가져오기위한 키
+    // 데이터 가져오기위한 키 정의
     /**
      * 에피소드 코드
      */
@@ -693,6 +703,7 @@ class DiloUtil {
    /**
     * 딜로 SDK 버전을 가져오는 메소드
     * @return 딜로 SDK 버전
+    *  eg) "0.0.1"
     */
    public static String getSDKVersion();
 }
