@@ -94,7 +94,7 @@ dependencies {
 ```xml
 <!--
      eg) Companion을 보여줄 레이아웃을 'kr.co.dilo.sdk.AdView'로 추가
-         Companion 레이아웃의 크기를 1000px * 1000px로 설정
+         Companion 부모 레이아웃의 크기를 1000px * 1000px로 설정
          닫기버튼을 위하여 RelativeLayout 추가
 -->
 <FrameLayout
@@ -373,7 +373,7 @@ class MyActivity extends AppCompatActivity {
 ### 광고 액션
 액션<br>(prefix:DiloUtil.ACTION_)|설명|전달<br>데이터 클래스|비고
 ---|---|:---:|---
-RELOAD_COMPANION|컴패니언 리로드 액션| | ※ 비고 : Companion 광고를 노출/숨김 처리 하는 것은 AdManager를 초기화 하고 광고를 요청한 뷰에서는 자동으로 되지만, Task Kill 등으로 뷰가 사라졌을 경우에는 AdManager를 다시 초기화 후에 BroadcastReceiver에서 이 액션을 받아 리로드하여야합니다
+RELOAD_COMPANION|컴패니언 리로드 액션| | ※ 비고 : Companion 광고를 노출/숨김 처리 하는 것은<br>AdManager를 초기화 하고 광고를 요청한 뷰에서는 자동으로 되지만,<br>Task Kill 등으로 뷰가 사라졌을 경우에는<br>AdManager를 다시 초기화 후에 BroadcastReceiver에서<br>이 액션을 받아 리로드하여야합니다
 ON_SKIP_ENABLED|광고 스킵 가능 액션|
 ON_AD_SKIPPED|사용자의<br>광고 스킵 액션|
 ON_AD_COMPLETED|광고 재생 완료 액션|
