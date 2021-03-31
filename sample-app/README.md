@@ -80,7 +80,7 @@ dependencies {
     <!-- 필요 권한 설정 -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    
+
     <!-- 네트워크 보안 설정 (targetSdkVersion 28 이상) -->
     <!-- 광고 노출 및 클릭이 정상적으로 동작하기 위해서 cleartext 네트워크 설정 필요 -->
     <application android:usesCleartextTraffic="true" />
@@ -128,8 +128,10 @@ dependencies {
 > 닫기 버튼의 위치는 Companion 우측 상단에 구현하는 것을 권고합니다
 >
 > 참고로 Dilo의 opt-out 버튼은 항상 우측 하단에 위치합니다
-
-![img.png](image/companion.png)
+>
+> <p align="center">
+>     <img src="https://user-images.githubusercontent.com/73524723/113123506-9ed89d80-924f-11eb-8598-d933e0744d74.png">
+> </p>
 
 ```xml
 <!-- eg) Skip 버튼을 App 내 원하는 곳에 위치하여 레이아웃 설정 -->
@@ -806,22 +808,35 @@ GAIN|최초 포커스를 얻거나 다시 얻었을 때| |이전 볼륨으로 �
 <code>usePauseInNotification = true</code> 설정 시 (기본)
 * 사용자가 Notification에서 버튼을 눌러 Dilo광고를 **일시중지/재개 할 수** 있습니다
 
-  ![noti1](image/noti1.jpg)
+<p align="center">
+    <img src="https://user-images.githubusercontent.com/73524723/113123509-9ed89d80-924f-11eb-9023-db821a3684f8.jpg" width=30%>
+</p>
 
 <code>usePauseInNotification = false</code> 설정 시
 * Notification에 일시중지/재개 버튼이 **사라**집니다
 
-  ![noti2](image/noti2.jpg)
+<p align="center">
+   <img src="https://user-images.githubusercontent.com/73524723/113123510-9f713400-924f-11eb-91fb-4f04792167d7.jpg" width=30%>
+</p>
 
 ### [v. Audio 재생에 대한 동작](#목차)
 > Dilo SDK에서는 광고 오디오 음원을 Service로 재생하여 App이 종료되어도 광고가 재생될 수 있도록 구현하였습니다
-> 
+>
 > * Service는 광고가 모두 종료된 후 destroy됩니다
-> 
+>
 > 하지만 아래와 같은 상황에서 Dilo SDK Service(광고 재생)가 Android 시스템에 의해 강제 종료될 수 있습니다
 > 1. App의 "배터리 사용 관리" 설정의 백그라운드에서 실행이 꺼져있음
-> ![background_off](image/background_off.jpg)
+>
+> <p align="center">
+>     <img src="https://user-images.githubusercontent.com/73524723/113123501-9da77080-924f-11eb-8bcc-1e35f1ea15e6.jpg" width=30%>
+> </p>
 > 2. App의 "배터리 사용 관리" 설정의 배터리 사용량 최적화가 켜져있음
-> ![battery_opt](image/battery_opt.jpg){: width="100px" height="100px"}
+>
+>
+> <p align="center">
+>     <img src="https://user-images.githubusercontent.com/73524723/113123504-9e400700-924f-11eb-9ec6-84e0a52dbacf.jpg" width="30%">
+> </p>
+>
+
 ## [문의](#목차)
 > Dilo SDK 탑재 및 서비스 이용에 관한 문의는 [dilo@dilo.co.kr](mailto:dilo@dilo.co.kr)로 문의 주시기 바랍니다
