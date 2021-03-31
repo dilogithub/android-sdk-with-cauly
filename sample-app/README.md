@@ -1,20 +1,23 @@
 # Dilo Android SDK 연동 가이드
+
 version 0.0.1
 
 * 본 문서의 내용은 Sample App을 기반으로 작성하였습니다. 해당 App의 코드를 함께 참고하시기를 권고합니다
 
 ## 목차
+
 * [개정 이력](#개정-이력)
+
 1. [시작하기](#1-시작하기)
     * [Dilo SDK 추가](#dilo-sdk-추가)
     * [AndroidManifest.xml 속성 지정](#androidmanifestxml-속성-지정)
 2. [광고 설정](#2-광고-설정)
     * [Companion 광고를 위한 레이아웃 설정 (옵션)](#i-companion-광고를-위한-레이아웃-설정-옵션)<br>
     * [광고 Skip기능 제공을 위한 Button 할당 (옵션)](#ii-광고-skip기능-제공을-위한-button-할당-옵션)
+    * [Class <code>RequestParam</code>](#iii-class-requestparam)
 3. [광고 요청](#3-광고-요청)
     * [Class <code>AdManager</code>](#i-class-admanager)
-    * [Class <code>RequestParam</code>](#ii-class-requestparam)
-    * [광고 요청 예시](#iii-광고-요청-예시)
+    * [광고 요청 예시](#ii-광고-요청-예시)
 
 4. [광고 액션 수신](#4-광고-액션-수신)
     * [광고 액션](#광고-액션)
@@ -31,18 +34,20 @@ version 0.0.1
     * [Audio Focus에 대한 동작](#iii-audio-focus에-대한-동작)
     * [Notification에 대한 동작](#iv-notification에-대한-동작)
     * [Audio 재생에 대한 동작](#v-audio-재생에-대한-동작)
-
-[문의](#문의)
-
+   
+---
 ## [개정 이력](#목차)
+
 변경일|버전|수정 내용|작성자
 :---:|---|---|:---:
 2021/04/01|0.0.1|최초 작성|백재현
 
-
 ## [1. 시작하기](#목차)
+
 ### [Dilo SDK 추가](#목차)
+
 * 최상위 level <code>build.gradle</code>에 maven repository 추가
+
 ```
 allprojects {
     repositories {
@@ -61,7 +66,9 @@ allprojects {
     }
 }
 ```
+
 * App level <code>build.gradle</code>에 디펜던시 추가
+
 ```
 dependencies {    
     ...
@@ -70,25 +77,30 @@ dependencies {
 ```
 
 ### [AndroidManifest.xml 속성 지정](#목차)
+
 * 필수 퍼미션 추가
+
 ```xml
+
 <manifest
         xmlns:android="http://schemas.android.com/apk/res/android"
         package="kr.co.dilo.sample.app"
 >
     ...
     <!-- 필요 권한 설정 -->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <!-- 네트워크 보안 설정 (targetSdkVersion 28 이상) -->
     <!-- 광고 노출 및 클릭이 정상적으로 동작하기 위해서 cleartext 네트워크 설정 필요 -->
-    <application android:usesCleartextTraffic="true" />
+    <application android:usesCleartextTraffic="true"/>
 </manifest>
 ```
 
 ## [2. 광고 설정](#목차)
+
 ### [i. Companion 광고를 위한 레이아웃 설정 (옵션)](#목차)
+
 * App에서 Companion(Image)을 포함하는 광고 노출을 원하는 경우 Companion이 노출될 레이아웃(kr.co.dilo.sdk.AdView)을 선언합니다.
 * Companion 닫기 버튼을 제공할 경우, 해당 레이아웃(ViewGroup)을 포함하여 할당합니다.
 
@@ -123,8 +135,10 @@ dependencies {
 ```
 
 ### [ii. 광고 Skip기능 제공을 위한 Button 할당 (옵션)](#목차)
+
 * App에서 광고 Skip기능을 제공할 경우 SKIP 버튼(Button)을 선언합니다.
 * Dilo SDK는 Skip 가능한 시점에만 해당 버튼을 Visible 처리합니다.
+
 > 닫기 버튼의 위치는 Companion 우측 상단에 구현하는 것을 권고합니다
 >
 > 참고로 Dilo의 opt-out 버튼은 항상 우측 하단에 위치합니다
@@ -149,69 +163,21 @@ dependencies {
 />
 ```
 
-## [3. 광고 요청](#목차)
-### [i. Class <code>AdManager</code>](#목차)
-* 광고 요청 및 제어에 대한 전반적인 사항은 <code>AdManager</code> 클래스를 통해 수행합니다
+### [iii. Class <code>RequestParam</code>](#목차)
 
-```java
-class AdManager {
-    /**
-     * AdManager를 초기화합니다 (Constructor)
-     * @param context 컨텍스트
-     */
-    public AdManager(@NonNull Context context);
-
-    /**
-     * 광고가 재생중인지 여부를 반환합니다
-     * @return 광고 재생 여부
-     */
-    public boolean isPlaying();
-
-    /**
-     * 광고를 시작합니다
-     */
-    public void start();
-
-    /**
-     * 광고를 일시중지 또는 재개합니다
-     */
-    public void playOrPause();
-
-    /**
-     * 광고를 Skip합니다
-     * ※ 광고가 Skip가능하지 않은 시점에 호출 시 무시됩니다
-     */
-    public void skip();
-
-    /**
-     * 광고를 종료하고 리소스를 해제합니다
-     */
-    public void release();
-
-    /**
-     * 컴패니언을 리로드합니다
-     * @param companionAdView Companion 뷰
-     * @param closeButton 닫기 버튼
-     */
-    public void reloadCompanion(@NonNull AdView companionAdView, @Nullable ViewGroup closeButton);
-
-    /**
-     * 광고를 요청합니다
-     * @param requestParam 요청 파라미터
-     */
-    public void loadAd(@NonNull RequestParam requestParam);
-}
-```
-### [ii. Class <code>RequestParam</code>](#목차)
 > 광고 요청에 필요한 클래스 및 열거 명세입니다<br>
 > Class <code>RequestParam</code>, <code>RequestParam.Builder</code> <br>
 > Enum <code>RequestParam.ProductType</code>, <code>RequestParam.FillType</code>
+
+> RequestParam.Builder를 통해 필요한 광고 요청을 세팅할 수 있습니다 
+
 ```java
 class RequestParam {
     static class Builder {
         ///////////////////////
         // 필수 사항
         ///////////////////////
+
         /**
          * 에피소드 코드를 설정합니다
          *      ※ 광고요청 전 DILO 시스템에 등록되어야 합니다
@@ -247,6 +213,7 @@ class RequestParam {
         ///////////////////////
         // 선택 사항
         ///////////////////////
+
         /**
          * Companion이 할당된 사이즈를 설정합니다
          * 설정하지 않으면 자동으로 계산된 사이즈가 들어갑니다
@@ -322,8 +289,67 @@ class RequestParam {
 }
 ```
 
-### [iii. 광고 요청 예시](#목차)
-* App에서 원하는 광고 형태를 <code>RequestParam.Builder</code> 클래스를 통해 <code>RequestParam</code>에 설정한 후 <code>AdManager</code>의 <code>loadAd()</code>에 전달하여 광고를 요청합니다
+## [3. 광고 요청](#목차)
+
+### [i. Class <code>AdManager</code>](#목차)
+
+* 광고 요청 및 제어에 대한 전반적인 사항은 <code>AdManager</code> 클래스를 통해 수행합니다
+
+```java
+class AdManager {
+    /**
+     * AdManager를 초기화합니다 (Constructor)
+     * @param context 컨텍스트
+     */
+    public AdManager(@NonNull Context context);
+
+    /**
+     * 광고가 재생중인지 여부를 반환합니다
+     * @return 광고 재생 여부
+     */
+    public boolean isPlaying();
+
+    /**
+     * 광고를 시작합니다
+     */
+    public void start();
+
+    /**
+     * 광고를 일시중지 또는 재개합니다
+     */
+    public void playOrPause();
+
+    /**
+     * 광고를 Skip합니다
+     * ※ 광고가 Skip가능하지 않은 시점에 호출 시 무시됩니다
+     */
+    public void skip();
+
+    /**
+     * 광고를 종료하고 리소스를 해제합니다
+     */
+    public void release();
+
+    /**
+     * 컴패니언을 리로드합니다
+     * @param companionAdView Companion 뷰
+     * @param closeButton 닫기 버튼
+     */
+    public void reloadCompanion(@NonNull AdView companionAdView, @Nullable ViewGroup closeButton);
+
+    /**
+     * 광고를 요청합니다
+     * @param requestParam 요청 파라미터
+     */
+    public void loadAd(@NonNull RequestParam requestParam);
+}
+```
+
+### [ii. 광고 요청 예시](#목차)
+
+* App에서 원하는 광고 형태를 <code>RequestParam.Builder</code> 클래스를 통해 <code>RequestParam</code>에 설정한 후 <code>AdManager</code>
+  의 <code>loadAd()</code>에 전달하여 광고를 요청합니다
+
 ```java
 class MyActivity extends AppCompatActivity {
 
@@ -370,20 +396,28 @@ class MyActivity extends AppCompatActivity {
 ```
 
 ## [4. 광고 액션 수신](#목차)
+
 * Dilo SDK에서 보내는 광고에 대한 액션 수신은 <code>BroadcastReceiver</code>를 통해 가능합니다
-* 아래의 모든 액션은 <code>DiloUtil.DILO_INTENT_FILTER</code>에 등록되어 있으니 registerReceiver시 IntentFilter로 등록하거나 필요한 액션만 등록해서 사용하시면 됩니다
+* 아래의 모든 액션은 <code>DiloUtil.DILO_INTENT_FILTER</code>에 등록되어 있으니 registerReceiver시 IntentFilter로 등록하거나 필요한 액션만 등록해서 사용하시면
+  됩니다
 * 액션 목록은 아래와 같습니다
 
 ### [광고 액션](#목차)
+
 액션<br>(prefix:DiloUtil.ACTION_)|설명|전달<br>데이터 클래스|비고
 ---|---|:---:|---
-RELOAD_COMPANION|컴패니언 리로드| | Companion이 있는 광고에서 Companion이 노출됨(또는 노출해야 함)<br><br>**※ 비고 : Companion 광고를 노출/숨김 처리 하는 것은<br><code>AdManager</code>를 초기화 하고 광고를 요청한 뷰에서는<br>자동으로 처리되지만,<br>Task Kill 등으로 뷰가 완전히 사라졌을 경우에는<br><code>AdManager</code>를 다시 초기화 후에<br>BroadcastReceiver에서 이 액션을 받아 <code>AdManager</code>의<br><code>reloadCompanion(AdView, ViewGroup)</code>을 호출하여<br>리로드하여야합니다**
+RELOAD_COMPANION|컴패니언 리로드| | Companion이 있는 광고에서 Companion이 노출됨(또는 노출해야 함)<br><br>**※ 비고 : Companion 광고를 노출/숨김 처리 하는
+것은<br><code>AdManager</code>를 초기화 하고 광고를 요청한 뷰에서는<br>자동으로 처리되지만,<br>Task Kill 등으로 뷰가 완전히 사라졌을 경우에는<br><code>
+AdManager</code>를 다시 초기화 후에<br>BroadcastReceiver에서 이 액션을 받아 <code>AdManager</code>의<br><code>reloadCompanion(AdView,
+ViewGroup)</code>을 호출하여<br>리로드하여야합니다**
 ON_SKIP_ENABLED|광고 스킵 가능| |광고 스킵 가능한 시점 도달
 ON_AD_SKIPPED|광고 스킵| | 사용자가 Skip 버튼을 눌러 광고를 Skip 또는<br>매체사에서 <code>AdManager</code>의 <code>skip()</code> 메소드 호출
 ON_NO_FILL|광고 없음| |요청에 맞는 조건의 광고가 없음
-ON_AD_READY|광고 재생<br>준비 완료| | 광고가 로드되어 재생 준비가 완료됨<br><br>**※ 비고 : 이 액션을 수신 시 <code>AdManager</code>의 <code>start()</code>메소드를 호출하여<br>광고를 시작하여야합니다**
+ON_AD_READY|광고 재생<br>준비 완료| | 광고가 로드되어 재생 준비가 완료됨<br><br>**※ 비고 : 이 액션을 수신 시 <code>AdManager</code>의 <code>
+start()</code>메소드를 호출하여<br>광고를 시작하여야합니다**
 ON_AD_START|광고 재생 시작| [AdInfo](#i-class-adinfo)|광고 재생이 시작됨
-ON_TIME_UPDATE|광고 진행 사항<br>업데이트| [Progress](#ii-class-progress)| 광고 진행사항이 업데이트 됨<br><br>**※ 비고 : 이 액션은 광고가 재생중일 때 200ms마다 호출됩니다**
+ON_TIME_UPDATE|광고 진행 사항<br>업데이트| [Progress](#ii-class-progress)| 광고 진행사항이 업데이트 됨<br><br>**※ 비고 : 이 액션은 광고가 재생중일 때
+200ms마다 호출됩니다**
 ON_AD_COMPLETED|광고 재생 완료| |하나의 광고가 재생 완료될 때마다 호출
 ON_ALL_AD_COMPLETED|모든 광고<br>재생 완료| |모든 광고가 재생 완료되면 한 번 호출
 ON_PAUSE|광고 일시 중지| |매체사에서 광고 재생 중 <code>AdManager</code>의 <code>playOrPause()</code> 호출<br>또는 사용자가 Notification에서 일시 중지 버튼 누름
@@ -391,6 +425,7 @@ ON_RESUME|광고 재개| |매체사에서 광고 일시 중지 중 <code>AdManag
 ON_ERROR|에러 발생| [DiloError](#iii-class-diloerror)| 광고 요청/로드 또는 재생에 문제가 발생
 
 ### [광고 액션 수신 예제](#목차)
+
 ```java
 class MyActivity extends AppCompatActivity {
 
@@ -513,7 +548,9 @@ class MyActivity extends AppCompatActivity {
 ```
 
 ## [5. 데이터 클래스 명세](#목차)
+
 ### [i. Class <code>AdInfo</code>](#목차)
+
 > 광고 정보 클래스
 >
 > <code>BroadcastReceiver</code>의 <code>onReceive</code>의 <code>intent.getAction()==DiloUtil.ACTION_ON_AD_START</code>(광고 시작됨) 에서<br>
@@ -576,6 +613,7 @@ class AdInfo implements Serializable {
 ```
 
 ### [ii. Class <code>Progress</code>](#목차)
+
 > 광고 진행 정보 클래스
 >
 > <code>BroadcastReceiver</code>의 <code>onReceive</code>의 <code>intent.getAction()==DiloUtil.ACTION_ON_TIME_UPDATE</code>(광고 진행사항 업데이트) 에서<br>
@@ -594,7 +632,6 @@ class AdInfo implements Serializable {
 >     }
 > }
 > ```
-
 
 ```java
 /**
@@ -619,7 +656,9 @@ class Progress implements Serializable {
     public double duration;
 }
 ```
+
 ### [iii. Class <code>DiloError</code>](#목차)
+
 > 오류 정보 클래스
 >
 > <code>BroadcastReceiver</code>의 <code>onReceive</code>의 <code>intent.getAction()==DiloUtil.ACTION_ON_ERROR</code>(오류 발생) 에서<br>
@@ -638,6 +677,7 @@ class Progress implements Serializable {
 >     }
 > }
 > ```
+
 ```java
 /**
  * 매체사에 전달할 오류 클래스
@@ -679,7 +719,9 @@ public class DiloError extends Exception {
 ```
 
 ### [iv. Class <code>DiloUtil</code>](#목차)
+
 > 유틸성 변수/메소드 정의 클래스
+
 ```java
 class DiloUtil {
     // 액션 정의
@@ -768,7 +810,9 @@ class DiloUtil {
 ```
 
 ## [6. Dilo SDK 동작](#목차)
+
 ### [i. Companion에 대한 동작](#목차)
+
 1. Companion이 있는 광고 재생 시 자동으로 Companion View와 닫기 버튼을 **Visible** 처리합니다
 2. Companion이 있는 광고가 끝나고 Companion이 없는(Audio만 재생되는) 광고 재생 시 자동으로 Companion View와 닫기 버튼을 **Gone** 처리합니다
 3. 사용자가 Companion 클릭 시 Landing에 대한 처리가 **자동**으로 이루어집니다
@@ -776,6 +820,7 @@ class DiloUtil {
 5. Skip 가능한 광고의 경우 Skip 가능 시점에만 Skip 버튼을 **Visible** 처리합니다
 
 ### [ii. Tracking에 대한 동작](#목차)
+
 * Dilo SDK에서는 아래와 같은 이벤트에 대하여 자동으로 Tracking합니다
 
 이벤트|설명
@@ -791,6 +836,7 @@ SKIP|광고를 Skip 했을 때
 ERROR|Error 가 발생했을 때
 
 ### [iii. Audio Focus에 대한 동작](#목차)
+
 * 광고 요청 시 Dilo SDK에서는 <code>AudioManager.AUDIOFOCUS_GAIN</code>으로 Audio Focus를 요청합니다
 * 광고 종료 또는 에러 발생 시 Audio Focus를 반환합니다
 * Audio Focus에 관하여 아래 표와 같이 동작합니다
@@ -803,9 +849,11 @@ LOSS_TRANSIENT_CAN_DUCK|볼륨 감소 요청이 있었을 때| |볼륨을 반으
 GAIN|최초 포커스를 얻거나 다시 얻었을 때| |이전 볼륨으로 재생합니다
 
 ### [iv. Notification에 대한 동작](#목차)
+
 > <code>RequestParam</code>의 <code>usePauseInNotification</code> (사용자 일시 중지 허용)값에 따른 Notification 동작에 대한 설명입니다
 
 <code>usePauseInNotification = true</code> 설정 시 (기본)
+
 * 사용자가 Notification에서 버튼을 눌러 Dilo광고를 **일시중지/재개 할 수** 있습니다
 
 <p align="center">
@@ -813,6 +861,7 @@ GAIN|최초 포커스를 얻거나 다시 얻었을 때| |이전 볼륨으로 �
 </p>
 
 <code>usePauseInNotification = false</code> 설정 시
+
 * Notification에 일시중지/재개 버튼이 **사라**집니다
 
 <p align="center">
@@ -820,12 +869,13 @@ GAIN|최초 포커스를 얻거나 다시 얻었을 때| |이전 볼륨으로 �
 </p>
 
 ### [v. Audio 재생에 대한 동작](#목차)
+
 > Dilo SDK에서는 광고 오디오 음원을 Service로 재생하여 App이 종료되어도 광고가 재생될 수 있도록 구현하였습니다
 >
 > * Service는 광고가 모두 종료된 후 destroy됩니다
 
 > 하지만 아래와 같은 상황에서 Dilo SDK Service(광고 재생)가 Android 시스템에 의해 강제 종료될 수 있습니다
-> 
+>
 > 1. App의 "배터리 사용 관리" 설정의 백그라운드에서 실행이 꺼져있음
 >
 > <p align="center">
@@ -841,4 +891,5 @@ GAIN|최초 포커스를 얻거나 다시 얻었을 때| |이전 볼륨으로 �
 >
 
 ## [문의](#목차)
+
 > Dilo SDK 탑재 및 서비스 이용에 관한 문의는 [dilo@dilo.co.kr](mailto:dilo@dilo.co.kr)로 문의 주시기 바랍니다
