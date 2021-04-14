@@ -1,6 +1,6 @@
 # Dilo Android SDK 연동 가이드
 
-version 0.0.1
+version 0.5
 
 * 본 문서의 내용은 Sample App을 기반으로 작성하였습니다. 해당 App의 코드를 함께 참고하시기를 권고합니다
 
@@ -40,7 +40,7 @@ version 0.0.1
 
 변경일|버전|수정 내용|작성자
 :---:|---|---|:---:
-2021/04/01|0.0.1|최초 작성|백재현
+2021/04/01|0.5|최초 작성|백재현
 
 ## [1. 시작하기](#목차)
 
@@ -72,7 +72,7 @@ allprojects {
 ```
 dependencies {    
     ...
-    implementation 'kr.co.dilo:dilo-sdk:0.0.1'
+    implementation 'kr.co.dilo:dilo-sdk:0.5'
 }
 ```
 
@@ -820,7 +820,7 @@ class DiloUtil {
     /**
      * 딜로 SDK 버전을 가져오는 메소드
      * @return 딜로 SDK 버전
-     *  eg) "0.0.1"
+     *  eg) "0.5"
      */
     public static String getSDKVersion();
 }

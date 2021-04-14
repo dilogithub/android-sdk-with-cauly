@@ -1,7 +1,10 @@
 package kr.co.dilo.sample.app;
 
 import android.app.PendingIntent;
-import android.content.*;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
@@ -128,6 +131,9 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
             public void onClick(View v) {
                 if (adManager != null) {
                     adManager.release();
+                    adWrapper.setVisibility(View.INVISIBLE);
+                    adInfoWrapper.setVisibility(View.INVISIBLE);
+                    playContent();
                 }
             }
         });
@@ -184,6 +190,9 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
                 public void onPrepared(MediaPlayer mp) {
 
                     int duration = mediaPlayer.getDuration();
+                    if (timer != null) {
+                        timer.cancel();
+                    }
                     timer = new CountDownTimer(duration, 1000) {
                         @Override
                         public void onTick(long millisUntilFinished) {
@@ -669,9 +678,6 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
 
                         case DiloUtil.ACTION_ON_SVC_DESTROYED:
                             log("딜로 SDK 서비스 종료");
-                            adWrapper.setVisibility(View.INVISIBLE);
-                            adInfoWrapper.setVisibility(View.INVISIBLE);
-                            playContent();
                             break;
                     }
                 }
