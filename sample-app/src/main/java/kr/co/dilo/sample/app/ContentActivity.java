@@ -14,17 +14,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
-import kr.co.dilo.sample.app.fragment.LogFragment;
 import kr.co.dilo.sample.app.content.DummyContent;
+import kr.co.dilo.sample.app.fragment.LogFragment;
 import kr.co.dilo.sample.app.util.DiloSampleAppUtil;
-import kr.co.dilo.sdk.model.Progress;
-import kr.co.dilo.sdk.RequestParam;
-import kr.co.dilo.sdk.AdManager;
-import kr.co.dilo.sdk.AdView;
-import kr.co.dilo.sdk.DiloError;
+import kr.co.dilo.sdk.*;
 import kr.co.dilo.sdk.model.AdInfo;
-import kr.co.dilo.sdk.DiloUtil;
+import kr.co.dilo.sdk.model.Progress;
 
+/**
+ * 광고와 컨텐츠(샘플 영상)을 보여주는 액티비티
+ */
 public class ContentActivity extends AppCompatActivity implements SurfaceHolder.Callback {
 
     // Content
@@ -129,9 +128,6 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
             public void onClick(View v) {
                 if (adManager != null) {
                     adManager.release();
-                    adWrapper.setVisibility(View.INVISIBLE);
-                    adInfoWrapper.setVisibility(View.INVISIBLE);
-                    playContent();
                 }
             }
         });
@@ -158,7 +154,8 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
         Log.d(DiloSampleAppUtil.LOG_TAG, "ContentActivity.onDestroy()");
         try {
             unregisterReceiver(diloActionReceiver);
-        } catch (IllegalArgumentException e) {}
+        } catch (IllegalArgumentException e) {
+        }
         super.onDestroy();
     }
 
@@ -346,7 +343,9 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
                         .productType(productType)
                         .fillType(fillType)
                         .usePauseInNotification(usePauseInNotification)
-                        .iconResourceId(R.drawable.notification_icon);
+                        .iconResourceId(R.drawable.notification_icon)
+                        .notificationContentTitle(pref.getString("notification_title", ""))
+                        .notificationContentText(pref.getString("notification_text", ""));
 
         if (!pref.getBoolean("companion_size", false)) {
             requestParamBuilder.companionSize(
@@ -473,6 +472,9 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
         super.onResume();
     }
 
+    /**
+     * 딜로 SDK로부터 액션을 받는 BroadcastReceiver
+     */
     BroadcastReceiver diloActionReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -481,6 +483,7 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
                 String epiCode = intent.getStringExtra(DiloUtil.INTENT_KEY_EPI_CODE);
                 if (action != null) {
                     switch (action) {
+                        // 컴패니언 리로드 액션
                         case DiloUtil.ACTION_RELOAD_COMPANION:
                             if (adManager != null) {
                                 adWrapper.setVisibility(View.VISIBLE);
@@ -488,6 +491,7 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
                             }
                             break;
 
+                        // 광고 준비 액션
                         case DiloUtil.ACTION_ON_AD_READY:
                             log("광고 준비 완료");
 
@@ -497,7 +501,8 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
                                 log("컨텐츠 일시 중지");
                                 try {
                                     mediaPlayer.pause();
-                                } catch (IllegalStateException e) {}
+                                } catch (IllegalStateException e) {
+                                }
                             }
 
                             contentWrapper.setVisibility(View.INVISIBLE);
@@ -512,6 +517,7 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
                             log("광고 재생");
                             break;
 
+                        // 광고 플레이 시작 액션
                         case DiloUtil.ACTION_ON_AD_START:
                             skipOffset = 0;
                             AdInfo adInfo = (AdInfo) intent.getSerializableExtra(DiloUtil.INTENT_KEY_AD_INFO);
@@ -533,7 +539,7 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
                             log(String.format("타입     : %s", adInfo.type));
                             log(String.format("광고주   : %s", adInfo.advertiserName));
                             log(String.format("광고명   : %s", adInfo.title));
-                            log(String.format("길이     : %s", adInfo.duration));
+                            log(String.format("길이     : %d초", adInfo.duration));
                             log(String.format("광고 수  : %d/%d", adInfo.currentOffset, adInfo.totalCount));
                             log(String.format("컴패니언 : %s", adInfo.hasCompanion ? "있음" : "없음"));
                             log(String.format("스킵 %s", adInfo.skipOffset != 0 ? "가능 " + DiloSampleAppUtil.secondsToTimeString(adInfo.skipOffset) : "불가능"));
@@ -547,9 +553,13 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
                                 skipButton.setVisibility(View.VISIBLE);
                             }
                             break;
+
+                        // 광고 재생 완료 액션 (각각의 광고 재생 완료마다 호출)
                         case DiloUtil.ACTION_ON_AD_COMPLETED:
                             log("재생이 완료되었습니다");
                             break;
+
+                        // 모든 광고 재생 완료 액션 (가장 마지막 광고 재생 완료 시 한 번 호출)
                         case DiloUtil.ACTION_ON_ALL_AD_COMPLETED:
                             log("모든 광고 재생이 완료되었습니다");
                             // 컴패니언 있는 광고면 다시 띄워 닫기 버튼 누르면 컨텐츠 재생
@@ -573,18 +583,26 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
                                 playContent();
                             }
                             break;
+
+                        // 광고 일시 중지 액션
                         case DiloUtil.ACTION_ON_PAUSE:
                             log("일시중지");
                             break;
+
+                        // 광고 재개 액션
                         case DiloUtil.ACTION_ON_RESUME:
                             log("재개");
                             break;
+
+                        // 요청한 조건에 맞는 광고 없음 액션
                         case DiloUtil.ACTION_ON_NO_FILL:
                             log("광고가 없습니다 (No Fill)");
                             adWrapper.setVisibility(View.INVISIBLE);
                             adInfoWrapper.setVisibility(View.INVISIBLE);
                             playContent();
                             break;
+
+                        // 스킵 가능 시점 도달 액션
                         case DiloUtil.ACTION_ON_SKIP_ENABLED:
                             log("스킵 가능 시점 도달");
                             if (companionAdView.getVisibility() == View.VISIBLE) {
@@ -592,12 +610,14 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
                             }
                             break;
 
+                        // 에러 발생 액션
                         case DiloUtil.ACTION_ON_ERROR:
                             DiloError error = (DiloError) intent.getSerializableExtra(DiloUtil.INTENT_KEY_ERROR);
                             log(String.format("광고 요청 중 에러가 발생하였습니다\n\t타입: %s, 에러: %s, 상세: %s", error.type, error.error, error.detail));
                             playContent();
                             break;
 
+                        // 광고 진행 사항 업데이트 액션
                         case DiloUtil.ACTION_ON_TIME_UPDATE:
                             Progress progress = (Progress) intent.getSerializableExtra(DiloUtil.INTENT_KEY_PROGRESS);
 
@@ -641,8 +661,17 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
                                     .putExtra("adInfo", String.format("%d/%d", progress.current, progress.total));
                             sendBroadcast(i);
                             break;
+
+                        // 사용자 광고 스킵 액션
                         case DiloUtil.ACTION_ON_AD_SKIPPED:
                             log("사용자가 광고를 건너뛰었습니다");
+                            break;
+
+                        case DiloUtil.ACTION_ON_SVC_DESTROYED:
+                            log("딜로 SDK 서비스 종료");
+                            adWrapper.setVisibility(View.INVISIBLE);
+                            adInfoWrapper.setVisibility(View.INVISIBLE);
+                            playContent();
                             break;
                     }
                 }

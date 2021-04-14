@@ -1,3 +1,2 @@
-include ':dilo-sdk'
 include ':sample-app'
 rootProject.name = "Dilo-Android-SDK"

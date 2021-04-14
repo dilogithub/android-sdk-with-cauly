@@ -20,6 +20,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     SwitchPreference target;
     SwitchPreference companionSize;
     SwitchPreference usePauseInNotification;
+    EditTextPreference notificationTitle;
+    EditTextPreference notificationText;
     Preference sdkVersion;
 
     @Override
@@ -33,11 +35,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         duration = findPreference("duration");
         packageName = findPreference("package_name");
         epiCode = findPreference("epi_code");
-
+        // TODO : 배포 코드에는 아래 target 변수 주석 후 아래 target = null; 코드 추가
         target = findPreference("target");
-//        target = null;
         companionSize = findPreference("companion_size");
         usePauseInNotification = findPreference("use_pause_in_notification");
+        notificationTitle = findPreference("notification_title");
+        notificationText = findPreference("notification_text");
         sdkVersion = findPreference("sdk_version");
 
         if (sdkVersion != null) {
@@ -72,6 +75,14 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         if(!prefs.getString("epi_code", "").equals("")){
             epiCode.setSummary(prefs.getString("epi_code", "300"));
+        }
+
+        if(!prefs.getString("notification_title", "").equals("")) {
+            notificationTitle.setSummary(prefs.getString("notification_title", getString(R.string.app_name)));
+        }
+
+        if(!prefs.getString("notification_text", "").equals("")) {
+            notificationText.setSummary(prefs.getString("notification_text", getString(R.string.app_name) + "후원하는 광고 재생 중"));
         }
 
         if (target != null) {
@@ -128,6 +139,14 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 companionWidth.setEnabled(!autoCompanionSize);
                 companionHeight.setEnabled(!autoCompanionSize);
                 companionSize.setSummary(autoCompanionSize? "자동":"수동 설정");
+            }
+
+            if(key.equals("notification_title")) {
+                notificationTitle.setSummary(prefs.getString("notification_title", getString(R.string.app_name)));
+            }
+
+            if(key.equals("notification_text")) {
+                notificationText.setSummary(prefs.getString("notification_text", getString(R.string.app_name) + "후원하는 광고 재생 중"));
             }
 
         }
