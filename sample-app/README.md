@@ -1,7 +1,5 @@
 # Dilo Android SDK 연동 가이드
 
-version 0.5
-
 * 본 문서의 내용은 Sample App을 기반으로 작성하였습니다. 해당 App의 코드를 함께 참고하시기를 권고합니다
 
 ## 목차
