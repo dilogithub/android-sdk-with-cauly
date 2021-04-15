@@ -12,7 +12,7 @@ version 0.5
     * [Dilo SDK 추가](#dilo-sdk-추가)
     * [AndroidManifest.xml 속성 지정](#androidmanifestxml-속성-지정)
 2. [광고 설정](#2-광고-설정)
-    * [Companion 광고를 위한 레이아웃 설정 (옵션)](#i-companion-광고를-위한-레이아웃-설정-옵션)<br>
+    * [Companion 광고를 위한 레이아웃 설정 (옵션)](#i-companion-광고를-위한-레이아웃-설정-옵션)
     * [광고 Skip기능 제공을 위한 Button 할당 (옵션)](#ii-광고-skip기능-제공을-위한-button-할당-옵션)
     * [Class <code>RequestParam</code>](#iii-class-requestparam)
 3. [광고 요청](#3-광고-요청)
@@ -41,6 +41,7 @@ version 0.5
 변경일|버전|수정 내용|작성자
 :---:|---|---|:---:
 2021/04/01|0.5|최초 작성|백재현
+2021/04/15|0.5.1|Skip 버튼 null 설정 시 오류 처리|백재현
 
 ## [1. 시작하기](#목차)
 
@@ -72,7 +73,7 @@ allprojects {
 ```
 dependencies {    
     ...
-    implementation 'kr.co.dilo:dilo-sdk:0.5'
+    implementation 'kr.co.dilo:dilo-sdk:0.5.1'
 }
 ```
 
@@ -375,7 +376,7 @@ class MyActivity extends AppCompatActivity {
                 .productType(RequestParam.ProductType.DILO)     // Audio 광고
                 .fillType(RequestParam.FillType.MULTI)          // n개의 광고
                 .drs(30)                                        // 30초
-                .epiCode("test_live")                           // 앱코드 설정
+                .epiCode("test_live")                           // 에피소드 코드 설정
                 .bundleId("com.queen.sampleapp")                // 패키지 설정
                 .iconResourceId(R.drawable.notification_icon);  // Notification 아이콘 설정
 
@@ -396,7 +397,7 @@ class MyActivity extends AppCompatActivity {
                 .closeButton(companionCloseButton)                    // 닫기 버튼 설정
                 .skipButton(skipButton)                               // Skip 버튼 설정
                 .drs(30)                                              // RequestParam.FillType.SINGLE_ANY 시 duration은 무시됩니다
-                .epiCode("test_live")                                 // 앱코드 설정
+                .epiCode("test_live")                                 // 에피소드 코드 설정
                 .bundleId("com.queen.sampleapp")                      // 패키지 설정
                 .notificationContentIntent(notificationIntent)        // Notification Click PendingIntent 설정
                 .usePauseInNotification(usePauseInNotification)       // Notification 사용자 일시정지/재개 기능 설정
