@@ -375,7 +375,7 @@ class MyActivity extends AppCompatActivity {
                 .productType(RequestParam.ProductType.DILO)     // Audio 광고
                 .fillType(RequestParam.FillType.MULTI)          // n개의 광고
                 .drs(30)                                        // 30초
-                .epiCode("test_live")                           // 앱코드 설정
+                .epiCode("test_live")                           // 에피소드코드 설정
                 .bundleId("com.queen.sampleapp")                // 패키지 설정
                 .iconResourceId(R.drawable.notification_icon);  // Notification 아이콘 설정
 
