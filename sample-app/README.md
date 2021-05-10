@@ -36,10 +36,9 @@
 ---
 ## [개정 이력](#목차)
 
----
 ### 0.5.2 - 2021/05/10
 
-####추가
+#### 추가
 * RequestParam 클래스
    - enum <code>AdPositionType</code> 추가
    - RequestParam 클래스에 ***필수*** 값 추가
@@ -47,7 +46,7 @@
 * 광고 액션에 <code>ON_MESSAGE</code> 추가
 * <code>DiloError</code> 클래스에 새로운 에러 유형 <code>REQUEST</code>추가
 
-####수정
+#### 수정
 * RequestParam 클래스
    - <code>epicode</code>, <code>bundleId</code> **URL 인코딩** 처리
    - ***필수*** 값 Validation 처리 (Validation 실패 시 광고 액션 <code>ON_ERROR</code>에서 메시지 확인 가능)
@@ -56,7 +55,7 @@
 
 ---
 ### 0.5.1 - 2021/04/15
-####수정
+#### 수정
 * Skip 버튼 null 설정 시 오류 처리
 
 ---
