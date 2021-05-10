@@ -14,8 +14,14 @@ import androidx.fragment.app.Fragment;
 import kr.co.dilo.sample.app.R;
 import kr.co.dilo.sample.app.util.DiloSampleAppUtil;
 
+/**
+ * 로그 보여주는 화면
+ */
 public class LogFragment extends Fragment {
 
+  /**
+   * 로그 초기화 메시지
+   */
   public static final String CLEAR_LOG = "jmi;oawecft($*#&EFLSDOIV=+'vm,.x!@8907";
 
   TextView log;
@@ -39,20 +45,17 @@ public class LogFragment extends Fragment {
     log = view.findViewById(R.id.log_area);
     scrollView = view.findViewById(R.id.scroll_view);
 
-    log.setOnLongClickListener(new View.OnLongClickListener() {
-      @Override
-      public boolean onLongClick(View v) {
-        new AlertDialog.Builder(getActivity())
-            .setTitle("")
-            .setMessage("로그를 삭제하시겠습니까?")
-            .setPositiveButton("삭제", (dialog, which) -> {
-              log.setText("");
-            })
-            .setNegativeButton("취소", (dialog, which) -> {
-            })
-            .show();
-        return false;
-      }
+    log.setOnLongClickListener(v -> {
+      new AlertDialog.Builder(getActivity())
+              .setTitle("")
+              .setMessage("로그를 삭제하시겠습니까?")
+              .setPositiveButton("삭제", (dialog, which) -> {
+                log.setText("");
+              })
+              .setNegativeButton("취소", (dialog, which) -> {
+              })
+              .show();
+      return false;
     });
   }
 
@@ -75,12 +78,7 @@ public class LogFragment extends Fragment {
       }
 
       log.append("# " + message + "\n");
-      scrollView.post(new Runnable() {
-        @Override
-        public void run() {
-          scrollView.fullScroll(ScrollView.FOCUS_DOWN);
-        }
-      });
+      scrollView.post(() -> scrollView.fullScroll(ScrollView.FOCUS_DOWN));
       Log.d(DiloSampleAppUtil.LOG_TAG, message);
     }
   }

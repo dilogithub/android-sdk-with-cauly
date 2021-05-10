@@ -11,8 +11,9 @@
 
 ## Release Note
 
-* [v 0.5 (2021/04/01)](sample-app/README.md)
-* [v 0.5.1 (2021/04/15)](sample-app/README.md)
+* 0.5 (2021/04/01)
+* 0.5.1 (2021/04/15)
+* [0.5.2 (2021/05/10)](sample-app/README.md)
 
 ## 문의
 Dilo Android SDK 설치/적용 관련 문의 사항은 [dilo@dilo.co.kr](dilo@dilo.co.kr)로 문의주시기 바랍니다

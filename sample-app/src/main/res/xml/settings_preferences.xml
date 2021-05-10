@@ -1,7 +1,6 @@
 <PreferenceScreen
         xmlns:android="http://schemas.android.com/apk/res/android">
 
-  <!-- TODO : 배포 코드에서는 아래 광고 요청 PreferenceCategory 블럭 주석 -->
   <PreferenceCategory
           android:title="광고 요청"
   >
@@ -46,7 +45,7 @@
             android:entries="@array/product_type"
             android:entryValues="@array/product_type_values"
             android:key="product_type"
-            android:title="광고 상품"
+            android:title="광고 상품 *"
             android:defaultValue="DILO_PLUS"
     />
 
@@ -54,13 +53,13 @@
             android:entries="@array/fill_type"
             android:entryValues="@array/fill_type_values"
             android:key="fill_type"
-            android:title="광고 갯수"
+            android:title="광고 갯수 *"
             android:defaultValue="MULTI"
     />
 
     <EditTextPreference
             android:key="duration"
-            android:title="광고 길이 (초)"
+            android:title="광고 길이 (초) *"
             android:inputType="number"
             android:defaultValue="15"
     />
@@ -72,14 +71,38 @@
 
     <EditTextPreference
             android:key="package_name"
-            android:title="패키지 명"
+            android:title="패키지 명 *"
             android:defaultValue="com.queen.sampleapp"
     />
 
     <EditTextPreference
             android:key="epi_code"
-            android:title="에피소드"
+            android:title="에피소드 코드 *"
             android:defaultValue="test_live"
+    />
+
+    <EditTextPreference
+            android:key="channel_name"
+            android:title="채널 이름 *"
+            android:defaultValue="테스트 채널"
+    />
+
+    <EditTextPreference
+            android:key="episode_name"
+            android:title="에피소드 이름 *"
+            android:defaultValue="테스트 에피소드"
+    />
+
+    <EditTextPreference
+            android:key="creator_id"
+            android:title="크리에이터 ID (식별자) *"
+            android:defaultValue="tester"
+    />
+
+    <EditTextPreference
+            android:key="creator_name"
+            android:title="크리에이터 이름 *"
+            android:defaultValue="테스터"
     />
   </PreferenceCategory>
 
@@ -106,6 +129,20 @@
 
   </PreferenceCategory>
 
+  <PreferenceCategory
+          android:title="기타"
+          android:summary="테스트용 세팅"
+  >
+    <EditTextPreference
+            android:key="ad_request_delay"
+            android:title="광고 요청 딜레이(초)"
+            android:summary="광고 요청 버튼을 누르면 이 값(초) 후에 광고를 요청합니다"
+            android:defaultValue="0"
+    />
+
+  </PreferenceCategory>
+
+  <!-- 항상 제일 아래 -->
   <PreferenceCategory
           android:title="정보"
   >

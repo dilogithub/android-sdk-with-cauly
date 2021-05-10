@@ -1,35 +1,33 @@
 package kr.co.dilo.sample.app;
 
-import android.content.*;
-import android.net.Uri;
-import android.os.Build;
-import android.os.PowerManager;
-import android.provider.Settings;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Bundle;
 import android.util.Log;
-import android.view.*;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
 import androidx.fragment.app.FragmentManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import kr.co.dilo.sample.app.fragment.*;
 import kr.co.dilo.sample.app.content.DummyContent;
+import kr.co.dilo.sample.app.fragment.HomeFragment;
+import kr.co.dilo.sample.app.fragment.LogFragment;
+import kr.co.dilo.sample.app.fragment.SettingsFragment;
 import kr.co.dilo.sample.app.util.DiloSampleAppUtil;
-import kr.co.dilo.sdk.DiloConst;
-import kr.co.dilo.sdk.DiloError;
-import kr.co.dilo.sdk.DiloUtil;
-import kr.co.dilo.sdk.model.AdInfo;
-import kr.co.dilo.sdk.model.Progress;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+/**
+ * 메인 화면
+ */
 public class MainActivity extends AppCompatActivity {
 
     private final FragmentManager fragmentManager = getSupportFragmentManager();
@@ -37,6 +35,9 @@ public class MainActivity extends AppCompatActivity {
     private final LogFragment logFragment = new LogFragment();
     private final SettingsFragment settingFragment = new SettingsFragment();
 
+    /**
+     * 광고나 오디오 재생 시 BottomNavigationView 위에 뜨는 재생 화면 창 (검정색 배경)
+     */
     private ViewGroup floatingContent;
     private TextView contentStat;
     private Intent contentIntent;
@@ -59,21 +60,26 @@ public class MainActivity extends AppCompatActivity {
         filter.addAction(DiloSampleAppUtil.CONTENT_ACTION_LOG);
         filter.addAction(DiloSampleAppUtil.CONTENT_ACTION_ON_PROGRESS);
 
-        registerReceiver(contentActionReceiver, filter);
+        Intent receiverIntent = new Intent(this, contentActionReceiver.getClass());
+        PendingIntent receiverPendingIntent = PendingIntent.getBroadcast(this, 0, receiverIntent, PendingIntent.FLAG_NO_CREATE);
+        // contentActionReceiver가 등록되어있지 않다면 등록
+        if (receiverPendingIntent == null) {
+            registerReceiver(contentActionReceiver, filter);
+        }
 
         floatingContent = (ViewGroup) findViewById(R.id.floating_content);
         contentStat = (TextView) findViewById(R.id.content_stat);
         contentIntent = new Intent(this, ContentActivity.class);
-        floatingContent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                contentIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                startActivity(contentIntent);
-            }
+        floatingContent.setOnClickListener(v -> {
+            contentIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            startActivity(contentIntent);
         });
 
+        /**
+         * 바텀 네이게이션 뷰 (아래 고정 메뉴)
+         */
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_view);
-        // 첫 화면 지정
+        // 프래그먼트 추가 (홈/로그/설정 화면)
         fragmentManager.beginTransaction().add(R.id.frameLayout, homeFragment).commit();
         fragmentManager.beginTransaction().add(R.id.frameLayout, logFragment).commit();
         fragmentManager.beginTransaction().add(R.id.frameLayout, settingFragment).commit();
@@ -81,31 +87,32 @@ public class MainActivity extends AppCompatActivity {
         fragmentManager.beginTransaction().hide(logFragment).commit();
         fragmentManager.beginTransaction().hide(settingFragment).commit();
 
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.page_home:
-                        fragmentManager.beginTransaction().hide(logFragment).commit();
-                        fragmentManager.beginTransaction().hide(settingFragment).commit();
-                        fragmentManager.beginTransaction().show(homeFragment).commit();
-                        break;
-                    case R.id.page_log:
-                        fragmentManager.beginTransaction().hide(settingFragment).commit();
-                        fragmentManager.beginTransaction().hide(homeFragment).commit();
-                        fragmentManager.beginTransaction().show(logFragment).commit();
-                        break;
-                    case R.id.page_pref:
-                        fragmentManager.beginTransaction().hide(logFragment).commit();
-                        fragmentManager.beginTransaction().hide(homeFragment).commit();
-                        fragmentManager.beginTransaction().show(settingFragment).commit();
-                        break;
-                }
-                return true;
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.page_home:
+                    fragmentManager.beginTransaction().hide(logFragment).commit();
+                    fragmentManager.beginTransaction().hide(settingFragment).commit();
+                    fragmentManager.beginTransaction().show(homeFragment).commit();
+                    break;
+                case R.id.page_log:
+                    fragmentManager.beginTransaction().hide(settingFragment).commit();
+                    fragmentManager.beginTransaction().hide(homeFragment).commit();
+                    fragmentManager.beginTransaction().show(logFragment).commit();
+                    break;
+                case R.id.page_pref:
+                    fragmentManager.beginTransaction().hide(logFragment).commit();
+                    fragmentManager.beginTransaction().hide(homeFragment).commit();
+                    fragmentManager.beginTransaction().show(settingFragment).commit();
+                    break;
             }
+            return true;
         });
     }
 
+    /**
+     * 로그 화면으로 로그 전송
+     * @param message 로그 내용
+     */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void log(String message) {
         logFragment.log(message);
@@ -134,23 +141,16 @@ public class MainActivity extends AppCompatActivity {
         EventBus.getDefault().unregister(this);
     }
 
+    /**
+     * 뒤로가기 키 눌렀을 때 처리
+     */
     @Override
     public void onBackPressed() {
         Log.d(DiloSampleAppUtil.LOG_TAG, "MainActivity.onBackPressed()");
         new AlertDialog.Builder(this)
                 .setMessage("종료하시겠습니까?")
-                .setPositiveButton("종료", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        finishAffinity();
-                    }
-                })
-                .setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                })
+                .setPositiveButton("종료", (dialog, which) -> finishAffinity())
+                .setNegativeButton("취소", (dialog, which) -> dialog.cancel())
                 .show();
     }
 
@@ -166,6 +166,9 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
     }
 
+    /**
+     * 컨텐츠 액션 수신 리시버
+     */
     BroadcastReceiver contentActionReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -176,10 +179,13 @@ public class MainActivity extends AppCompatActivity {
             Log.v(DiloSampleAppUtil.LOG_TAG, "MainActivity.BroadcastReceiver.onReceive() :: Action : " + action);
 
             switch (action) {
+                // 컨텐츠 재생 완료
+                // 재생 화면 숨김
                 case DiloSampleAppUtil.CONTENT_ACTION_PLAY_END:
                     floatingContent.setVisibility(View.GONE);
                     break;
 
+                // 컨텐츠 재생
                 case DiloSampleAppUtil.CONTENT_ACTION_PLAY:
                     setFloatingContent(intent);
 
@@ -187,6 +193,7 @@ public class MainActivity extends AppCompatActivity {
                     floatingContent.setVisibility(View.VISIBLE);
                     break;
 
+                // 광고 재생
                 case DiloSampleAppUtil.CONTENT_ACTION_AD:
                     setFloatingContent(intent);
 
@@ -202,11 +209,13 @@ public class MainActivity extends AppCompatActivity {
                     floatingContent.setVisibility(View.VISIBLE);
                     break;
 
+                // 컨텐츠 관련 로그 수신
                 case DiloSampleAppUtil.CONTENT_ACTION_LOG:
                     String msg = intent.getStringExtra("msg");
                     log(msg);
                     break;
 
+                // 컨텐츠 재생 정보 수신
                 case DiloSampleAppUtil.CONTENT_ACTION_ON_PROGRESS:
                     setFloatingContent(intent);
                     double current2 = intent.getDoubleExtra("currentSec", 0);
@@ -221,6 +230,7 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    // ContentActivity의 결과 수신해서 처리
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         Log.d(DiloSampleAppUtil.LOG_TAG, "MainActivity.onActivityResult :: requestCode : " + requestCode + ", resultCode : " + resultCode);
@@ -234,6 +244,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * 재생 화면 처리
+     * @param intent 재생 데이터가 있는 인텐트
+     */
     private void setFloatingContent(Intent intent) {
         if (intent == null) {
             return;
