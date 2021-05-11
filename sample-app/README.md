@@ -51,6 +51,8 @@
    - <code>epicode</code>, <code>bundleId</code> **URL 인코딩** 처리
    - ***필수*** 값 Validation 처리 (Validation 실패 시 광고 액션 <code>ON_ERROR</code>에서 메시지 확인 가능)
 * <code>DiloError</code> 클래스 패키지 이동 kr.co.dilo.sdk -> kr.co.dilo.sdk.model
+* 광고가 재생중일 때 <code>AdManager.start()</code> 중복 호출 처리
+* 컴패니언 노출 개선
    
 
 ---
