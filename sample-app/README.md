@@ -45,6 +45,8 @@
 * 가이드 내 용어 변경
     - 매체사 -> App
 
+---
+
 ### 0.5.2 - 2021/05/10
 
 #### 추가
@@ -107,7 +109,7 @@ allprojects {
 ```
 dependencies {    
     ...
-    implementation 'kr.co.dilo:dilo-sdk:0.5.2'
+    implementation 'kr.co.dilo:dilo-sdk:0.5.3'
 }
 ```
 
