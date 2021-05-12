@@ -324,15 +324,15 @@ class RequestParam {
       /**
        * Audio 광고
        */
-      DILO("DILO"),
+      DILO("dilo"),
       /**
        * Audio 또는 Audio + Companion 광고
        */
-      DILO_PLUS("DILO_PLUS"),
+      DILO_PLUS("dilo_plus"),
       /**
        * Audio + Companion 광고
        */
-      DILO_PLUS_ONLY("DILO_PLUS_ONLY")
+      DILO_PLUS_ONLY("dilo_plus_only")
    }
 
    /**
@@ -344,17 +344,17 @@ class RequestParam {
        *      ※ Duration(drs) 은 6, 10, 15 중 하나이어야 합니다.
        *       (다른 값으로 요청하면 "광고 없음(NoFill)" 처리됩니다)
        */
-      SINGLE("SINGLE"),
+      SINGLE("single"),
       /**
        * 1 개의 광고 요청 타입 (6, 10, 15 초 광고중 랜덤)
        *      ※ Duration 은 무시됩니다
        */
-      SINGLE_ANY("SINGLE_ANY"),
+      SINGLE_ANY("single_any"),
       /**
        * Duration 만큼 채우는 n 개의 광고 요청 타입
        *      ※ padding 기능 설정 여부에 따라 5 초 이하의 오차발생 가능합니다.
        */
-      MULTI("MULTI")
+      MULTI("multi")
    }
 
    /**
