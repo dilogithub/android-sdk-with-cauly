@@ -133,6 +133,7 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
         reload.setOnClickListener(v -> {
             if (adManager != null) {
                 adWrapper.setVisibility(View.VISIBLE);
+                adInfoWrapper.setVisibility(View.VISIBLE);
                 adManager.reloadCompanion(companionAdView, companionCloseButton);
             }
         });
@@ -494,7 +495,6 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
         public void onReceive(Context context, Intent intent) {
             if (intent != null) {
                 String action = intent.getAction();
-                String epiCode = intent.getStringExtra(DiloUtil.INTENT_KEY_EPI_CODE);
                 if (action != null) {
                     switch (action) {
                         // 컴패니언 리로드 액션
@@ -503,6 +503,11 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
                                 adWrapper.setVisibility(View.VISIBLE);
                                 adManager.reloadCompanion(companionAdView, companionCloseButton);
                             }
+                            break;
+
+                        // 사용자의 컴패니언 닫기 액션
+                        case DiloUtil.ACTION_ON_COMPANION_CLOSED:
+                            log("사용자가 컴패니언을 닫았습니다");
                             break;
 
                         // 광고 준비 액션
@@ -672,6 +677,9 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
 
                         case DiloUtil.ACTION_ON_SVC_DESTROYED:
                             log("딜로 SDK 서비스 종료");
+                            adWrapper.setVisibility(View.INVISIBLE);
+                            adInfoWrapper.setVisibility(View.INVISIBLE);
+                            playContent();
                             break;
                     }
                 }

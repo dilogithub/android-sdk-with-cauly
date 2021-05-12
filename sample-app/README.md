@@ -36,6 +36,15 @@
 ---
 ## [개정 이력](#목차)
 
+### 0.5.3 - 2021/05/12
+#### 추가
+* 광고 액션에 <code>ON_COMPANION_CLOSED</code> 추가
+    - 이 액션은 사용자가 Companion 닫기 버튼(ViewGroup)을 눌렀을 때 발생합니다
+
+#### 수정
+* 가이드 내 용어 변경
+    - 매체사 -> App
+
 ### 0.5.2 - 2021/05/10
 
 #### 추가
@@ -44,6 +53,8 @@
    - RequestParam 클래스에 ***필수*** 값 추가
       - <code>adPositionType</code>, <code>channelName</code>, <code>episodeName</code>, <code>creatorName</code>, <code>creatorId</code>
 * 광고 액션에 <code>ON_MESSAGE</code> 추가
+    - 이 액션은 필수값 누락 등 SDK에서 App에 메시지를 전송할 때 발생합니다
+    - 개발 도중에는 이 액션을 수신하는 것을 권고합니다
 * <code>DiloError</code> 클래스에 새로운 에러 유형 <code>REQUEST</code>추가
 
 #### 수정
@@ -289,7 +300,7 @@ class RequestParam {
 
       /**
        * Notification 클릭 시 수행할 PendingIntent를 설정합니다
-       *     ※ 매체사의 컨텐츠 재생 화면 (광고 재생 화면)으로 설정하는 것을 권고드립니다
+       *     ※ App의 컨텐츠 재생 화면 (광고 재생 화면)으로 설정하는 것을 권고드립니다
        */
       public Builder notificationContentIntent(@Nullable PendingIntent intent);
 
@@ -505,25 +516,27 @@ class MyActivity extends AppCompatActivity {
 액션<br>(prefix:DiloUtil.ACTION_)|설명|전달<br>데이터 클래스|비고
 ---|---|:---:|---
 RELOAD_COMPANION|컴패니언 리로드| | Companion이 있는 광고에서 Companion이 노출됨(또는 노출해야 함)<br><br>**※ 비고** : Companion 광고를 노출/숨김 처리 하는 것은<br><code>AdManager</code>를 초기화 하고 광고를 요청한 뷰에서는<br>자동으로 처리되지만,<br>Task Kill 등으로 뷰가 완전히 사라졌을 경우에는<br><code> AdManager</code>를 다시 초기화 후에<br>BroadcastReceiver에서 이 액션을 받아 <code>AdManager</code>의<br><code>reloadCompanion(AdView, ViewGroup)</code>을 호출하여<br>리로드하여야합니다
+ON_COMPANION_CLOSED|사용자가 Companion을 닫음| |사용자가 닫기 버튼을 눌러 Companion을 닫음
 ON_SKIP_ENABLED|광고 스킵 가능| |스킵 가능한 광고의 경우 스킵 가능한 시점 도달
-ON_AD_SKIPPED|광고 스킵| | 사용자가 Skip 버튼을 눌러 광고를 Skip 또는<br>매체사에서<code>AdManager</code>의 <code>skip()</code> 메소드 호출
+ON_AD_SKIPPED|광고 스킵| | 사용자가 Skip 버튼을 눌러 광고를 Skip 또는<br>App에서<code>AdManager</code>의 <code>skip()</code> 메소드 호출
 ON_NO_FILL|광고 없음| |요청에 맞는 조건의 광고가 없음
 ON_AD_READY|광고 재생<br>준비 완료| | 광고가 로드되어 재생 준비가 완료됨
 ON_AD_START|광고 재생 시작| [AdInfo](#i-class-adinfo)|광고 재생이 시작됨
 ON_TIME_UPDATE|광고 진행 사항<br>업데이트| [Progress](#ii-class-progress)| 광고 진행사항이 업데이트 됨<br><br>**※ 비고** : 이 액션은 광고가 재생중일 때 200ms마다 호출됩니다
 ON_AD_COMPLETED|광고 재생 완료| |하나의 광고가 재생 완료될 때마다 호출
 ON_ALL_AD_COMPLETED|모든 광고<br>재생 완료| |모든 광고가 재생 완료되면 한 번 호출
-ON_PAUSE|광고 일시 중지| |매체사에서 광고 재생 중 <code>AdManager</code>의 <code>playOrPause()</code> 호출<br>또는 사용자가 Notification에서 일시 중지 버튼 누름
-ON_RESUME|광고 재개| |매체사에서 광고 일시 중지 중 <code>AdManager</code>의 <code>playOrPause()</code> 호출<br>또는 사용자가 Notification에서 재개 버튼 누름
+ON_PAUSE|광고 일시 중지| |App에서 광고 재생 중 <code>AdManager</code>의 <code>playOrPause()</code> 호출<br>또는 사용자가 Notification에서 일시 중지 버튼 누름
+ON_RESUME|광고 재개| |App에서 광고 일시 중지 중 <code>AdManager</code>의 <code>playOrPause()</code> 호출<br>또는 사용자가 Notification에서 재개 버튼 누름
 ON_ERROR|에러 발생| [DiloError](#iii-class-diloerror)| 광고 요청/로드 또는 재생에 문제가 발생
 ON_MESSAGE|메시지 전송|String| SDK에서 App으로 메시지를 전달
 ON_SVC_DESTROYED|서비스 종료| | 딜로 SDK 서비스 종료
 
 ※ 유의 사항
 1. <code>**ON_AD_READY**</code> 액션 발생 시 <code>AdManager</code>의 <code>start()</code> 메소드를 호출해야 광고가 시작되므로 이 액션은 항상 등록하시기 바랍니다
-2. <code>**ON_NO_FILL**</code>, <code>**ON_ERROR ACTION**</code> 발생 시 다른 액션이 발생하지 않고 SDK가 종료되어 매체사의 컨텐츠를 재생해야하므로 이 액션은 항상 등록하시기 바랍니다 
-3. <code>**ON_ALL_AD_COMPLETED**</code> 또는 <code>**ON_SVC_DESTROYED**</code> 발생 시 매체사의 컨텐츠를 재생해야하므로 둘 중 한 액션은 항상 등록하시기 바랍니다
+2. <code>**ON_NO_FILL**</code>, <code>**ON_ERROR ACTION**</code> 발생 시 다른 액션이 발생하지 않고 SDK가 종료되어 App의 컨텐츠를 재생해야하므로 이 액션은 항상 등록하시기 바랍니다 
+3. <code>**ON_ALL_AD_COMPLETED**</code> 또는 <code>**ON_SVC_DESTROYED**</code> 발생 시 App의 컨텐츠를 재생해야하므로 둘 중 한 액션은 항상 등록하시기 바랍니다
 4. <code>**ON_MESSAGE**</code> 액션 발생 시 App으로 메시지를 전달하므로 개발하는 동안에는 등록하시기를 권고드립니다, 메시지만을 전달하므로 이 액션 수신 시 광고 제어 메소드(AdManager의 메소드 play(), release() 등)를 호출하지 마시기 바랍니다
+5. Companion 닫기 버튼(ViewGroup)의 클릭 시 이벤트 설정은 setOnClickListener가 아닌 <code>**ON_COMPANION_CLOSED**</code> 액션을 수신하여 처리하시기 바랍니다. 리스너의 설정은 무시됩니다
 
 
 ### [광고 액션 수신 예제](#목차)
@@ -553,7 +566,6 @@ class MyActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             if (intent != null) {
                 String action = intent.getAction();
-                String epiCode = intent.getStringExtra(DiloUtil.INTENT_KEY_EPI_CODE);
                 if (action != null) {
                     switch (action) {
                         // 컴패니언 리로드 액션
@@ -562,6 +574,11 @@ class MyActivity extends AppCompatActivity {
                                 adWrapper.setVisibility(View.VISIBLE);
                                 adManager.reloadCompanion(companionAdView, companionCloseButton);
                             }
+                            break;
+
+                        // 사용자의 컴패니언 닫기 액션
+                        case DiloUtil.ACTION_ON_COMPANION_CLOSED:
+                            log("사용자가 컴패니언을 닫았습니다");
                             break;
 
                         // 광고 준비 완료 액션
@@ -684,7 +701,7 @@ class MyActivity extends AppCompatActivity {
 
 ```java
 /**
- * 매체사에 전달하는 광고 정보 클래스
+ * App에 전달하는 광고 정보 클래스
  */
 class AdInfo implements Serializable {
     /**
@@ -747,7 +764,7 @@ class MyActivity extends AppCompatActivity {
 
 ```java
 /**
- * 매체사에 전달할 광고 진행 정보 클래스
+ * App에 전달할 광고 진행 정보 클래스
  */
 class Progress implements Serializable {
     /**
@@ -793,7 +810,7 @@ class MyActivity extends AppCompatActivity {
 
 ```java
 /**
- * 매체사에 전달할 오류 클래스
+ * App에 전달할 오류 클래스
  */
 public class DiloError extends Exception {
 
@@ -846,6 +863,10 @@ class DiloUtil {
      * 컴패니언 리로드 액션
      */
     public static final String ACTION_RELOAD_COMPANION;
+    /**
+     * 사용자의 컴패니언 닫기 액션
+     */
+    public static final String ACTION_ON_COMPANION_CLOSED;
     /**
      * 광고 스킵 가능 액션
      */
@@ -905,11 +926,6 @@ class DiloUtil {
     public static final IntentFilter DILO_INTENT_FILTER;
 
     // 데이터 가져오기위한 키 정의
-    /**
-     * 매체사에서 요청한 에피소드 코드
-     *     String epiCode = intent.getStringExtra(DiloUtil.INTENT_KEY_EPI_CODE);
-     */
-    public static final String INTENT_KEY_EPI_CODE;
     /**
      * 광고 진행 정보
      *     Progress progress = (Progress) intent.getSerializableExtra(DiloUtil.INTENT_KEY_PROGRESS);
