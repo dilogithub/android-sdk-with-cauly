@@ -140,6 +140,14 @@
             android:defaultValue="0"
     />
 
+    <SwitchPreference
+            android:key="use_background"
+            android:title="앱 강제종료에도 서비스 실행"
+            android:defaultValue="true"
+    >
+
+    </SwitchPreference>
+
   </PreferenceCategory>
 
   <!-- 항상 제일 아래 -->

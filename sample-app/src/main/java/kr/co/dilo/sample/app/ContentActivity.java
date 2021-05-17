@@ -77,7 +77,7 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
 
         contentIntent = getIntent();
 
-        adManager = new AdManager(this);
+        adManager = SampleApplication.getInstance().adManager;
 
         setResult(-1, contentIntent);
 
@@ -112,12 +112,8 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
                 Toast.makeText(ContentActivity.this, msg, Toast.LENGTH_SHORT).show();
             }
 
-            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    onAdRequest();
-                }
-            }, adRequestDelay * 1000L);
+            new Handler(Looper.getMainLooper())
+                    .postDelayed(this::onAdRequest, adRequestDelay * 1000L);
         });
         skipButton.setOnClickListener(v -> {
             if (adManager != null) {
@@ -167,8 +163,7 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
         Log.d(DiloSampleAppUtil.LOG_TAG, "ContentActivity.onDestroy()");
         try {
             unregisterReceiver(diloActionReceiver);
-        } catch (IllegalArgumentException e) {
-        }
+        } catch (IllegalArgumentException ignored) {}
         super.onDestroy();
     }
 
@@ -225,14 +220,22 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
                         @Override
                         public void start() {
                             log("컨텐츠 재생");
-                            timer.start();
-                            mediaPlayer.start();
+                            if (timer != null) {
+                                timer.start();
+                            }
+                            if (mediaPlayer != null) {
+                                mediaPlayer.start();
+                            }
                         }
 
                         @Override
                         public void pause() {
-                            timer.cancel();
-                            mediaPlayer.pause();
+                            if (timer != null) {
+                                timer.cancel();
+                            }
+                            if (mediaPlayer != null) {
+                                mediaPlayer.pause();
+                            }
                         }
 
                         @Override
@@ -242,17 +245,26 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
 
                         @Override
                         public int getCurrentPosition() {
-                            return mediaPlayer.getCurrentPosition();
+                            if (mediaPlayer != null) {
+                                return mediaPlayer.getCurrentPosition();
+                            }
+
+                            return 0;
                         }
 
                         @Override
                         public void seekTo(int pos) {
-                            mediaPlayer.seekTo(pos);
+                            if (mediaPlayer != null) {
+                                mediaPlayer.seekTo(pos);
+                            }
                         }
 
                         @Override
                         public boolean isPlaying() {
-                            return mediaPlayer.isPlaying();
+                            if (mediaPlayer != null) {
+                                return mediaPlayer.isPlaying();
+                            }
+                            return false;
                         }
 
                         @Override
@@ -277,14 +289,19 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
 
                         @Override
                         public int getAudioSessionId() {
-                            return mediaPlayer.getAudioSessionId();
+                            if (mediaPlayer != null) {
+                                return mediaPlayer.getAudioSessionId();
+                            }
+                            return Integer.MIN_VALUE;
                         }
                     });
                     mediaController.setAnchorView(surfaceView);
                     log("컨텐츠 재생");
                     sendBroadcast(getContentPlayIntent());
                     isPlaying = true;
-                    timer.start();
+                    if (timer != null) {
+                        timer.start();
+                    }
                     mp.start();
                 }
             });
@@ -327,7 +344,7 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
                 this,
                 0,
                 new Intent(getApplicationContext(), MainActivity.class),
-                PendingIntent.FLAG_UPDATE_CURRENT
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
         );
 
         // Shared Preferences에서 값 읽어 옴(테스트 용)
@@ -520,8 +537,7 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
                                 log("컨텐츠 일시 중지");
                                 try {
                                     mediaPlayer.pause();
-                                } catch (IllegalStateException e) {
-                                }
+                                } catch (IllegalStateException ignored) {}
                             }
 
                             contentWrapper.setVisibility(View.INVISIBLE);

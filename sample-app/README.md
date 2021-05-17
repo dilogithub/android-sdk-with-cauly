@@ -32,16 +32,20 @@
     * [Audio Focus에 대한 동작](#iii-audio-focus에-대한-동작)
     * [Notification에 대한 동작](#iv-notification에-대한-동작)
     * [Audio 재생에 대한 동작](#v-audio-재생에-대한-동작)
-   
+
 ---
+
 ## [개정 이력](#목차)
 
 ### 0.5.3 - 2021/05/12
+
 #### 추가
+
 * 광고 액션에 <code>ON_COMPANION_CLOSED</code> 추가
     - 이 액션은 사용자가 Companion 닫기 버튼(ViewGroup)을 눌렀을 때 발생합니다
 
 #### 수정
+
 * 가이드 내 용어 변경
     - 매체사 -> App
 
@@ -50,31 +54,38 @@
 ### 0.5.2 - 2021/05/10
 
 #### 추가
+
 * RequestParam 클래스
-   - enum <code>AdPositionType</code> 추가
-   - RequestParam 클래스에 ***필수*** 값 추가
-      - <code>adPositionType</code>, <code>channelName</code>, <code>episodeName</code>, <code>creatorName</code>, <code>creatorId</code>
+    - enum <code>AdPositionType</code> 추가
+    - RequestParam 클래스에 ***필수*** 값 추가
+        - <code>adPositionType</code>, <code>channelName</code>, <code>episodeName</code>, <code>creatorName</code>
+          , <code>creatorId</code>
 * 광고 액션에 <code>ON_MESSAGE</code> 추가
     - 이 액션은 필수값 누락 등 SDK에서 App에 메시지를 전송할 때 발생합니다
     - 개발 도중에는 이 액션을 수신하는 것을 권고합니다
 * <code>DiloError</code> 클래스에 새로운 에러 유형 <code>REQUEST</code>추가
 
 #### 수정
+
 * RequestParam 클래스
-   - <code>epicode</code>, <code>bundleId</code> **URL 인코딩** 처리
-   - ***필수*** 값 Validation 처리 (Validation 실패 시 광고 액션 <code>ON_ERROR</code>에서 메시지 확인 가능)
+    - <code>epicode</code>, <code>bundleId</code> **URL 인코딩** 처리
+    - ***필수*** 값 Validation 처리 (Validation 실패 시 광고 액션 <code>ON_ERROR</code>에서 메시지 확인 가능)
 * <code>DiloError</code> 클래스 패키지 이동 kr.co.dilo.sdk -> kr.co.dilo.sdk.model
 * 광고가 재생중일 때 <code>AdManager.start()</code> 중복 호출 처리
 * 컴패니언 노출 개선
-   
 
 ---
+
 ### 0.5.1 - 2021/04/15
+
 #### 수정
+
 * Skip 버튼 null 설정 시 오류 처리
 
 ---
+
 ### 0.5 - 2021/04/01
+
 최초 작성
 
 ---
@@ -212,168 +223,205 @@ dependencies {
 import androidx.annotation.Nullable;
 
 class RequestParam {
-   static class Builder {
-      ///////////////////////
-      // 필수 사항
-      ///////////////////////
-      // 누락 또는 유효하지 않은 값 입력 시 ACTION_ON_ERROR를 Broadcast
-      ///////////////////////
+    static class Builder {
+        ///////////////////////
+        // 필수 사항
+        ///////////////////////
+        // 누락 또는 유효하지 않은 값 입력 시 ACTION_ON_ERROR를 Broadcast
+        ///////////////////////
 
-      /**
-       * 번들 ID(패키지 이름)를 설정합니다
-       *      ※ 광고요청 전 DILO 시스템에 등록되어야 합니다
-       *      ※ 등록되어있지 않으면 항상 NO-FILL 응답을 리턴합니다    
-       *      ※ 테스트 시에는 "com.queen.sampleapp"를 지정하고 NO-FILL 응답 시 문의 메일 부탁드립니다
-       *      ※ URL 인코딩되어있지 않아야 합니다 (딜로 SDK 내부에서 처리합니다)
-       */
-      public Builder bundleId(@NonNull String bundleId);
-      
-      /**
-       * 에피소드 코드를 설정합니다
-       *      ※ 광고요청 전 DILO 시스템에 등록되어야 합니다
-       *      ※ 등록되어있지 않으면 항상 NO-FILL 응답을 리턴합니다
-       *      ※ 테스트 시에는 "test_live"를 지정하고 NO-FILL 응답 시 문의 메일 부탁드립니다
-       *      ※ URL 인코딩되어있지 않아야 합니다 (딜로 SDK 내부에서 처리합니다)
-       */
-      public Builder epiCode(@NonNull String epiCode);
-      
-      /**
-       * 광고 요청 길이를 설정합니다 (초)
-       */
-      public Builder drs(@IntRange(from = 0) int duration);
+        /**
+         * 번들 ID(패키지 이름)를 설정합니다
+         *      ※ 광고요청 전 DILO 시스템에 등록되어야 합니다
+         *      ※ 등록되어있지 않으면 항상 NO-FILL 응답을 리턴합니다    
+         *      ※ 테스트 시에는 "com.queen.sampleapp"를 지정하고 NO-FILL 응답 시 문의 메일 부탁드립니다
+         *      ※ URL 인코딩되어있지 않아야 합니다 (딜로 SDK 내부에서 처리합니다)
+         */
+        public Builder bundleId(@NonNull String bundleId);
 
-      /**
-       * 광고 상품 유형을 설정합니다
-       */
-      public Builder productType(@NonNull ProductType productType);
+        /**
+         * 에피소드 코드를 설정합니다
+         *      ※ 광고요청 전 DILO 시스템에 등록되어야 합니다
+         *      ※ 등록되어있지 않으면 항상 NO-FILL 응답을 리턴합니다
+         *      ※ 테스트 시에는 "test_live"를 지정하고 NO-FILL 응답 시 문의 메일 부탁드립니다
+         *      ※ URL 인코딩되어있지 않아야 합니다 (딜로 SDK 내부에서 처리합니다)
+         *          ex) https://test.com/audio/episode_20210410.mp3
+         *      ※ 컨텐츠 재생 시점이 아닌 지점의 광고 삽입의 에피소드 코드는 문의 메일 부탁드립니다
+         *          ex) 앱 첫 실행 시점, 앱 종료 직전, 특정 메뉴 터치 시점 등 
+         */
+        public Builder epiCode(@NonNull String epiCode);
 
-      /**
-       * 광고 채우기 유형을 설정합니다
-       */
-      public Builder fillType(@NonNull FillType fillType);
+        /**
+         * 에피소드의 채널 이름을 설정합니다
+         * 광고 요청한 에피소드가 속해있는 채널 이름
+         * 추후 리포트에 반영되는 값으로 채널 이름이 없을 경우 리포트에 보여질 임의값으로 설정합니다
+         *     ex) "매일 아침 9시 세계의 라디오 세상", "앱 시작 광고" ...
+         */
+        public Builder channelName(@NonNull String channelName);
 
-      /**
-       * 광고가 컨텐츠에서 삽입된 위치 타입을 설정합니다
-       * 광고 요청 시점에따라 설정하여야합니다
-       *      PRE : 컨텐츠 재생 전
-       *      MID : 컨텐츠 50% 재생 후
-       *     POST : 컨텐츠 재생 후
-       */
-      public public Builder adPositionType(@NonNull AdPositionType adPositionType);
+        /**
+         * 에피소드 타이틀을 설정합니다
+         * 추후 리포트에 반영되는 값으로 에피소드 타이틀이 없을 경우 리포트에 보여질 임의값 설정
+         *     ex) "전세계 확진자 1억 명 임박…되돌아본 코로나19 1년 6개월", 
+         */
+        public Builder episodeName(@NonNull String episodeName);
 
-      /**
-       * Notification에 보여질 아이콘을 설정합니다
-       */
-      public Builder iconResourceId(@DrawableRes int iconResourceId);
+        /**
+         * 에피소드의 창작자 ID(중복되지 않는 고유 식별값)를 설정합니다
+         * 매체사에서 창작자를 식별할 수 있는 값
+         *     ex) "user#0001", "12391", "user@dilo.co.kr", "F8CA-9283-AFB1C" ...
+         * 중복될 경우 같은 창작자로 인식하여 리포트가 집계됩니다
+         *     ※ 만약 닉네임같이 변경 가능한 값을 설정할 경우, 변경 시 기존과 다른 창작자로 인식하여 리포트가 다르게 집계됩니다
+         * 
+         */
+        public Builder creatorId(@NonNull String creatorId);
 
-      ///////////////////////
-      // 선택 사항
-      ///////////////////////
-      
-      /**
-       * Companion이 할당된 사이즈를 설정합니다
-       * 설정하지 않으면 자동으로 계산된 사이즈가 들어갑니다
-       *     ※ 수동으로 설정할 경우 0보다 큰 값이 들어가야합니다 (단위 : pixel)
-       */
-      public Builder companionSize(@IntRange(from = 1) int width, @IntRange(from = 1) int height);
+        /**
+         * 광고 요청한 에피소드의 창작자 이름을 설정합니다
+         * 추후 리포트에 반영되는 값으로 창작자 이름이 없을 경우 리포트에 보여질 임의값 설정
+         */
+        public Builder creatorName(@NonNull String creatorName);
 
-      /**
-       * Companion이 보여질 뷰를 설정합니다
-       *     ※ 컴패니언이 있는 광고 (ProductType = DILO_PLUS || DILO_PLUS_ONLY) 요청에
-       *       이 항목을 설정하지 않으면 컴패니언 없는 광고(DILO)가 나갈 수 있습니다
-       */
-      public Builder companionAdView(@Nullable AdView companionAdView);
+        /**
+         * 광고 요청 길이를 설정합니다 (초)
+         */
+        public Builder drs(@IntRange(from = 0) int duration);
 
-      /**
-       * 광고 Close 버튼 뷰를 설정합니다
-       */
-      public Builder closeButton(@Nullable ViewGroup closeButton);
+        /**
+         * 광고 상품 유형을 설정합니다
+         * 아래 enum ProductType 참고
+         */
+        public Builder productType(@NonNull ProductType productType);
 
-      /**
-       * 광고 Skip 버튼을 설정합니다
-       */
-      public Builder skipButton(@Nullable Button skipButton);
+        /**
+         * 광고 채우기 유형을 설정합니다
+         * 아래 enum FillType 참고
+         */
+        public Builder fillType(@NonNull FillType fillType);
 
-      /**
-       * Notification에서 사용자가 광고를 일시중지/재개 할 수 있는 기능을 제공합니다 (일시중지/재개 버튼이 표현됨)
-       * @param usePauseInNotification true: 사용 (기본), false: 미사용
-       */
-      public Builder usePauseInNotification(@Nullable boolean usePauseInNotification);
+        /**
+         * 광고가 컨텐츠에서 삽입된 위치 타입을 설정합니다
+         * 아래 enum AdPositionType 참고
+         * 광고 요청 시점에따라 설정하여야합니다
+         *      PRE : 컨텐츠(에피소드) 재생 전
+         *      MID : 컨텐츠(에피소드) 50% 재생 후
+         *     POST : 컨텐츠(에피소드) 재생 후
+         */
+        public public Builder adPositionType(@NonNull AdPositionType adPositionType);
 
-      /**
-       * Notification 클릭 시 수행할 PendingIntent를 설정합니다
-       *     ※ App의 컨텐츠 재생 화면 (광고 재생 화면)으로 설정하는 것을 권고드립니다
-       */
-      public Builder notificationContentIntent(@Nullable PendingIntent intent);
+        /**
+         * Notification에 보여질 아이콘을 설정합니다
+         */
+        public Builder iconResourceId(@DrawableRes int iconResourceId);
 
-      /**
-       * Notification의 타이틀 문구를 설정합니다
-       */
-      public Builder notificationContentTitle(@Nullable String notificationContentTitle);
+        ///////////////////////
+        // 선택 사항
+        ///////////////////////
 
-      /**
-       * Notification의 텍스트 문구를 설정합니다
-       */
-      public Builder notificationContentText(@Nullable String notificationContentText);
-   }
+        /**
+         * Companion이 할당된 사이즈를 설정합니다
+         * 설정하지 않으면 자동으로 계산된 사이즈가 들어갑니다
+         *     ※ 수동으로 설정할 경우 0보다 큰 값이 들어가야합니다 (단위 : pixel)
+         */
+        public Builder companionSize(@IntRange(from = 1) int width, @IntRange(from = 1) int height);
 
-   /**
-    * 광고 상품 유형
-    */
-   enum ProductType {
-      /**
-       * Audio 광고
-       */
-      DILO("dilo"),
-      /**
-       * Audio 또는 Audio + Companion 광고
-       */
-      DILO_PLUS("dilo_plus"),
-      /**
-       * Audio + Companion 광고
-       */
-      DILO_PLUS_ONLY("dilo_plus_only")
-   }
+        /**
+         * Companion이 보여질 뷰를 설정합니다
+         *     ※ 컴패니언이 있는 광고 (ProductType = DILO_PLUS || DILO_PLUS_ONLY) 요청에
+         *       이 항목을 설정하지 않으면 컴패니언 없는 광고(DILO)가 나갈 수 있습니다
+         */
+        public Builder companionAdView(@Nullable AdView companionAdView);
 
-   /**
-    * 광고 채우기 유형
-    */
-   enum FillType {
-      /**
-       * 1개의 광고 요청 타입
-       *      ※ Duration(drs) 은 6, 10, 15 중 하나이어야 합니다.
-       *       (다른 값으로 요청하면 "광고 없음(NoFill)" 처리됩니다)
-       */
-      SINGLE("single"),
-      /**
-       * 1 개의 광고 요청 타입 (6, 10, 15 초 광고중 랜덤)
-       *      ※ Duration 은 무시됩니다
-       */
-      SINGLE_ANY("single_any"),
-      /**
-       * Duration 만큼 채우는 n 개의 광고 요청 타입
-       *      ※ padding 기능 설정 여부에 따라 5 초 이하의 오차발생 가능합니다.
-       */
-      MULTI("multi")
-   }
+        /**
+         * 광고 Close 버튼 뷰를 설정합니다
+         */
+        public Builder closeButton(@Nullable ViewGroup closeButton);
 
-   /**
-    * 광고 요청 시점 유형
-    */
-   public enum AdPositionType {
-      /**
-       * 컨텐츠 재생 시작 직전 지점
-       */
-      PRE("pre"),
-      /**
-       * 컨텐츠 재생 50% 지점
-       */
-      MID("mid"),
-      /**
-       * 컨텐츠 재생 완료 직후 지점
-       */
-      POST("post");
-   }
+        /**
+         * 광고 Skip 버튼을 설정합니다
+         */
+        public Builder skipButton(@Nullable Button skipButton);
+
+        /**
+         * Notification에서 사용자가 광고를 일시중지/재개 할 수 있는 기능을 제공합니다 (일시중지/재개 버튼이 표현됨)
+         * @param usePauseInNotification true: 사용 (기본), false: 미사용
+         */
+        public Builder usePauseInNotification(boolean usePauseInNotification);
+
+        /**
+         * Notification 클릭 시 수행할 PendingIntent를 설정합니다
+         *     ※ App의 컨텐츠 재생 화면 (광고 재생 화면)으로 설정하는 것을 권고드립니다
+         */
+        public Builder notificationContentIntent(@Nullable PendingIntent intent);
+
+        /**
+         * Notification의 타이틀 문구를 설정합니다
+         */
+        public Builder notificationContentTitle(@Nullable String notificationContentTitle);
+
+        /**
+         * Notification의 텍스트 문구를 설정합니다
+         */
+        public Builder notificationContentText(@Nullable String notificationContentText);
+    }
+
+    /**
+     * 광고 상품 유형
+     */
+    enum ProductType {
+        /**
+         * Audio 광고
+         */
+        DILO("dilo"),
+        /**
+         * Audio 또는 Audio + Companion 광고
+         */
+        DILO_PLUS("dilo_plus"),
+        /**
+         * Audio + Companion 광고 (Companion이 무조건 포함)
+         */
+        DILO_PLUS_ONLY("dilo_plus_only")
+    }
+
+    /**
+     * 광고 채우기 유형
+     */
+    enum FillType {
+        /**
+         * 1개의 광고 요청 타입
+         *      ※ Duration(drs) 은 6, 10, 15 중 하나이어야 합니다.
+         *       (다른 값으로 요청하면 "광고 없음(NoFill)" 처리됩니다)
+         */
+        SINGLE("single"),
+        /**
+         * 1개의 광고 요청 타입 (6, 10, 15 초 광고중 랜덤)
+         *      ※ Duration 은 무시됩니다
+         */
+        SINGLE_ANY("single_any"),
+        /**
+         * Duration 만큼 채우는 n 개의 광고 요청 타입
+         *      ※ padding 기능 설정 여부에 따라 5 초 이하의 오차발생 가능합니다.
+         */
+        MULTI("multi")
+    }
+
+    /**
+     * 광고 요청 시점 유형
+     */
+    public enum AdPositionType {
+        /**
+         * 컨텐츠 재생 시작 직전 지점
+         */
+        PRE("pre"),
+        /**
+         * 컨텐츠 재생 50% 지점
+         */
+        MID("mid"),
+        /**
+         * 컨텐츠 재생 완료 직후 지점
+         */
+        POST("post");
+    }
 }
 ```
 
@@ -401,7 +449,7 @@ class AdManager {
 
     /**
      * 광고를 시작합니다
-     * 
+     *
      * ※ loadAd()로 광고를 요청한 다음
      *     DiloUtil.ACTION_ON_AD_READY 에서 호출하여야합니다
      */
@@ -500,7 +548,7 @@ class MyActivity extends AppCompatActivity {
                 .usePauseInNotification(false)                        // Notification 사용자 일시정지/재개 기능 설정
                 .notificationContentTitle("크리에이터를 후원하는 광고 재생중입니다") // Notification Title 설정 (상단 텍스트)
                 .notificationContentText("ABC 뉴스");                                // Notification Text 설정 (하단 텍스트)
-       
+
         adManager.loadAd(requestParamBuilder.build());
     }
 }
@@ -509,22 +557,24 @@ class MyActivity extends AppCompatActivity {
 ## [4. 광고 액션 수신](#목차)
 
 * Dilo SDK에서 보내는 광고에 대한 액션 수신은 <code>BroadcastReceiver</code>를 통해 가능합니다
-* 아래의 모든 액션은 <code>DiloUtil.DILO_INTENT_FILTER</code>에 등록되어 있으니 registerReceiver시 IntentFilter로 등록하거나 <code>DiloUtil.ACTION_</code>으로 시작하는 아래 액션에서 필요한 액션만 등록해서 사용하시면
-  됩니다
+* 아래의 모든 액션은 <code>DiloUtil.DILO_INTENT_FILTER</code>에 등록되어 있으니 registerReceiver시 IntentFilter로 등록하거나 <code>
+  DiloUtil.ACTION_</code>으로 시작하는 아래 액션에서 필요한 액션만 등록해서 사용하시면 됩니다
 * 액션 목록은 아래와 같습니다
 
 ### [광고 액션](#목차)
 
 액션<br>(prefix:DiloUtil.ACTION_)|설명|전달<br>데이터 클래스|비고
 ---|---|:---:|---
-RELOAD_COMPANION|컴패니언 리로드| | Companion이 있는 광고에서 Companion이 노출됨(또는 노출해야 함)<br><br>**※ 비고** : Companion 광고를 노출/숨김 처리 하는 것은<br><code>AdManager</code>를 초기화 하고 광고를 요청한 뷰에서는<br>자동으로 처리되지만,<br>Task Kill 등으로 뷰가 완전히 사라졌을 경우에는<br><code> AdManager</code>를 다시 초기화 후에<br>BroadcastReceiver에서 이 액션을 받아 <code>AdManager</code>의<br><code>reloadCompanion(AdView, ViewGroup)</code>을 호출하여<br>리로드하여야합니다
+RELOAD_COMPANION|컴패니언 리로드| | Companion이 있는 광고에서 Companion이 노출됨(또는 노출해야 함)<br><br>**※
+비고** : Companion 광고를 노출/숨김 처리 하는 것은<br><code>AdManager</code>를 초기화 하고 광고를 요청한 뷰에서는<br>자동으로 처리되지만,<br>Task Kill 등으로 뷰가 완전히 사라졌을 경우에는<br><code> AdManager</code>를 다시 초기화 후에<br>BroadcastReceiver에서 이 액션을 받아 <code>AdManager</code>의<br><code>reloadCompanion(AdView, ViewGroup)</code>을 호출하여<br>리로드하여야합니다
 ON_COMPANION_CLOSED|사용자가 Companion을 닫음| |사용자가 닫기 버튼을 눌러 Companion을 닫음
 ON_SKIP_ENABLED|광고 스킵 가능| |스킵 가능한 광고의 경우 스킵 가능한 시점 도달
 ON_AD_SKIPPED|광고 스킵| | 사용자가 Skip 버튼을 눌러 광고를 Skip 또는<br>App에서<code>AdManager</code>의 <code>skip()</code> 메소드 호출
 ON_NO_FILL|광고 없음| |요청에 맞는 조건의 광고가 없음
 ON_AD_READY|광고 재생<br>준비 완료| | 광고가 로드되어 재생 준비가 완료됨
 ON_AD_START|광고 재생 시작| [AdInfo](#i-class-adinfo)|광고 재생이 시작됨
-ON_TIME_UPDATE|광고 진행 사항<br>업데이트| [Progress](#ii-class-progress)| 광고 진행사항이 업데이트 됨<br><br>**※ 비고** : 이 액션은 광고가 재생중일 때 200ms마다 호출됩니다
+ON_TIME_UPDATE|광고 진행 사항<br>업데이트| [Progress](#ii-class-progress)| 광고 진행사항이 업데이트 됨<br><br>**※
+비고** : 이 액션은 광고가 재생중일 때 200ms마다 호출됩니다
 ON_AD_COMPLETED|광고 재생 완료| |하나의 광고가 재생 완료될 때마다 호출
 ON_ALL_AD_COMPLETED|모든 광고<br>재생 완료| |모든 광고가 재생 완료되면 한 번 호출
 ON_PAUSE|광고 일시 중지| |App에서 광고 재생 중 <code>AdManager</code>의 <code>playOrPause()</code> 호출<br>또는 사용자가 Notification에서 일시 중지 버튼 누름
@@ -534,12 +584,17 @@ ON_MESSAGE|메시지 전송|String| SDK에서 App으로 메시지를 전달
 ON_SVC_DESTROYED|서비스 종료| | 딜로 SDK 서비스 종료
 
 ※ 유의 사항
-1. <code>**ON_AD_READY**</code> 액션 발생 시 <code>AdManager</code>의 <code>start()</code> 메소드를 호출해야 광고가 시작되므로 이 액션은 항상 등록하시기 바랍니다
-2. <code>**ON_NO_FILL**</code>, <code>**ON_ERROR ACTION**</code> 발생 시 다른 액션이 발생하지 않고 SDK가 종료되어 App의 컨텐츠를 재생해야하므로 이 액션은 항상 등록하시기 바랍니다 
-3. <code>**ON_ALL_AD_COMPLETED**</code> 또는 <code>**ON_SVC_DESTROYED**</code> 발생 시 App의 컨텐츠를 재생해야하므로 둘 중 한 액션은 항상 등록하시기 바랍니다
-4. <code>**ON_MESSAGE**</code> 액션 발생 시 App으로 메시지를 전달하므로 개발하는 동안에는 등록하시기를 권고드립니다, 메시지만을 전달하므로 이 액션 수신 시 광고 제어 메소드(AdManager의 메소드 play(), release() 등)를 호출하지 마시기 바랍니다
-5. Companion 닫기 버튼(ViewGroup)의 클릭 시 이벤트 설정은 setOnClickListener가 아닌 <code>**ON_COMPANION_CLOSED**</code> 액션을 수신하여 처리하시기 바랍니다. 리스너의 설정은 무시됩니다
 
+1. <code>**ON_AD_READY**</code> 액션 발생 시 <code>AdManager</code>의 <code>start()</code> 메소드를 호출해야 광고가 시작되므로 이 액션은 항상 등록하시기
+   바랍니다
+2. <code>**ON_NO_FILL**</code>, <code>**ON_ERROR ACTION**</code> 발생 시 다른 액션이 발생하지 않고 SDK가 종료되어 App의 컨텐츠를 재생해야하므로 이 액션은
+   항상 등록하시기 바랍니다
+3. <code>**ON_ALL_AD_COMPLETED**</code> 또는 <code>**ON_SVC_DESTROYED**</code> 발생 시 App의 컨텐츠를 재생해야하므로 둘 중 한 액션은 항상 등록하시기
+   바랍니다
+4. <code>**ON_MESSAGE**</code> 액션 발생 시 App으로 메시지를 전달하므로 개발하는 동안에는 등록하시기를 권고드립니다, 메시지만을 전달하므로 이 액션 수신 시 광고 제어 메소드(
+   AdManager의 메소드 play(), release() 등)를 호출하지 마시기 바랍니다
+5. Companion 닫기 버튼(ViewGroup)의 클릭 시 이벤트 설정은 setOnClickListener가 아닌 <code>**ON_COMPANION_CLOSED**</code> 액션을 수신하여 처리하시기
+   바랍니다. 리스너의 설정은 무시됩니다
 
 ### [광고 액션 수신 예제](#목차)
 
@@ -659,14 +714,14 @@ class MyActivity extends AppCompatActivity {
                             log("사용자가 광고를 건너뛰었습니다");
                             break;
 
-                       // SDK로부터 메시지 수신
-                       case DiloUtil.ACTION_ON_MESSAGE:
-                          String msg = intent.getStringExtra(DiloUtil.INTENT_KEY_MESSAGE);
-                          log(msg);
+                        // SDK로부터 메시지 수신
+                        case DiloUtil.ACTION_ON_MESSAGE:
+                            String msg = intent.getStringExtra(DiloUtil.INTENT_KEY_MESSAGE);
+                            log(msg);
 
-                       case DiloUtil.ACTION_ON_SVC_DESTROYED:
-                          log("딜로 SDK 서비스 종료");
-                          break; 
+                        case DiloUtil.ACTION_ON_SVC_DESTROYED:
+                            log("딜로 SDK 서비스 종료");
+                            break;
                     }
                 }
             }
@@ -683,7 +738,8 @@ class MyActivity extends AppCompatActivity {
 
 광고 정보 클래스
 
-<code>BroadcastReceiver</code>의 <code>onReceive</code>의 <code>intent.getAction()==DiloUtil.ACTION_ON_AD_START</code>(광고 시작됨) 에서<br>
+<code>BroadcastReceiver</code>의 <code>onReceive</code>의 <code>intent.getAction()==DiloUtil.ACTION_ON_AD_START</code>(광고
+시작됨) 에서<br>
 <code>DiloUtil.INTENT_KEY_AD_INFO</code> Key로 가져온 후 Cast<br>
 
 ```java
@@ -691,7 +747,7 @@ class MyActivity extends AppCompatActivity {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        switch(intent.getAction()) {
+        switch (intent.getAction()) {
             case DiloUtil.ACTION_ON_AD_START:
                 AdInfo adInfo = (AdInfo) intent.getSerializableExtra(DiloUtil.INTENT_KEY_AD_INFO);
                 // ...
@@ -746,7 +802,8 @@ class AdInfo implements Serializable {
 
 광고 진행 정보 클래스
 
-<code>BroadcastReceiver</code>의 <code>onReceive</code>의 <code>intent.getAction()==DiloUtil.ACTION_ON_TIME_UPDATE</code>(광고 진행사항 업데이트) 에서<br>
+<code>BroadcastReceiver</code>의 <code>onReceive</code>의 <code>intent.getAction()==DiloUtil.ACTION_ON_TIME_UPDATE</code>(
+광고 진행사항 업데이트) 에서<br>
 <code>DiloUtil.INTENT_KEY_PROGRESS</code> Key로 가져온 후 Cast
 
 ```java
@@ -754,7 +811,7 @@ class MyActivity extends AppCompatActivity {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        switch(intent.getAction()) {
+        switch (intent.getAction()) {
             case DiloUtil.ACTION_ON_TIME_UPDATE:
                 Progress progress = (Progress) intent.getSerializableExtra(DiloUtil.INTENT_KEY_PROGRESS);
                 // ...
@@ -792,7 +849,8 @@ class Progress implements Serializable {
 
 오류 정보 클래스
 
-<code>BroadcastReceiver</code>의 <code>onReceive</code>의 <code>intent.getAction()==DiloUtil.ACTION_ON_ERROR</code>(오류 발생) 에서<br>
+<code>BroadcastReceiver</code>의 <code>onReceive</code>의 <code>intent.getAction()==DiloUtil.ACTION_ON_ERROR</code>(오류 발생)
+에서<br>
 <code>DiloUtil.INTENT_KEY_ERROR</code> Key로 가져온 후 Cast<br>
 
 ```java
@@ -800,7 +858,7 @@ class MyActivity extends AppCompatActivity {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        switch(intent.getAction()) {
+        switch (intent.getAction()) {
             case DiloUtil.ACTION_ON_ERROR:
                 DiloError error = (DiloError) intent.getSerializableExtra(DiloUtil.INTENT_KEY_ERROR);
                 // ...
@@ -818,23 +876,24 @@ public class DiloError extends Exception {
 
     @Retention(RetentionPolicy.SOURCE)
     @StringDef({REQUEST, MEDIA, NETWORK})
-    public @interface ErrorType {}
+    public @interface ErrorType {
+    }
 
-   /**
-    * 에러 유형 REQUEST
-    *  딜로 광고 요청 에러가 반환됩니다
-    */
-   public final static String REQUEST = "REQUEST";
-   /**
+    /**
+     * 에러 유형 REQUEST
+     *  딜로 광고 요청 에러가 반환됩니다
+     */
+    public final static String REQUEST = "REQUEST";
+    /**
      * 에러 유형 MEDIA
      *  error, detail에 MediaPlayer의 에러가 반환됩니다
      */
-   public final static String MEDIA = "MEDIA";
+    public final static String MEDIA = "MEDIA";
     /**
      * 에러 유형 NETWORK
      *  error, detail에 Volley의 에러가 반환됩니다
      */
-   public final static String NETWORK = "NETWORK";
+    public final static String NETWORK = "NETWORK";
 
     /**
      * 에러 유형
@@ -921,7 +980,7 @@ class DiloUtil {
      * 딜로 서비스 종료 액션
      */
     public static final String ACTION_ON_SVC_DESTROYED;
-   
+
     /**
      * 위의 액션들을 모두 등록해놓은 인텐트 필터
      */
@@ -966,10 +1025,11 @@ class DiloUtil {
 1. Companion이 있는 광고 재생 시 자동으로 Companion View와 닫기 버튼을 **Visible** 처리합니다
 2. Companion이 있는 광고가 끝나고 Companion이 없는(Audio만 재생되는) 광고 재생 시 자동으로 Companion View와 닫기 버튼을 **Gone** 처리합니다
 3. Skip 가능한 광고의 경우 Skip 가능 시점에만 Skip 버튼을 **Visible** 처리합니다
+
 > ※ View를 처리하는 위의 경우 Companion View가 있는 Activity/Fragment가 Destory되면 자동으로 처리하지 못하니 BroadcastReceiver의 ACTION_RELOAD_COMPANION, ACTION_ON_SKIP_ENABLED 액션을 통해 처리해야합니다
+
 4. 사용자가 Companion 클릭 시 Landing에 대한 처리가 **자동**으로 이루어집니다
 5. 사용자가 Companion 내의 opt-out 클릭 시에 대한 처리가 **자동**으로 이루어집니다
-
 
 ### [ii. Tracking에 대한 동작](#목차)
 
@@ -1025,6 +1085,7 @@ GAIN|최초 포커스를 얻거나 다시 얻었을 때| |이전 볼륨으로 �
 ### [v. Audio 재생에 대한 동작](#목차)
 
 Dilo SDK에서는 광고 오디오 음원을 Service로 재생하여 App이 종료되어도 광고가 재생될 수 있도록 구현하였습니다
+
 * Service는 광고가 모두 종료된 후 Destroy됩니다
 
 하지만 아래와 같은 상황에서 Dilo SDK Service(광고 재생)가 Android 시스템에 의해 강제 종료될 수 있습니다

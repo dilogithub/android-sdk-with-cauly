@@ -1,11 +1,10 @@
 package kr.co.dilo.sample.app;
 
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
+import android.content.*;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,16 +13,16 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
+import androidx.preference.PreferenceManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import kr.co.dilo.sample.app.content.DummyContent;
 import kr.co.dilo.sample.app.fragment.HomeFragment;
 import kr.co.dilo.sample.app.fragment.LogFragment;
 import kr.co.dilo.sample.app.fragment.SettingsFragment;
 import kr.co.dilo.sample.app.util.DiloSampleAppUtil;
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
+import kr.co.dilo.sdk.AdManager;
 
 /**
  * 메인 화면
@@ -48,9 +47,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-        if (!EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().register(this);
-        }
 
         IntentFilter filter = new IntentFilter();
         filter.addAction(DiloSampleAppUtil.CONTENT_ACTION_PLAY_END);
@@ -60,11 +56,11 @@ public class MainActivity extends AppCompatActivity {
         filter.addAction(DiloSampleAppUtil.CONTENT_ACTION_LOG);
         filter.addAction(DiloSampleAppUtil.CONTENT_ACTION_ON_PROGRESS);
 
-        Intent receiverIntent = new Intent(this, contentActionReceiver.getClass());
-        PendingIntent receiverPendingIntent = PendingIntent.getBroadcast(this, 0, receiverIntent, PendingIntent.FLAG_NO_CREATE);
         // contentActionReceiver가 등록되어있지 않다면 등록
+        Intent receiverIntent = new Intent(getApplication(), contentActionReceiver.getClass());
+        PendingIntent receiverPendingIntent = PendingIntent.getBroadcast(this, 0, receiverIntent, PendingIntent.FLAG_NO_CREATE);
         if (receiverPendingIntent == null) {
-            registerReceiver(contentActionReceiver, filter);
+            getApplication().registerReceiver(contentActionReceiver, filter);
         }
 
         floatingContent = (ViewGroup) findViewById(R.id.floating_content);
@@ -75,9 +71,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(contentIntent);
         });
 
-        /**
-         * 바텀 네이게이션 뷰 (아래 고정 메뉴)
-         */
+        // 바텀 네이게이션 뷰 (아래 고정 메뉴)
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_view);
         // 프래그먼트 추가 (홈/로그/설정 화면)
         fragmentManager.beginTransaction().add(R.id.frameLayout, homeFragment).commit();
@@ -113,7 +107,6 @@ public class MainActivity extends AppCompatActivity {
      * 로그 화면으로 로그 전송
      * @param message 로그 내용
      */
-    @Subscribe(threadMode = ThreadMode.MAIN)
     public void log(String message) {
         logFragment.log(message);
     }
@@ -121,24 +114,30 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         Log.d(DiloSampleAppUtil.LOG_TAG, "MainActivity.onDestroy()");
-        unregisterReceiver(contentActionReceiver);
         super.onDestroy();
+
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+
+        // 앱 강제 종료 허용 여부에 따라 서비스 및 프로세스 종료
+        if (!pref.getBoolean("use_background", true)) {
+            AdManager adManager = SampleApplication.getInstance().adManager;
+            adManager.release();
+
+            new Handler(Looper.getMainLooper())
+                    .postDelayed(this::exitApplication, 500);
+        }
     }
 
     @Override
     protected void onStart() {
         Log.d(DiloSampleAppUtil.LOG_TAG, "MainActivity.onStart()");
         super.onStart();
-        if (!EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().register(this);
-        }
     }
 
     @Override
     protected void onStop() {
         Log.d(DiloSampleAppUtil.LOG_TAG, "MainActivity.onStop()");
         super.onStop();
-        EventBus.getDefault().unregister(this);
     }
 
     /**
@@ -263,5 +262,15 @@ public class MainActivity extends AppCompatActivity {
 
         ImageView image = (ImageView) findViewById(R.id.content_small_image);
         image.setImageResource(item.image);
+    }
+
+    /**
+     * 어플리케이션 (프로세스) 종료
+     */
+    private void exitApplication() {
+        Log.d(DiloSampleAppUtil.LOG_TAG, "Exiting Application");
+        ActivityCompat.finishAffinity(this);
+        System.runFinalizersOnExit(true);
+        System.exit(0);
     }
 }

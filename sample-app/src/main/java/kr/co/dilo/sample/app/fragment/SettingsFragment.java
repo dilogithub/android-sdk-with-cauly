@@ -11,11 +11,11 @@ import kr.co.dilo.sdk.DiloUtil;
  */
 public class SettingsFragment extends PreferenceFragmentCompat {
 
-    SharedPreferences prefs;
+    SharedPreferences  prefs;
     EditTextPreference companionWidth;
     EditTextPreference companionHeight;
-    ListPreference productType;
-    ListPreference fillType;
+    ListPreference     productType;
+    ListPreference     fillType;
     EditTextPreference duration;
     EditTextPreference packageName;
     EditTextPreference epiCode;
@@ -23,13 +23,14 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     EditTextPreference episodeName;
     EditTextPreference creatorId;
     EditTextPreference creatorName;
-    SwitchPreference target;
-    SwitchPreference companionSize;
-    SwitchPreference usePauseInNotification;
+    SwitchPreference   target;
+    SwitchPreference   companionSize;
+    SwitchPreference   usePauseInNotification;
     EditTextPreference notificationTitle;
     EditTextPreference notificationText;
+    SwitchPreference   useBackground;
     EditTextPreference adRequestDelay;
-    Preference sdkVersion;
+    Preference         sdkVersion;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -51,6 +52,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         usePauseInNotification = findPreference("use_pause_in_notification");
         notificationTitle = findPreference("notification_title");
         notificationText = findPreference("notification_text");
+        useBackground = findPreference("use_background");
         adRequestDelay = findPreference("ad_request_delay");
         sdkVersion = findPreference("sdk_version");
 
@@ -199,7 +201,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     break;
 
                 case "notification_text":
-                    notificationText.setSummary(prefs.getString("notification_text", getString(R.string.app_name) + "후원하는 광고 재생 중"));
+                    notificationText.setSummary(prefs.getString("notification_text", getString(R.string.app_name) + " 후원하는 광고 재생 중"));
                     break;
 
                 case "ad_request_delay":
