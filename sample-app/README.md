@@ -116,7 +116,7 @@
     - RequestParam 클래스에 ***필수*** 값 추가
         - `adPositionType`, `channelName`, `episodeName`, `creatorName`, `creatorId`
 * 광고 액션에 `ON_MESSAGE` 추가
-    - SDK에서 App에 개발 시 참고할만한 메시지를 전송할 때 발생합니다
+    - App 개발 시 SDK에서 참고할만한 메시지를 전송할 때 발생합니다
     - 개발 도중에는 이 액션을 수신하는 것을 권고합니다
 * `DiloError` 클래스에 새로운 에러 유형 `REQUEST`추가
 
@@ -676,6 +676,23 @@ ON_SVC_DESTROYED|서비스 종료| | 딜로 SDK 서비스 종료
 4. `ON_MESSAGE` 액션 발생 시 App으로 메시지를 전달하므로 개발하는 동안에는 등록하시기를 권고드립니다, 메시지만을 전달하므로 이 액션 수신 시 광고 제어 메소드(AdManager의 메소드 play(), release() 등)를 호출하지 마시기 바랍니다
 5. Companion 닫기 버튼(ViewGroup)의 클릭 시 이벤트 설정은 setOnClickListener가 아닌 `ON_COMPANION_CLOSED` 액션을 수신하여 처리하시기
    바랍니다. 리스너의 설정은 무시됩니다
+   
+### [광고 액션 수신 시퀀스 다이어그램](#목차)
+일반적인 액션 시퀀스 다이어그램은 아래와 같습니다
+> 광고 없음 / 에러
+> <p align="center">
+>     <img src="https://user-images.githubusercontent.com/73524723/120272718-7c630f00-c2e8-11eb-9be6-909552ed769d.png">
+> </p>
+
+> 일시중지/재개를 하는 경우
+> <p align="center">
+>     <img src="https://user-images.githubusercontent.com/73524723/120272725-7cfba580-c2e8-11eb-9652-72edfb4589d1.png">
+> </p>
+
+> 광고를 SKIP하는 경우
+> <p align="center">
+>     <img src="https://user-images.githubusercontent.com/73524723/120272728-7d943c00-c2e8-11eb-801c-3f0bc61edd4c.png">
+> </p>
 
 ### [광고 액션 수신 예제](#목차)
 
