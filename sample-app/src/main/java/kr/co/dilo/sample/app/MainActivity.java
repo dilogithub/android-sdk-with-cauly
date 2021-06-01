@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -18,6 +19,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.preference.PreferenceManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import kr.co.dilo.sample.app.content.DummyContent;
+import kr.co.dilo.sample.app.databinding.ActivityMainBinding;
 import kr.co.dilo.sample.app.fragment.HomeFragment;
 import kr.co.dilo.sample.app.fragment.LogFragment;
 import kr.co.dilo.sample.app.fragment.SettingsFragment;
@@ -38,15 +40,20 @@ public class MainActivity extends AppCompatActivity {
      * 광고나 오디오 재생 시 BottomNavigationView 위에 뜨는 재생 화면 창 (검정색 배경)
      */
     private ViewGroup floatingContent;
+    private ProgressBar progressBar;
     private TextView contentStat;
     private Intent contentIntent;
+
+    private ActivityMainBinding viewBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(DiloSampleAppUtil.LOG_TAG, "MainActivity.onCreate()");
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_main);
+        viewBinding = ActivityMainBinding.inflate(getLayoutInflater());
+
+        setContentView(viewBinding.getRoot());
 
         IntentFilter filter = new IntentFilter();
         filter.addAction(DiloSampleAppUtil.CONTENT_ACTION_PLAY_END);
@@ -56,48 +63,55 @@ public class MainActivity extends AppCompatActivity {
         filter.addAction(DiloSampleAppUtil.CONTENT_ACTION_LOG);
         filter.addAction(DiloSampleAppUtil.CONTENT_ACTION_ON_PROGRESS);
 
-        // contentActionReceiver가 등록되어있지 않다면 등록
+        // contentActionReceiver 가 등록되어있지 않다면 등록
         Intent receiverIntent = new Intent(getApplication(), contentActionReceiver.getClass());
         PendingIntent receiverPendingIntent = PendingIntent.getBroadcast(this, 0, receiverIntent, PendingIntent.FLAG_NO_CREATE);
         if (receiverPendingIntent == null) {
             getApplication().registerReceiver(contentActionReceiver, filter);
         }
 
-        floatingContent = (ViewGroup) findViewById(R.id.floating_content);
-        contentStat = (TextView) findViewById(R.id.content_stat);
+        floatingContent = viewBinding.floatingContent;
+        progressBar = viewBinding.progressBar;
+        contentStat = viewBinding.contentStat;
         contentIntent = new Intent(this, ContentActivity.class);
         floatingContent.setOnClickListener(v -> {
             contentIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             startActivity(contentIntent);
         });
 
-        // 바텀 네이게이션 뷰 (아래 고정 메뉴)
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_view);
         // 프래그먼트 추가 (홈/로그/설정 화면)
-        fragmentManager.beginTransaction().add(R.id.frameLayout, homeFragment).commit();
-        fragmentManager.beginTransaction().add(R.id.frameLayout, logFragment).commit();
-        fragmentManager.beginTransaction().add(R.id.frameLayout, settingFragment).commit();
-        fragmentManager.beginTransaction().show(homeFragment).commit();
-        fragmentManager.beginTransaction().hide(logFragment).commit();
-        fragmentManager.beginTransaction().hide(settingFragment).commit();
+        fragmentManager.beginTransaction()
+                .add(R.id.content_list_layout, homeFragment)
+                .show(homeFragment)
+                .add(R.id.content_list_layout, logFragment)
+                .hide(logFragment)
+                .add(R.id.content_list_layout, settingFragment)
+                .hide(settingFragment)
+                .commit();
 
+        // 바텀 네이게이션 뷰 (아래 고정 메뉴)
+        BottomNavigationView bottomNavigationView = viewBinding.bottomNavigationView;
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
-            switch (item.getItemId()) {
-                case R.id.page_home:
-                    fragmentManager.beginTransaction().hide(logFragment).commit();
-                    fragmentManager.beginTransaction().hide(settingFragment).commit();
-                    fragmentManager.beginTransaction().show(homeFragment).commit();
-                    break;
-                case R.id.page_log:
-                    fragmentManager.beginTransaction().hide(settingFragment).commit();
-                    fragmentManager.beginTransaction().hide(homeFragment).commit();
-                    fragmentManager.beginTransaction().show(logFragment).commit();
-                    break;
-                case R.id.page_pref:
-                    fragmentManager.beginTransaction().hide(logFragment).commit();
-                    fragmentManager.beginTransaction().hide(homeFragment).commit();
-                    fragmentManager.beginTransaction().show(settingFragment).commit();
-                    break;
+            int id = item.getItemId();
+
+            if (id == R.id.page_home) {
+                fragmentManager.beginTransaction()
+                        .hide(logFragment)
+                        .hide(settingFragment)
+                        .show(homeFragment)
+                        .commit();
+            } else if (id == R.id.page_log) {
+                fragmentManager.beginTransaction()
+                        .hide(settingFragment)
+                        .hide(homeFragment)
+                        .show(logFragment)
+                        .commit();
+            } else if (id == R.id.page_pref) {
+                fragmentManager.beginTransaction()
+                        .hide(logFragment)
+                        .hide(homeFragment)
+                        .show(settingFragment)
+                        .commit();
             }
             return true;
         });
@@ -115,6 +129,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         Log.d(DiloSampleAppUtil.LOG_TAG, "MainActivity.onDestroy()");
         super.onDestroy();
+
+        try {
+            getApplication().unregisterReceiver(contentActionReceiver);
+        } catch (IllegalArgumentException ignored) {}
 
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -197,13 +215,15 @@ public class MainActivity extends AppCompatActivity {
                     setFloatingContent(intent);
 
                     String adInfo = intent.getStringExtra("adInfo");
-                    double current1 = intent.getDoubleExtra("currentSec", 0);
-                    double total1 = intent.getDoubleExtra("totalSec", 0);
+                    double current = intent.getDoubleExtra("currentSec", 0);
+                    double total= intent.getDoubleExtra("totalSec", 0);
+
+                    progressBar.setProgress((int) (current * 100 / total));
 
                     contentStat.setText(String.format("광고중 %s\n%s / %s",
                             adInfo,
-                            DiloSampleAppUtil.secondsToTimeString(current1),
-                            DiloSampleAppUtil.secondsToTimeString(total1)
+                            DiloSampleAppUtil.secondsToTimeString(current),
+                            DiloSampleAppUtil.secondsToTimeString(total)
                     ));
                     floatingContent.setVisibility(View.VISIBLE);
                     break;
@@ -217,11 +237,12 @@ public class MainActivity extends AppCompatActivity {
                 // 컨텐츠 재생 정보 수신
                 case DiloSampleAppUtil.CONTENT_ACTION_ON_PROGRESS:
                     setFloatingContent(intent);
-                    double current2 = intent.getDoubleExtra("currentSec", 0);
-                    double total2 = intent.getDoubleExtra("totalSec", 0);
+                    current = intent.getDoubleExtra("currentSec", 0);
+                    total = intent.getDoubleExtra("totalSec", 0);
+                    progressBar.setProgress((int)(current * 100 / total));
                     contentStat.setText(String.format("재생중\n%s / %s",
-                            DiloSampleAppUtil.secondsToTimeString(current2),
-                            DiloSampleAppUtil.secondsToTimeString(total2))
+                            DiloSampleAppUtil.secondsToTimeString(current),
+                            DiloSampleAppUtil.secondsToTimeString(total))
                     );
                     floatingContent.setVisibility(View.VISIBLE);
                     break;
@@ -229,15 +250,13 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    // ContentActivity의 결과 수신해서 처리
+    // ContentActivity 의 결과 수신해서 처리
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         Log.d(DiloSampleAppUtil.LOG_TAG, "MainActivity.onActivityResult :: requestCode : " + requestCode + ", resultCode : " + resultCode);
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == -1) {
-//            floatingContent.setVisibility(View.GONE);
-        } else {
+        if (resultCode != -1) {
             setFloatingContent(data);
             floatingContent.setVisibility(View.VISIBLE);
         }
@@ -251,16 +270,17 @@ public class MainActivity extends AppCompatActivity {
         if (intent == null) {
             return;
         }
-        TextView desc = (TextView) findViewById(R.id.content_small_desc);
+
+        TextView desc = viewBinding.contentSmallDesc;
         DummyContent.DummyItem item = (DummyContent.DummyItem) intent.getSerializableExtra("item");
         contentIntent.putExtra("index", intent.getExtras().getInt("index"))
                 .putExtra("item", item);
         desc.setText(item.desc);
 
-        TextView title = (TextView) findViewById(R.id.content_small_title);
+        TextView title = viewBinding.contentSmallTitle;
         title.setText(item.title);
 
-        ImageView image = (ImageView) findViewById(R.id.content_small_image);
+        ImageView image = viewBinding.contentSmallImage;
         image.setImageResource(item.image);
     }
 
@@ -270,7 +290,13 @@ public class MainActivity extends AppCompatActivity {
     private void exitApplication() {
         Log.d(DiloSampleAppUtil.LOG_TAG, "Exiting Application");
         ActivityCompat.finishAffinity(this);
-        System.runFinalizersOnExit(true);
+//        System.runFinalizersOnExit(true);
         System.exit(0);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        overridePendingTransition(0, R.anim.slide_down_exit);
     }
 }

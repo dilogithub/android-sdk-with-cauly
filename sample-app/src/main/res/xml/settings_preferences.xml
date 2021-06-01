@@ -1,5 +1,7 @@
 <PreferenceScreen
-        xmlns:android="http://schemas.android.com/apk/res/android">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/setting_preferences"
+>
 
   <PreferenceCategory
           android:title="광고 요청"
@@ -8,10 +10,7 @@
             android:key="target"
             android:title="테스트 서버"
             android:defaultValue="true"
-    >
-
-    </SwitchPreference>
-
+    />
   </PreferenceCategory>
 
   <PreferenceCategory
@@ -26,15 +25,11 @@
     <EditTextPreference
             android:key="companion_width"
             android:title="컴패니언 넓이"
-            android:inputType="numberDecimal"
-            android:digits="0123456789"
     />
 
     <EditTextPreference
             android:key="companion_height"
             android:title="컴패니언 높이"
-            android:inputType="numberDecimal"
-            android:digits="0123456789"
     />
   </PreferenceCategory>
 
@@ -55,6 +50,14 @@
             android:key="fill_type"
             android:title="광고 갯수 *"
             android:defaultValue="MULTI"
+    />
+
+    <ListPreference
+            android:entries="@array/ad_position_type"
+            android:entryValues="@array/ad_position_type_values"
+            android:key="ad_position_type"
+            android:title="광고 위치 *"
+            android:defaultValue="PRE"
     />
 
     <EditTextPreference
@@ -113,9 +116,13 @@
             android:key="use_pause_in_notification"
             android:title="노티 일시정지 사용"
             android:defaultValue="true"
-    >
+    />
 
-    </SwitchPreference>
+    <SwitchPreference
+            android:key="use_progress_bar_in_notification"
+            android:title="노티 프로그레스 바 사용"
+            android:defaultValue="true"
+    />
 
     <EditTextPreference
             android:key="notification_title"
@@ -144,10 +151,7 @@
             android:key="use_background"
             android:title="앱 강제종료에도 서비스 실행"
             android:defaultValue="true"
-    >
-
-    </SwitchPreference>
-
+    />
   </PreferenceCategory>
 
   <!-- 항상 제일 아래 -->

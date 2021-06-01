@@ -62,26 +62,6 @@
         />
 
         <RelativeLayout
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="left|bottom"
-          android:layout_marginBottom="15dp"
-        >
-          <Button
-            android:id="@+id/skip_button"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:textColor="@android:color/white"
-            android:background="@drawable/skip_button"
-            android:layout_marginLeft="0dp"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:textSize="10sp"
-            android:visibility="invisible"
-          />
-        </RelativeLayout>
-
-        <RelativeLayout
           android:id="@+id/companion_close_button"
           android:layout_width="25dp"
           android:layout_height="25dp"
@@ -89,6 +69,7 @@
           android:layout_marginTop="15dp"
           android:layout_gravity="right|top"
           android:orientation="vertical"
+          android:visibility="invisible"
           android:background="@drawable/close_button"
         >
         </RelativeLayout>
@@ -149,6 +130,39 @@
             android:textColor="@android:color/white"
             android:textSize="12sp"/>
         </TableRow>
+        <TableRow android:background="@android:color/white">
+          <EditText android:id="@+id/ad_title"
+                    android:layout_width="0dp"
+                    android:layout_height="25dp"
+                    android:layout_span="3"
+                    android:paddingLeft="10dp"
+                    android:enabled="false"
+                    android:background="@drawable/text_box"
+                    android:textAlignment="textStart"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp"/>
+
+          <View
+                  android:layout_width="0dp"
+                  android:layout_height="0dp"
+                  android:layout_weight="1"
+          />
+
+          <!-- eg) Skip 버튼을 App 내 원하는 곳에 위치하여 레이아웃 설정 -->
+          <Button
+                  android:id="@+id/skip_button"
+                  android:layout_width="50dp"
+                  android:layout_height="25dp"
+                  android:textColor="@android:color/white"
+                  android:background="@drawable/skip_button"
+                  android:layout_marginLeft="0dp"
+                  android:paddingLeft="5dp"
+                  android:paddingRight="5dp"
+                  android:textSize="10sp"
+                  android:visibility="invisible"
+          />
+        </TableRow>
+
       </TableLayout>
     </LinearLayout>
   </RelativeLayout>

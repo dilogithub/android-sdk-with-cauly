@@ -2,10 +2,11 @@ package kr.co.dilo.sample.app;
 
 import android.app.Application;
 import android.content.res.Configuration;
+import android.os.StrictMode;
 import android.util.Log;
 import androidx.annotation.NonNull;
+import kr.co.dilo.sample.app.util.DiloSampleAppUtil;
 import kr.co.dilo.sdk.AdManager;
-import kr.co.dilo.sdk.DiloUtil;
 
 public class SampleApplication extends Application {
 
@@ -20,7 +21,18 @@ public class SampleApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.d(DiloUtil.LOG_TAG, "SampleApplication.onCreate()");
+        Log.d(DiloSampleAppUtil.LOG_TAG, "SampleApplication.onCreate()");
+
+        if (BuildConfig.DEBUG) {
+            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+                    .detectAll()
+                    .penaltyLog()
+                    .build());
+            StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+                    .detectAll()
+                    .penaltyLog()
+                    .build());
+        }
 
         instance = this;
         adManager = new AdManager(this);

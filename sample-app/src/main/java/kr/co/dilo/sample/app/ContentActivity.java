@@ -1,5 +1,6 @@
 package kr.co.dilo.sample.app;
 
+import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -19,8 +20,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 import kr.co.dilo.sample.app.content.DummyContent;
+import kr.co.dilo.sample.app.databinding.ActivityContentBinding;
 import kr.co.dilo.sample.app.fragment.LogFragment;
 import kr.co.dilo.sample.app.util.DiloSampleAppUtil;
+import kr.co.dilo.sample.app.util.OnSwipeTouchListener;
 import kr.co.dilo.sdk.AdManager;
 import kr.co.dilo.sdk.AdView;
 import kr.co.dilo.sdk.DiloUtil;
@@ -53,9 +56,10 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
     private Button release;
     private AdManager adManager;
     private ViewGroup companionCloseButton;
-    protected ProgressBar progressBar;
+    private ProgressBar progressBar;
     private EditText progressText;
     private EditText adCount;
+    private EditText adTitle;
     private ViewGroup adInfoWrapper;
     private RequestParam.Builder requestParamBuilder = null;
     private Intent contentIntent;
@@ -63,15 +67,27 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
     private long skipOffset;
 
     private boolean isPlaying = false;
+    private boolean isMediaControllerShowing = false;
 
     private SharedPreferences pref;
+
+    private ActivityContentBinding viewBinding;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         Log.d(DiloSampleAppUtil.LOG_TAG, "ContentActivity.onCreate()");
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_content);
+        viewBinding = ActivityContentBinding.inflate(getLayoutInflater());
+        setContentView(viewBinding.getRoot());
+
+        viewBinding.getRoot().setOnTouchListener(new OnSwipeTouchListener(this) {
+            @Override
+            public void onSwipeBottom() {
+                super.onSwipeBottom();
+                onBackPressed();
+            }
+        });
 
         pref = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -81,26 +97,27 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
 
         setResult(-1, contentIntent);
 
-        contentWrapper = (ViewGroup) findViewById(R.id.content_wrapper);
-        contentTitle = (TextView) findViewById(R.id.content_title);
+        contentWrapper = viewBinding.contentWrapper;
+        contentTitle = viewBinding.contentTitle;
         item = (DummyContent.DummyItem) getIntent().getSerializableExtra("item");
         if (item != null) {
             contentTitle.setText(String.format("%s - %s", item.title, item.desc));
         }
-        companionAdView = (AdView) findViewById(R.id.companion_ad_view);
-        adWrapper = (ViewGroup) findViewById(R.id.ad_wrapper);
-        skipButton = (Button) findViewById(R.id.skip_button);
-        play = (Button) findViewById(R.id.play);
-        pause = (Button) findViewById(R.id.pause);
-        reload = (Button) findViewById(R.id.reload);
-        release = (Button) findViewById(R.id.release);
+        companionAdView = viewBinding.companionAdView;
+        adWrapper = viewBinding.adWrapper;
+        skipButton = viewBinding.skipButton;
+        play = viewBinding.play;
+        pause = viewBinding.pause;
+        reload = viewBinding.reload;
+        release = viewBinding.release;
 
-        surfaceView = (SurfaceView) findViewById(R.id.video_view);
-        companionCloseButton = (ViewGroup) findViewById(R.id.companion_close_button);
-        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
-        progressText = (EditText) findViewById(R.id.progress_text);
-        adCount = (EditText) findViewById(R.id.ad_count);
-        adInfoWrapper = (ViewGroup) findViewById(R.id.ad_info);
+        surfaceView = viewBinding.videoView;
+        companionCloseButton = viewBinding.companionCloseButton;
+        progressBar = viewBinding.progressBar;
+        progressText = viewBinding.progressText;
+        adTitle = viewBinding.adTitle;
+        adCount = viewBinding.adCount;
+        adInfoWrapper = viewBinding.adInfo;
 
         play.setOnClickListener(v -> {
             // 로그 초기화
@@ -129,7 +146,7 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
         reload.setOnClickListener(v -> {
             if (adManager != null) {
                 adWrapper.setVisibility(View.VISIBLE);
-                adInfoWrapper.setVisibility(View.VISIBLE);
+//                adInfoWrapper.setVisibility(View.VISIBLE);
                 adManager.reloadCompanion(companionAdView, companionCloseButton);
             }
         });
@@ -142,16 +159,25 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
             }
         });
 
-        surfaceView.setOnTouchListener((v, event) -> {
+        surfaceView.setOnClickListener(v -> {
             if (mediaController != null) {
-                mediaController.show();
+                if (!isMediaControllerShowing) {
+                    mediaController.show();
+                    isMediaControllerShowing = true;
+                } else {
+                    mediaController.hide();
+                    isMediaControllerShowing = false;
+                }
             }
-            return false;
         });
 
         contentWrapper.setVisibility(View.INVISIBLE);
 
-        registerReceiver(diloActionReceiver, DiloUtil.DILO_INTENT_FILTER);
+        Intent receiverIntent = new Intent(getApplication(), diloActionReceiver.getClass());
+        PendingIntent receiverPendingIntent = PendingIntent.getBroadcast(this, 0, receiverIntent, PendingIntent.FLAG_NO_CREATE);
+        if (receiverPendingIntent == null) {
+            getApplication().registerReceiver(diloActionReceiver, DiloUtil.DILO_INTENT_FILTER);
+        }
 
         adWrapper.setVisibility(View.INVISIBLE);
         adInfoWrapper.setVisibility(View.INVISIBLE);
@@ -162,7 +188,7 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
     public void onDestroy() {
         Log.d(DiloSampleAppUtil.LOG_TAG, "ContentActivity.onDestroy()");
         try {
-            unregisterReceiver(diloActionReceiver);
+            getApplication().unregisterReceiver(diloActionReceiver);
         } catch (IllegalArgumentException ignored) {}
         super.onDestroy();
     }
@@ -179,6 +205,135 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
             }
             mediaController = new MediaController(this);
 
+            mediaPlayer.setOnPreparedListener(mp -> {
+
+                int duration = mediaPlayer.getDuration();
+                if (timer != null) {
+                    timer.cancel();
+                }
+                timer = new CountDownTimer(duration, 1000) {
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+
+                        double currentSec = (double) mediaPlayer.getCurrentPosition() / 1000;
+                        double totalSec = (double) duration / 1000;
+
+                        Intent i = new Intent(DiloSampleAppUtil.CONTENT_ACTION_ON_PROGRESS)
+                                .addFlags(Intent.FLAG_RECEIVER_FOREGROUND)
+                                .putExtra("item", item)
+                                .putExtra("currentSec", currentSec)
+                                .putExtra("totalSec", totalSec);
+                        sendBroadcast(i);
+                    }
+
+                    @Override
+                    public void onFinish() {
+
+                    }
+                };
+
+                log("컨텐츠 재생");
+                sendBroadcast(getContentPlayIntent());
+                isPlaying = true;
+                if (timer != null) {
+                    timer.start();
+                }
+                mp.start();
+            });
+
+            mediaPlayer.setOnErrorListener((mp, what, extra) -> {
+//                    log("컨텐츠 재생 실패");
+                return false;
+            });
+
+            mediaController.setMediaPlayer(new MediaController.MediaPlayerControl() {
+                @Override
+                public void start() {
+                    log("컨텐츠 재생");
+                    if (timer != null) {
+                        timer.start();
+                    }
+                    if (mediaPlayer != null) {
+                        mediaPlayer.start();
+                    }
+                }
+
+                @Override
+                public void pause() {
+                    if (timer != null) {
+                        timer.cancel();
+                    }
+                    if (mediaPlayer != null) {
+                        mediaPlayer.pause();
+                    }
+                }
+
+                @Override
+                public int getDuration() {
+                    if (mediaPlayer != null) {
+                        return mediaPlayer.getDuration();
+                    }
+                    return 0;
+                }
+
+                @Override
+                public int getCurrentPosition() {
+                    if (mediaPlayer != null) {
+                        return mediaPlayer.getCurrentPosition();
+                    }
+
+                    return 0;
+                }
+
+                @Override
+                public void seekTo(int pos) {
+                    if (mediaPlayer != null) {
+                        mediaPlayer.seekTo(pos);
+                    }
+                }
+
+                @Override
+                public boolean isPlaying() {
+                    if (mediaPlayer != null) {
+                        return mediaPlayer.isPlaying();
+                    }
+                    return false;
+                }
+
+                @Override
+                public int getBufferPercentage() {
+                    return 0;
+                }
+
+                @Override
+                public boolean canPause() {
+                    return true;
+                }
+
+                @Override
+                public boolean canSeekBackward() {
+                    return true;
+                }
+
+                @Override
+                public boolean canSeekForward() {
+                    return true;
+                }
+
+                @Override
+                public int getAudioSessionId() {
+                    if (mediaPlayer != null) {
+                        return mediaPlayer.getAudioSessionId();
+                    }
+                    return Integer.MIN_VALUE;
+                }
+            });
+            mediaController.setAnchorView(surfaceView);
+
+            if (isPlaying) {
+                return;
+            }
+
             String dataSource = "android.resource://" + this.getPackageName() + "/raw/sample";
             Log.v(DiloSampleAppUtil.LOG_TAG, "ContentActivity.surfaceCreated() :: 컨텐츠 소스 설정 Url : " + dataSource);
             try {
@@ -186,130 +341,6 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
             } catch (Exception e) {
                 Log.e(DiloSampleAppUtil.LOG_TAG, "ContentActivity.surfaceCreated() :: 컨텐츠 소스를 설정할 수 없습니다");
             }
-
-            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                @Override
-                public void onPrepared(MediaPlayer mp) {
-
-                    int duration = mediaPlayer.getDuration();
-                    if (timer != null) {
-                        timer.cancel();
-                    }
-                    timer = new CountDownTimer(duration, 1000) {
-                        @Override
-                        public void onTick(long millisUntilFinished) {
-
-                            double currentSec = (double) mediaPlayer.getCurrentPosition() / 1000;
-                            double totalSec = (double) duration / 1000;
-
-                            Intent i = new Intent(DiloSampleAppUtil.CONTENT_ACTION_ON_PROGRESS)
-                                    .addFlags(Intent.FLAG_RECEIVER_FOREGROUND)
-                                    .putExtra("item", item)
-                                    .putExtra("currentSec", currentSec)
-                                    .putExtra("totalSec", totalSec);
-                            sendBroadcast(i);
-                        }
-
-                        @Override
-                        public void onFinish() {
-
-                        }
-                    };
-
-                    mediaController.setMediaPlayer(new MediaController.MediaPlayerControl() {
-                        @Override
-                        public void start() {
-                            log("컨텐츠 재생");
-                            if (timer != null) {
-                                timer.start();
-                            }
-                            if (mediaPlayer != null) {
-                                mediaPlayer.start();
-                            }
-                        }
-
-                        @Override
-                        public void pause() {
-                            if (timer != null) {
-                                timer.cancel();
-                            }
-                            if (mediaPlayer != null) {
-                                mediaPlayer.pause();
-                            }
-                        }
-
-                        @Override
-                        public int getDuration() {
-                            return duration;
-                        }
-
-                        @Override
-                        public int getCurrentPosition() {
-                            if (mediaPlayer != null) {
-                                return mediaPlayer.getCurrentPosition();
-                            }
-
-                            return 0;
-                        }
-
-                        @Override
-                        public void seekTo(int pos) {
-                            if (mediaPlayer != null) {
-                                mediaPlayer.seekTo(pos);
-                            }
-                        }
-
-                        @Override
-                        public boolean isPlaying() {
-                            if (mediaPlayer != null) {
-                                return mediaPlayer.isPlaying();
-                            }
-                            return false;
-                        }
-
-                        @Override
-                        public int getBufferPercentage() {
-                            return 0;
-                        }
-
-                        @Override
-                        public boolean canPause() {
-                            return true;
-                        }
-
-                        @Override
-                        public boolean canSeekBackward() {
-                            return true;
-                        }
-
-                        @Override
-                        public boolean canSeekForward() {
-                            return true;
-                        }
-
-                        @Override
-                        public int getAudioSessionId() {
-                            if (mediaPlayer != null) {
-                                return mediaPlayer.getAudioSessionId();
-                            }
-                            return Integer.MIN_VALUE;
-                        }
-                    });
-                    mediaController.setAnchorView(surfaceView);
-                    log("컨텐츠 재생");
-                    sendBroadcast(getContentPlayIntent());
-                    isPlaying = true;
-                    if (timer != null) {
-                        timer.start();
-                    }
-                    mp.start();
-                }
-            });
-
-            mediaPlayer.setOnErrorListener((mp, what, extra) -> {
-//                    log("컨텐츠 재생 실패");
-                return false;
-            });
 
             try {
                 mediaPlayer.prepareAsync();
@@ -347,7 +378,7 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
         );
 
-        // Shared Preferences에서 값 읽어 옴(테스트 용)
+        // SharedPreferences 에서 값 읽어 옴(테스트 용)
         final String epiCode = pref.getString("epi_code", "").trim();
         final String bundleId = pref.getString("package_name", "").trim();
         final String channelName = pref.getString("channel_name", "").trim();
@@ -357,7 +388,9 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
         final int duration = Integer.parseInt(pref.getString("duration", "15"));
         final RequestParam.ProductType productType = RequestParam.ProductType.valueOf(pref.getString("product_type", "DILO_PLUS"));
         final RequestParam.FillType fillType = RequestParam.FillType.valueOf(pref.getString("fill_type", "MULTI"));
+        final RequestParam.AdPositionType adPositionType = RequestParam.AdPositionType.valueOf(pref.getString("ad_position_type", "PRE"));
         final boolean usePauseInNotification = pref.getBoolean("use_pause_in_notification", true);
+        final boolean useProgressBarInNotification = pref.getBoolean("use_progress_bar_in_notification", true);
 
         requestParamBuilder =
                 new RequestParam.Builder(this)
@@ -367,18 +400,17 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
                         .productType(productType)                        // 광고 상품 유형 설정
                         .fillType(fillType)                              // 광고 채우기 유형 설정
                         .drs(duration)                                   // 광고 시간 설정
-                        .adPositionType(RequestParam.AdPositionType.PRE) // 광고 재생 시점 설정
+                        .adPositionType(adPositionType)                  // 광고 재생 시점 설정
                         .iconResourceId(R.drawable.notification_icon)    // Notification 아이콘 설정
                         .channelName(channelName)                        // 채널 이름 설정
                         .episodeName(episodeName)                        // 에피소드 이름 설정
                         .creatorId(creatorId)                            // 크리에이터 ID (식별자) 설정
                         .creatorName(creatorName)                        // 크리에이터 이름 설정
                         // 선택 항목
-                        .companionAdView(companionAdView)                // Companion View 설정 (Companion이 있는 광고가 나가려면 필수)
+                        .companionAdView(companionAdView)                // Companion View 설정 (Companion 이 있는 광고가 나가려면 필수)
                         .closeButton(companionCloseButton)               // 닫기 버튼 설정
                         .skipButton(skipButton)                          // Skip 버튼 설정
                         .notificationContentIntent(notificationIntent)   // Notification Click PendingIntent 설정
-                        .usePauseInNotification(usePauseInNotification)  // Notification 사용자 일시정지/재개 기능 설정
                         .notificationContentTitle(pref.getString("notification_title", "")) // Notification Title 설정 (상단 텍스트)
                         .notificationContentText(pref.getString("notification_text", ""));  // Notification Text 설정 (하단 텍스트)
 
@@ -387,6 +419,14 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
                     Integer.parseInt(pref.getString("companion_width", "300")),
                     Integer.parseInt(pref.getString("companion_height", "300"))
             );
+        }
+
+        // 플래그 설정
+        if (usePauseInNotification) {
+            requestParamBuilder.addFlags(RequestParam.FLAG_USE_PAUSE_IN_NOTIFICATION);
+        }
+        if (useProgressBarInNotification) {
+            requestParamBuilder.addFlags(RequestParam.FLAG_USE_PROGRESSBAR_IN_NOTIFICATION);
         }
 
         log("광고 요청");
@@ -449,11 +489,10 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
     }
 
     private Intent getContentPlayIntent() {
-        Intent i = new Intent(DiloSampleAppUtil.CONTENT_ACTION_PLAY)
+        return new Intent(DiloSampleAppUtil.CONTENT_ACTION_PLAY)
                 .addFlags(Intent.FLAG_RECEIVER_FOREGROUND)
                 .putExtra("index", contentIntent.getExtras().getInt("index"))
                 .putExtra("item", item);
-        return i;
     }
 
     public void log(String message) {
@@ -505,8 +544,9 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
     }
 
     /**
-     * 딜로 SDK로부터 액션을 받는 BroadcastReceiver
+     * 딜로 SDK 로부터 액션을 받는 BroadcastReceiver
      */
+    @SuppressLint("DefaultLocale")
     BroadcastReceiver diloActionReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -555,7 +595,7 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
                         // 광고 플레이 시작 액션
                         case DiloUtil.ACTION_ON_AD_START:
                             skipOffset = 0;
-                            AdInfo adInfo = (AdInfo) intent.getSerializableExtra(DiloUtil.INTENT_KEY_AD_INFO);
+                            AdInfo adInfo = (AdInfo) intent.getSerializableExtra(DiloUtil.EXTRA_AD_INFO);
                             Intent i = new Intent(DiloSampleAppUtil.CONTENT_ACTION_AD)
                                     .addFlags(Intent.FLAG_RECEIVER_FOREGROUND)
                                     .putExtra("index", intent.getExtras().getInt("index"))
@@ -565,9 +605,8 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
                                     .putExtra("adInfo", String.format("%d/%d", adInfo.currentOffset, adInfo.totalCount));
                             sendBroadcast(i);
 
-                            adWrapper.setVisibility(View.VISIBLE);
-                            adInfoWrapper.setVisibility(View.VISIBLE);
                             adCount.setText(String.format("광고 %d/%d", adInfo.currentOffset, adInfo.totalCount));
+                            adTitle.setText(String.format("[%s] %s", adInfo.advertiserName, adInfo.title));
                             log("========================================");
                             log("광고 정보");
                             log(String.format("타입     : %s", adInfo.type));
@@ -586,6 +625,9 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
                                 skipButton.setText("스킵 불가능");
                                 skipButton.setVisibility(View.VISIBLE);
                             }
+
+                            adWrapper.setVisibility(View.VISIBLE);
+                            adInfoWrapper.setVisibility(View.VISIBLE);
                             break;
 
                         // 광고 재생 완료 액션 (각각의 광고 재생 완료마다 호출)
@@ -596,9 +638,6 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
                         // 모든 광고 재생 완료 액션 (가장 마지막 광고 재생 완료 시 한 번 호출)
                         case DiloUtil.ACTION_ON_ALL_AD_COMPLETED:
                             log("모든 광고 재생이 완료되었습니다");
-                            adWrapper.setVisibility(View.INVISIBLE);
-                            adInfoWrapper.setVisibility(View.INVISIBLE);
-                            playContent();
                             break;
 
                         // 광고 일시 중지 액션
@@ -630,14 +669,14 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
 
                         // 에러 발생 액션
                         case DiloUtil.ACTION_ON_ERROR:
-                            DiloError error = (DiloError) intent.getSerializableExtra(DiloUtil.INTENT_KEY_ERROR);
+                            DiloError error = (DiloError) intent.getSerializableExtra(DiloUtil.EXTRA_ERROR);
                             log(String.format("광고 요청 중 에러가 발생하였습니다\n\t타입: %s, 에러: %s, 상세: %s", error.type, error.error, error.detail));
                             playContent();
                             break;
 
                         // 광고 진행 사항 업데이트 액션
                         case DiloUtil.ACTION_ON_TIME_UPDATE:
-                            Progress progress = (Progress) intent.getSerializableExtra(DiloUtil.INTENT_KEY_PROGRESS);
+                            Progress progress = (Progress) intent.getSerializableExtra(DiloUtil.EXTRA_PROGRESS);
 
                             int percent = (int) (progress.seconds * 100 / progress.duration);
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -662,12 +701,12 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
                             adCount.setText(String.format("광고 %d/%d", progress.current, progress.total));
 
                             if (skipOffset != 0) {
+                                String msg = "건너뛰기";
                                 if (skipOffset - (int) progress.seconds > 0) {
-                                    skipButton.setText((int) (skipOffset - progress.seconds) + "초 후 건너뛰기");
+                                    msg = (int) (skipOffset - progress.seconds) + "초 후 건너뛰기";
                                     skipButton.setVisibility(View.VISIBLE);
-                                } else {
-                                    skipButton.setText("건너뛰기");
                                 }
+                                skipButton.setText(msg);
                             }
 
                             i = new Intent(DiloSampleAppUtil.CONTENT_ACTION_AD)
@@ -685,15 +724,15 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
                             log("사용자가 광고를 건너뛰었습니다");
                             break;
 
-                        // SDK로부터 메시지 수신
+                        // SDK 로부터 메시지 수신
                         case DiloUtil.ACTION_ON_MESSAGE:
-                            String msg = intent.getStringExtra(DiloUtil.INTENT_KEY_MESSAGE);
+                            String msg = intent.getStringExtra(DiloUtil.EXTRA_MESSAGE);
                             log(msg);
                             break;
 
                         case DiloUtil.ACTION_ON_SVC_DESTROYED:
                             log("딜로 SDK 서비스 종료");
-                            adWrapper.setVisibility(View.INVISIBLE);
+//                            adWrapper.setVisibility(View.INVISIBLE);
                             adInfoWrapper.setVisibility(View.INVISIBLE);
                             playContent();
                             break;
@@ -702,4 +741,5 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
             }
         }
     };
+
 }

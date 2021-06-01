@@ -1,13 +1,12 @@
 package kr.co.dilo.sample.app.content;
 
-import android.widget.ImageView;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
-
-import kr.co.dilo.sample.app.R;
+import androidx.recyclerview.widget.RecyclerView;
+import kr.co.dilo.sample.app.databinding.FragmentHomeBinding;
 
 import java.util.List;
 
@@ -16,57 +15,58 @@ import java.util.List;
  */
 public class ContentRecyclerViewAdapter extends RecyclerView.Adapter<ContentRecyclerViewAdapter.ViewHolder> {
 
-  private final List<DummyContent.DummyItem> mValues;
+  private final List<DummyContent.DummyItem> items;
 
   public ContentRecyclerViewAdapter(List<DummyContent.DummyItem> items) {
-    mValues = items;
+    this.items = items;
   }
 
   private OnContentSelectedListener listener;
 
   @Override
   public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-    View view = LayoutInflater.from(parent.getContext())
-        .inflate(R.layout.fragment_home, parent, false);
-
-    return new ViewHolder(view);
+    return new ViewHolder(FragmentHomeBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
   }
 
   @Override
   public void onBindViewHolder(final ViewHolder holder, int position) {
-    holder.mItem = mValues.get(position);
-    holder.mImageView.setImageResource(mValues.get(position).image);
-    holder.mTitleView.setText(mValues.get(position).title);
-    holder.mDescView.setText(mValues.get(position).desc);
+    DummyContent.DummyItem item = items.get(position);
+
+    holder.item = item;
+    holder.image.setImageResource(item.image);
+    holder.title.setText(item.title);
+    holder.desc.setText(item.desc);
   }
 
   @Override
   public int getItemCount() {
-    return mValues.size();
+    return items.size();
   }
 
+  /**
+   * 컨텐츠 리스트 아이템 (View)
+   */
   public class ViewHolder extends RecyclerView.ViewHolder {
-    public final View mView;
-    public final ImageView mImageView;
-    public final TextView mTitleView;
-    public final TextView mDescView;
-    public DummyContent.DummyItem mItem;
+    public final ImageView image;
+    public final TextView title;
+    public final TextView desc;
+    public DummyContent.DummyItem item;
 
-    public ViewHolder(View view) {
-      super(view);
-      mView = view;
-      mView.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-          int pos = getAdapterPosition();
-          if (pos != RecyclerView.NO_POSITION && listener != null) {
-            listener.onContentSelected(v, pos, mValues.get(pos));
-          }
+    public ViewHolder(FragmentHomeBinding view) {
+      super(view.getRoot());
+
+      // 뷰홀더 자체 클릭 시
+      View view1 = view.getRoot();
+      view1.setOnClickListener(v -> {
+        int pos = getAdapterPosition();
+        if (pos != RecyclerView.NO_POSITION && listener != null) {
+          listener.onContentSelected(pos, items.get(pos));
         }
       });
-      mImageView = (ImageView) view.findViewById(R.id.content_image);
-      mTitleView = (TextView) view.findViewById(R.id.content_title);
-      mDescView = (TextView) view.findViewById(R.id.content_desc);
+
+      image = view.contentImage;
+      title = view.contentTitle;
+      desc  = view.contentDesc;
     }
   }
 
@@ -75,6 +75,6 @@ public class ContentRecyclerViewAdapter extends RecyclerView.Adapter<ContentRecy
   }
 
   public interface OnContentSelectedListener {
-    void onContentSelected(View view, int pos, DummyContent.DummyItem item);
+    void onContentSelected(int pos, DummyContent.DummyItem item);
   }
 }
