@@ -14,11 +14,11 @@
 2. [광고 설정](#2-광고-설정)
     * [Companion 광고를 위한 레이아웃 설정 (옵션)](#i-companion-광고를-위한-레이아웃-설정-옵션)
     * [광고 Skip기능 제공을 위한 Button 할당 (옵션)](#ii-광고-skip기능-제공을-위한-button-할당-옵션)
-    * [Class <code>RequestParam</code>](#iii-class-requestparam)
+    * [Class `RequestParam`](#iii-class-requestparam)
     
 
 3. [광고 요청](#3-광고-요청)
-    * [Class <code>AdManager</code>](#i-class-admanager)
+    * [Class `AdManager`](#i-class-admanager)
     * [광고 요청 예시](#ii-광고-요청-예시)
 
 
@@ -28,10 +28,10 @@
     
 
 5. [데이터 클래스 명세](#5-데이터-클래스-명세)
-    * [Class <code>AdInfo</code>](#i-class-adinfo)
-    * [Class <code>Progress</code>](#ii-class-progress)
-    * [Class <code>DiloError</code>](#iii-class-diloerror)
-    * [Class <code>DiloUtil</code>](#iv-class-diloutil)
+    * [Class `AdInfo`](#i-class-adinfo)
+    * [Class `Progress`](#ii-class-progress)
+    * [Class `DiloError`](#iii-class-diloerror)
+    * [Class `DiloUtil`](#iv-class-diloutil)
     
 
 6. [딜로 SDK 동작](#6-Dilo-SDK-동작)
@@ -52,22 +52,22 @@
 
 #### 추가
 
-* <code>RequestParam</code>에 **Flag**를 지정하는 메소드가 추가되었습니다
-    - <code>setFlags(int flags)</code>, <code>addFlags(int flags)</code>, <code>removeFlags(int flags)</code>
+* `RequestParam`에 **Flag**를 지정하는 메소드가 추가되었습니다
+    - `setFlags(int flags)`, `addFlags(int flags)`, `removeFlags(int flags)`
     - 현재 SDK 기능 및 앞으로 추가될 기능들의 사용 여부를 지정하는 데 사용됩니다
-    - [여기에서](#iii-class-requestparam) <code>RequestParam.FLAG_</code>로 시작하는 Flag들을 참고하시기 바랍니다
+    - [여기에서](#iii-class-requestparam) `RequestParam.FLAG_`로 시작하는 Flag들을 참고하시기 바랍니다
 
 
 * Notification에 광고 진행률을 보여주는 프로그레스 바 추가
-    - 해당 기능은 기본으로 **disable** 상태이며 사용하기 위해 <code>RequestParam.Builder</code>의 Flag 지정 메소드를 사용하여 <code>RequestParam.FLAG_USE_PROGRESSBAR_IN_NOTIFICATION</code> Flag를 지정하시기 바랍니다
+    - 해당 기능은 기본으로 **disable** 상태이며 사용하기 위해 `RequestParam.Builder`의 Flag 지정 메소드를 사용하여 `RequestParam.FLAG_USE_PROGRESSBAR_IN_NOTIFICATION` Flag를 지정하시기 바랍니다
     - 자세한 내용은 [Notification에 대한 동작](#iv-notification에-대한-동작)을 참고바랍니다
 
 #### 수정
 
 * Notification 사용자 일시중지/재개 변경 버튼 활성화 기능 변경
-    - <code>RequestParam.usePauseInNotification(boolean)</code>이 ***Deprecated*** 되었습니다
+    - `RequestParam.usePauseInNotification(boolean)`이 ***Deprecated*** 되었습니다
     - 더 이상 해당 메소드는 기능이 작동하지 않습니다 (0.6 버전에서 삭제될 예정입니다)
-    - 해당 기능은 기본으로 **disable** 상태이며 사용하기 위해 <code>RequestParam.Builder</code>의 Flag 지정 메소드를 사용하여 <code>RequestParam.FLAG_USE_PAUSE_IN_NOTIFICATION</code> Flag를 지정하시기 바랍니다
+    - 해당 기능은 기본으로 **disable** 상태이며 사용하기 위해 `RequestParam.Builder`의 Flag 지정 메소드를 사용하여 `RequestParam.FLAG_USE_PAUSE_IN_NOTIFICATION` Flag를 지정하시기 바랍니다
     
 
 * `DiloUtil`에 정의된 Intent에서 Extra 데이터를 가져오기 위한 KEY 상수 이름이 수정되었습니다
@@ -82,14 +82,14 @@
 
 
 * 광고 액션 변경 사항
-    - 3초 내에 같은 epiCode로 광고를 요청하면 <code>ON_ERROR</code>를 Broadcast한 후 요청을 무시합니다
+    - 3초 내에 같은 epiCode로 광고를 요청하면 `ON_ERROR`를 Broadcast한 후 요청을 무시합니다
     - SKIP에 대한 액션 전달
         * 변경 전 : SKIP 시 `ON_AD_SKIPPED` 액션 전달
         * 변경 후 : SKIP 시 `ON_AD_SKIPPED` 액션 전달 후 바로 `ON_AD_COMPLETED`(광고 재생 완료) 액션 전달
     
 
 * Companion 리로드 기능
-    - 사용자가 닫기 버튼을 눌러 Companion을 닫았거나, Skip 버튼을 눌러 건너뛰었거나, SDK가 광고 재생을 마쳤을 경우 <code>AdManager.reloadCompanion()</code> 호출 시 Companion을 리로드 하지 않고 무시합니다
+    - 사용자가 닫기 버튼을 눌러 Companion을 닫았거나, Skip 버튼을 눌러 건너뛰었거나, SDK가 광고 재생을 마쳤을 경우 `AdManager.reloadCompanion()` 호출 시 Companion을 리로드 하지 않고 무시합니다
 
 ---
 
@@ -97,7 +97,7 @@
 
 #### 추가
 
-* 광고 액션에 <code>ON_COMPANION_CLOSED</code> 추가
+* 광고 액션에 `ON_COMPANION_CLOSED` 추가
     - 이 액션은 사용자가 Companion 닫기 버튼(ViewGroup)을 눌렀을 때 발생합니다
 
 #### 수정
@@ -112,21 +112,21 @@
 #### 추가
 
 * RequestParam 클래스
-    - enum <code>AdPositionType</code> 추가
+    - enum `AdPositionType` 추가
     - RequestParam 클래스에 ***필수*** 값 추가
-        - <code>adPositionType</code>, <code>channelName</code>, <code>episodeName</code>, <code>creatorName</code>, <code>creatorId</code>
-* 광고 액션에 <code>ON_MESSAGE</code> 추가
+        - `adPositionType`, `channelName`, `episodeName`, `creatorName`, `creatorId`
+* 광고 액션에 `ON_MESSAGE` 추가
     - SDK에서 App에 개발 시 참고할만한 메시지를 전송할 때 발생합니다
     - 개발 도중에는 이 액션을 수신하는 것을 권고합니다
-* <code>DiloError</code> 클래스에 새로운 에러 유형 <code>REQUEST</code>추가
+* `DiloError` 클래스에 새로운 에러 유형 `REQUEST`추가
 
 #### 수정
 
 * RequestParam 클래스
-    - <code>epicode</code>, <code>bundleId</code> **URL 인코딩** 처리
-    - ***필수*** 값 Validation 처리 (Validation 실패 시 광고 액션 <code>ON_ERROR</code>에서 메시지 확인 가능)
-* <code>DiloError</code> 클래스 패키지 이동 kr.co.dilo.sdk -> kr.co.dilo.sdk.model
-* 광고가 재생중일 때 <code>AdManager.start()</code> 중복 호출 처리
+    - `epicode`, `bundleId` **URL 인코딩** 처리
+    - ***필수*** 값 Validation 처리 (Validation 실패 시 광고 액션 `ON_ERROR`에서 메시지 확인 가능)
+* `DiloError` 클래스 패키지 이동 kr.co.dilo.sdk -> kr.co.dilo.sdk.model
+* 광고가 재생중일 때 `AdManager.start()` 중복 호출 처리
 * 컴패니언 노출 개선
 
 ---
@@ -149,7 +149,7 @@
 
 ### [Dilo SDK 추가](#목차)
 
-* 최상위 level <code>build.gradle</code>에 maven repository 추가
+* 최상위 level `build.gradle`에 maven repository 추가
 
 ```
 allprojects {
@@ -170,7 +170,7 @@ allprojects {
 }
 ```
 
-* App level <code>build.gradle</code>에 디펜던시 추가
+* App level `build.gradle`에 디펜던시 추가
 
 ```
 dependencies {    
@@ -267,11 +267,11 @@ dependencies {
 />
 ```
 
-### [iii. Class <code>RequestParam</code>](#목차)
+### [iii. Class `RequestParam`](#목차)
 
 > 광고 요청에 필요한 클래스 및 열거 명세입니다<br>
-> class <code>RequestParam</code>, <code>RequestParam.Builder</code> <br>
-> enum <code>RequestParam.ProductType</code>, <code>RequestParam.FillType</code>, <code>RequestParam.AdPositionType</code>
+> class `RequestParam`, `RequestParam.Builder` <br>
+> enum `RequestParam.ProductType`, `RequestParam.FillType`, `RequestParam.AdPositionType`
 
 > RequestParam.Builder를 통해 필요한 광고 요청을 세팅할 수 있습니다
 
@@ -510,9 +510,9 @@ class RequestParam {
 
 ## [3. 광고 요청](#목차)
 
-### [i. Class <code>AdManager</code>](#목차)
+### [i. Class `AdManager`](#목차)
 
-* 광고 요청 및 제어에 대한 전반적인 사항은 <code>AdManager</code> 클래스를 통해 수행합니다
+* 광고 요청 및 제어에 대한 전반적인 사항은 `AdManager` 클래스를 통해 수행합니다
 
 > 동일한 메소드를 동시에 여러번 호출하는 것은 의도하지 않은 동작을 초래할 수 있습니다
 
@@ -574,8 +574,8 @@ class AdManager {
 
 ### [ii. 광고 요청 예시](#목차)
 
-* App에서 원하는 광고 형태를 <code>RequestParam.Builder</code> 클래스를 통해 <code>RequestParam</code>에 설정한 후 <code>AdManager</code>
-  의 <code>loadAd()</code>에 전달하여 광고를 요청합니다
+* App에서 원하는 광고 형태를 `RequestParam.Builder` 클래스를 통해 `RequestParam`에 설정한 후 `AdManager`
+  의 `loadAd()`에 전달하여 광고를 요청합니다
 
 ```java
 class MyActivity extends AppCompatActivity {
@@ -640,41 +640,41 @@ class MyActivity extends AppCompatActivity {
 
 ## [4. 광고 액션 수신](#목차)
 
-* Dilo SDK에서 보내는 광고에 대한 액션 수신은 <code>BroadcastReceiver</code>를 통해 가능합니다
-* 아래의 모든 액션은 <code>DiloUtil.DILO_INTENT_FILTER</code>에 등록되어 있으니 registerReceiver시 IntentFilter로 등록하거나 <code>
-  DiloUtil.ACTION_</code>으로 시작하는 아래 액션에서 필요한 액션만 등록해서 사용하시면 됩니다
+* Dilo SDK에서 보내는 광고에 대한 액션 수신은 `BroadcastReceiver`를 통해 가능합니다
+* 아래의 모든 액션은 `DiloUtil.DILO_INTENT_FILTER`에 등록되어 있으니 registerReceiver시 IntentFilter로 등록하거나 `
+  DiloUtil.ACTION_`으로 시작하는 아래 액션에서 필요한 액션만 등록해서 사용하시면 됩니다
 * 액션 목록은 아래와 같습니다
 
 ### [광고 액션](#목차)
 
 액션<br>(prefix:DiloUtil.ACTION_)|설명|전달<br>데이터 클래스|비고
 ---|---|:---:|---
-RELOAD_COMPANION|컴패니언 리로드| | Companion이 있는 광고에서 Companion이 노출됨(또는 노출해야 함)<br><br>**※ 비고** : Companion 광고를 노출/숨김 처리 하는 것은<br><code>AdManager</code>를 초기화 하고 광고를 요청한 뷰에서는<br>자동으로 처리되지만,<br>Task Kill 등으로 뷰가 완전히 사라졌을 경우에는<br><code> AdManager</code>를 다시 초기화 후에<br>BroadcastReceiver에서 이 액션을 받아 <code>AdManager</code>의<br><code>reloadCompanion(AdView, ViewGroup)</code>을 호출하여<br>리로드하여야합니다
+RELOAD_COMPANION|컴패니언 리로드| | Companion이 있는 광고에서 Companion이 노출됨(또는 노출해야 함)<br><br>**※ 비고** : Companion 광고를 노출/숨김 처리 하는 것은<br>`AdManager`를 초기화 하고 광고를 요청한 뷰에서는<br>자동으로 처리되지만,<br>Task Kill 등으로 뷰가 완전히 사라졌을 경우에는<br>` AdManager`를 다시 초기화 후에<br>BroadcastReceiver에서 이 액션을 받아 `AdManager`의<br>`reloadCompanion(AdView, ViewGroup)`을 호출하여<br>리로드하여야합니다
 ON_COMPANION_CLOSED|사용자가 Companion을 닫음| |사용자가 닫기 버튼을 눌러 Companion을 닫음
 ON_SKIP_ENABLED|광고 스킵 가능| |스킵 가능한 광고의 경우 스킵 가능한 시점 도달
-ON_AD_SKIPPED|광고 스킵| | 사용자가 Skip 버튼을 눌러 광고를 Skip 또는<br>App에서<code>AdManager</code>의 <code>skip()</code> 메소드 호출
+ON_AD_SKIPPED|광고 스킵| | 사용자가 Skip 버튼을 눌러 광고를 Skip 또는<br>App에서`AdManager`의 `skip()` 메소드 호출
 ON_NO_FILL|광고 없음| |요청에 맞는 조건의 광고가 없음
 ON_AD_READY|광고 재생<br>준비 완료| | 광고가 로드되어 재생 준비가 완료됨
 ON_AD_START|광고 재생 시작| [AdInfo](#i-class-adinfo)|광고 재생이 시작됨
 ON_TIME_UPDATE|광고 진행 사항<br>업데이트| [Progress](#ii-class-progress)| 광고 진행사항이 업데이트 됨<br><br>**※ 비고** : 이 액션은 광고가 재생중일 때 200ms마다 호출됩니다
 ON_AD_COMPLETED|광고 재생 완료| |하나의 광고가 재생 완료될 때마다 호출
 ON_ALL_AD_COMPLETED|모든 광고<br>재생 완료| |모든 광고가 재생 완료되면 한 번 호출
-ON_PAUSE|광고 일시 중지| |App에서 광고 재생 중 <code>AdManager</code>의 <code>playOrPause()</code> 호출<br>또는 사용자가 Notification에서 일시 중지 버튼 누름
-ON_RESUME|광고 재개| |App에서 광고 일시 중지 중 <code>AdManager</code>의 <code>playOrPause()</code> 호출<br>또는 사용자가 Notification에서 재개 버튼 누름
+ON_PAUSE|광고 일시 중지| |App에서 광고 재생 중 `AdManager`의 `playOrPause()` 호출<br>또는 사용자가 Notification에서 일시 중지 버튼 누름
+ON_RESUME|광고 재개| |App에서 광고 일시 중지 중 `AdManager`의 `playOrPause()` 호출<br>또는 사용자가 Notification에서 재개 버튼 누름
 ON_ERROR|에러 발생| [DiloError](#iii-class-diloerror)| 광고 요청/로드 또는 재생에 문제가 발생
 ON_MESSAGE|메시지 전송|String| SDK에서 App으로 메시지를 전달
 ON_SVC_DESTROYED|서비스 종료| | 딜로 SDK 서비스 종료
 
 ※ 유의 사항
 
-1. <code>**ON_AD_READY**</code> 액션 발생 시 <code>AdManager</code>의 <code>start()</code> 메소드를 호출해야 광고가 시작되므로 이 액션은 항상 등록하시기
+1. `ON_AD_READY` 액션 발생 시 `AdManager`의 `start()` 메소드를 호출해야 광고가 시작되므로 이 액션은 항상 등록하시기
    바랍니다
-2. <code>**ON_NO_FILL**</code>, <code>**ON_ERROR ACTION**</code> 발생 시 다른 액션이 발생하지 않고 SDK가 종료되어 App의 컨텐츠를 재생해야하므로 이 액션은
+2. `ON_NO_FILL`, `ON_ERROR ACTION` 발생 시 다른 액션이 발생하지 않고 SDK가 종료되어 App의 컨텐츠를 재생해야하므로 이 액션은
    항상 등록하시기 바랍니다
-3. <code>**ON_ALL_AD_COMPLETED**</code> 또는 <code>**ON_SVC_DESTROYED**</code> 발생 시 App의 컨텐츠를 재생해야하므로 둘 중 한 액션은 항상 등록하시기
+3. `ON_ALL_AD_COMPLETED` 또는 `ON_SVC_DESTROYED` 발생 시 App의 컨텐츠를 재생해야하므로 둘 중 한 액션은 항상 등록하시기
    바랍니다
-4. <code>**ON_MESSAGE**</code> 액션 발생 시 App으로 메시지를 전달하므로 개발하는 동안에는 등록하시기를 권고드립니다, 메시지만을 전달하므로 이 액션 수신 시 광고 제어 메소드(AdManager의 메소드 play(), release() 등)를 호출하지 마시기 바랍니다
-5. Companion 닫기 버튼(ViewGroup)의 클릭 시 이벤트 설정은 setOnClickListener가 아닌 <code>**ON_COMPANION_CLOSED**</code> 액션을 수신하여 처리하시기
+4. `ON_MESSAGE` 액션 발생 시 App으로 메시지를 전달하므로 개발하는 동안에는 등록하시기를 권고드립니다, 메시지만을 전달하므로 이 액션 수신 시 광고 제어 메소드(AdManager의 메소드 play(), release() 등)를 호출하지 마시기 바랍니다
+5. Companion 닫기 버튼(ViewGroup)의 클릭 시 이벤트 설정은 setOnClickListener가 아닌 `ON_COMPANION_CLOSED` 액션을 수신하여 처리하시기
    바랍니다. 리스너의 설정은 무시됩니다
 
 ### [광고 액션 수신 예제](#목차)
@@ -815,13 +815,13 @@ class MyActivity extends AppCompatActivity {
 
 ## [5. 데이터 클래스 명세](#목차)
 
-### [i. Class <code>AdInfo</code>](#목차)
+### [i. Class `AdInfo`](#목차)
 
 광고 정보 클래스
 
-<code>BroadcastReceiver</code>의 <code>onReceive</code>의 <code>intent.getAction()==DiloUtil.ACTION_ON_AD_START</code>(광고
+`BroadcastReceiver`의 `onReceive`의 `intent.getAction()==DiloUtil.ACTION_ON_AD_START`(광고
 시작됨) 에서<br>
-<code>DiloUtil.EXTRA_AD_INFO</code> Key로 가져온 후 Cast<br>
+`DiloUtil.EXTRA_AD_INFO` Key로 가져온 후 Cast<br>
 
 ```java
 class MyActivity extends AppCompatActivity {
@@ -879,13 +879,13 @@ class AdInfo implements Serializable {
 }
 ```
 
-### [ii. Class <code>Progress</code>](#목차)
+### [ii. Class `Progress`](#목차)
 
 광고 진행 정보 클래스
 
-<code>BroadcastReceiver</code>의 <code>onReceive</code>의 <code>intent.getAction()==DiloUtil.ACTION_ON_TIME_UPDATE</code>(
+`BroadcastReceiver`의 `onReceive`의 `intent.getAction()==DiloUtil.ACTION_ON_TIME_UPDATE`(
 광고 진행사항 업데이트) 에서<br>
-<code>DiloUtil.EXTRA_PROGRESS</code> Key로 가져온 후 Cast
+`DiloUtil.EXTRA_PROGRESS` Key로 가져온 후 Cast
 
 ```java
 class MyActivity extends AppCompatActivity {
@@ -926,13 +926,13 @@ class Progress implements Serializable {
 }
 ```
 
-### [iii. Class <code>DiloError</code>](#목차)
+### [iii. Class `DiloError`](#목차)
 
 오류 정보 클래스
 
-<code>BroadcastReceiver</code>의 <code>onReceive</code>의 <code>intent.getAction()==DiloUtil.ACTION_ON_ERROR</code>(오류 발생)
+`BroadcastReceiver`의 `onReceive`의 `intent.getAction()==DiloUtil.ACTION_ON_ERROR`(오류 발생)
 에서<br>
-<code>DiloUtil.EXTRA_ERROR</code> Key로 가져온 후 Cast<br>
+`DiloUtil.EXTRA_ERROR` Key로 가져온 후 Cast<br>
 
 ```java
 class MyActivity extends AppCompatActivity {
@@ -994,7 +994,7 @@ public class DiloError extends Exception {
 }
 ```
 
-### [iv. Class <code>DiloUtil</code>](#목차)
+### [iv. Class `DiloUtil`](#목차)
 
 > 유틸성 변수/메소드 정의 클래스
 
@@ -1132,7 +1132,7 @@ CLICK|Companion을 클릭했을 때
 
 ### [iii. Audio Focus에 대한 동작](#목차)
 
-* 광고 요청 시 Dilo SDK에서는 <code>AudioManager.AUDIOFOCUS_GAIN</code>으로 Audio Focus를 요청합니다
+* 광고 요청 시 Dilo SDK에서는 `AudioManager.AUDIOFOCUS_GAIN`으로 Audio Focus를 요청합니다
 * 광고 종료 또는 에러 발생 시 Audio Focus를 반환합니다
 * Audio Focus에 관하여 아래 표와 같이 동작합니다
 
@@ -1145,7 +1145,7 @@ GAIN|최초 포커스를 얻거나 다시 얻었을 때| |이전 볼륨으로 �
 
 ### [iv. Notification에 대한 동작](#목차)
 
-> <code>RequestParam</code>의 <code>FLAG_USE_PAUSE_IN_NOTIFICATION</code> (사용자 일시 중지 허용) 플래그 지정 따른 Notification 동작에 대한 설명입니다
+> `RequestParam`의 `FLAG_USE_PAUSE_IN_NOTIFICATION` (사용자 일시 중지 허용) 플래그 지정 따른 Notification 동작에 대한 설명입니다
 
 플래그 미 지정 시 (기본)
 
@@ -1170,7 +1170,7 @@ GAIN|최초 포커스를 얻거나 다시 얻었을 때| |이전 볼륨으로 �
    <img src="https://user-images.githubusercontent.com/73524723/120162990-f38a9b80-c233-11eb-90f9-da165648acb5.jpg" width=50%>
 </p>
 
-> <code>RequestParam</code>의 <code>FLAG_USE_PROGRESSBAR_IN_NOTIFICATION</code> (광고 진행 프로그레스 바 표시) 플래그 지정 따른 Notification 동작에 대한 설명입니다
+> `RequestParam`의 `FLAG_USE_PROGRESSBAR_IN_NOTIFICATION` (광고 진행 프로그레스 바 표시) 플래그 지정 따른 Notification 동작에 대한 설명입니다
 
 플래그 미 지정 시 (기본)
 
