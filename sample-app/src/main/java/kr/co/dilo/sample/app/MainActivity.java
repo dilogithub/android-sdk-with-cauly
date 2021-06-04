@@ -55,19 +55,18 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(viewBinding.getRoot());
 
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(DiloSampleAppUtil.CONTENT_ACTION_PLAY_END);
-        filter.addAction(DiloSampleAppUtil.CONTENT_ACTION_PLAY_PAUSE);
-        filter.addAction(DiloSampleAppUtil.CONTENT_ACTION_PLAY);
-        filter.addAction(DiloSampleAppUtil.CONTENT_ACTION_AD);
-        filter.addAction(DiloSampleAppUtil.CONTENT_ACTION_LOG);
-        filter.addAction(DiloSampleAppUtil.CONTENT_ACTION_ON_PROGRESS);
-
         // contentActionReceiver 가 등록되어있지 않다면 등록
-        Intent receiverIntent = new Intent(getApplication(), contentActionReceiver.getClass());
+        Intent receiverIntent = new Intent(this, contentActionReceiver.getClass());
         PendingIntent receiverPendingIntent = PendingIntent.getBroadcast(this, 0, receiverIntent, PendingIntent.FLAG_NO_CREATE);
         if (receiverPendingIntent == null) {
-            getApplication().registerReceiver(contentActionReceiver, filter);
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(DiloSampleAppUtil.CONTENT_ACTION_PLAY_END);
+            filter.addAction(DiloSampleAppUtil.CONTENT_ACTION_PLAY_PAUSE);
+            filter.addAction(DiloSampleAppUtil.CONTENT_ACTION_PLAY);
+            filter.addAction(DiloSampleAppUtil.CONTENT_ACTION_AD);
+            filter.addAction(DiloSampleAppUtil.CONTENT_ACTION_LOG);
+            filter.addAction(DiloSampleAppUtil.CONTENT_ACTION_ON_PROGRESS);
+            registerReceiver(contentActionReceiver, filter);
         }
 
         floatingContent = viewBinding.floatingContent;
@@ -131,13 +130,13 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
 
         try {
-            getApplication().unregisterReceiver(contentActionReceiver);
+            unregisterReceiver(contentActionReceiver);
         } catch (IllegalArgumentException ignored) {}
 
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         // 앱 강제 종료 허용 여부에 따라 서비스 및 프로세스 종료
-        if (!pref.getBoolean("use_background", true)) {
+        if (!prefs.getBoolean(DiloSampleAppUtil.PREF_DILO_USE_BACKGROUND, true)) {
             AdManager adManager = SampleApplication.getInstance().adManager;
             adManager.release();
 
@@ -193,7 +192,6 @@ public class MainActivity extends AppCompatActivity {
             if (action == null) {
                 return;
             }
-            Log.v(DiloSampleAppUtil.LOG_TAG, "MainActivity.BroadcastReceiver.onReceive() :: Action : " + action);
 
             switch (action) {
                 // 컨텐츠 재생 완료
@@ -272,7 +270,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         TextView desc = viewBinding.contentSmallDesc;
-        DummyContent.DummyItem item = (DummyContent.DummyItem) intent.getSerializableExtra("item");
+        DummyContent.DummyItem item = intent.getParcelableExtra("item");
         contentIntent.putExtra("index", intent.getExtras().getInt("index"))
                 .putExtra("item", item);
         desc.setText(item.desc);

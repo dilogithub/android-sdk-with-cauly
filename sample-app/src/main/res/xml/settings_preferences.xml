@@ -7,8 +7,10 @@
           android:title="광고 요청"
   >
     <SwitchPreference
-            android:key="target"
-            android:title="테스트 서버"
+            android:key="@string/pref_dilo_ad_target"
+            android:title="광고 서버"
+            android:summaryOn="테스트"
+            android:summaryOff="운영"
             android:defaultValue="true"
     />
   </PreferenceCategory>
@@ -17,19 +19,23 @@
           android:title="컴패니언 설정">
 
     <SwitchPreference
-            android:key="companion_size"
-            android:title="컴패니언 사이즈 자동"
-            android:defaultValue="true"
+            android:key="@string/pref_dilo_companion_size"
+            android:title="크기"
+            android:summaryOn="수동 설정"
+            android:summaryOff="자동 설정"
+            android:defaultValue="false"
     />
 
     <EditTextPreference
-            android:key="companion_width"
-            android:title="컴패니언 넓이"
+            android:key="@string/pref_dilo_companion_width"
+            android:dependency="@string/pref_dilo_companion_size"
+            android:title="넓이"
     />
 
     <EditTextPreference
-            android:key="companion_height"
-            android:title="컴패니언 높이"
+            android:key="@string/pref_dilo_companion_height"
+            android:dependency="@string/pref_dilo_companion_size"
+            android:title="높이"
     />
   </PreferenceCategory>
 
@@ -39,7 +45,7 @@
     <ListPreference
             android:entries="@array/product_type"
             android:entryValues="@array/product_type_values"
-            android:key="product_type"
+            android:key="@string/pref_dilo_product_type"
             android:title="광고 상품 *"
             android:defaultValue="DILO_PLUS"
     />
@@ -47,7 +53,7 @@
     <ListPreference
             android:entries="@array/fill_type"
             android:entryValues="@array/fill_type_values"
-            android:key="fill_type"
+            android:key="@string/pref_dilo_fill_type"
             android:title="광고 갯수 *"
             android:defaultValue="MULTI"
     />
@@ -55,13 +61,13 @@
     <ListPreference
             android:entries="@array/ad_position_type"
             android:entryValues="@array/ad_position_type_values"
-            android:key="ad_position_type"
+            android:key="@string/pref_dilo_ad_position_type"
             android:title="광고 위치 *"
             android:defaultValue="PRE"
     />
 
     <EditTextPreference
-            android:key="duration"
+            android:key="@string/pref_dilo_duration"
             android:title="광고 길이 (초) *"
             android:inputType="number"
             android:defaultValue="15"
@@ -73,37 +79,37 @@
           android:title="요청 키">
 
     <EditTextPreference
-            android:key="package_name"
+            android:key="@string/pref_dilo_package_name"
             android:title="패키지 명 *"
             android:defaultValue="com.queen.sampleapp"
     />
 
     <EditTextPreference
-            android:key="epi_code"
+            android:key="@string/pref_dilo_epi_code"
             android:title="에피소드 코드 *"
             android:defaultValue="test_live"
     />
 
     <EditTextPreference
-            android:key="channel_name"
+            android:key="@string/pref_dilo_channel_name"
             android:title="채널 이름 *"
             android:defaultValue="테스트 채널"
     />
 
     <EditTextPreference
-            android:key="episode_name"
+            android:key="@string/pref_dilo_episode_name"
             android:title="에피소드 이름 *"
             android:defaultValue="테스트 에피소드"
     />
 
     <EditTextPreference
-            android:key="creator_id"
+            android:key="@string/pref_dilo_creator_id"
             android:title="크리에이터 ID (식별자) *"
             android:defaultValue="tester"
     />
 
     <EditTextPreference
-            android:key="creator_name"
+            android:key="@string/pref_dilo_creator_name"
             android:title="크리에이터 이름 *"
             android:defaultValue="테스터"
     />
@@ -113,25 +119,27 @@
           android:title="노티피케이션"
   >
     <SwitchPreference
-            android:key="use_pause_in_notification"
-            android:title="노티 일시정지 사용"
-            android:defaultValue="true"
+            android:key="@string/pref_dilo_use_pause_in_notification"
+            android:title="일시중지/재개 사용"
+            android:summary="일시중지/재개 가능한 버튼이 나타납니다"
+            android:defaultValue="false"
     />
 
     <SwitchPreference
-            android:key="use_progress_bar_in_notification"
-            android:title="노티 프로그레스 바 사용"
-            android:defaultValue="true"
+            android:key="@string/pref_dilo_use_progress_bar_in_notification"
+            android:title="프로그레스 바 사용"
+            android:summary="광고 진행률을 보여주는 프로그레스 바가 나타납니다"
+            android:defaultValue="false"
     />
 
     <EditTextPreference
-            android:key="notification_title"
-            android:title="노티 타이틀"
+            android:key="@string/pref_dilo_notification_title"
+            android:title="타이틀"
     />
 
     <EditTextPreference
-            android:key="notification_text"
-            android:title="노티 텍스트"
+            android:key="@string/pref_dilo_notification_text"
+            android:title="텍스트"
     />
 
   </PreferenceCategory>
@@ -141,14 +149,13 @@
           android:summary="테스트용 세팅"
   >
     <EditTextPreference
-            android:key="ad_request_delay"
-            android:title="광고 요청 딜레이(초)"
-            android:summary="광고 요청 버튼을 누르면 이 값(초) 후에 광고를 요청합니다"
+            android:key="@string/pref_dilo_ad_request_delay"
+            android:title="광고 요청 딜레이 (초)"
             android:defaultValue="0"
     />
 
     <SwitchPreference
-            android:key="use_background"
+            android:key="@string/pref_dilo_use_background"
             android:title="앱 강제종료에도 서비스 실행"
             android:defaultValue="true"
     />
@@ -159,7 +166,7 @@
           android:title="정보"
   >
     <Preference
-            android:key="sdk_version"
+            android:key="@string/pref_dilo_sdk_version"
             android:title="SDK 버전" />
   </PreferenceCategory>
 

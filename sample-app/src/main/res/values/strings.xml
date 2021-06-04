@@ -1,16 +1,25 @@
 <resources>
   <string name="app_name">Sample-App</string>
-  <!-- Preference Titles -->
-  <string name="messages_header">Messages</string>
-  <string name="sync_header">Sync</string>
-
-  <!-- Messages Preferences -->
-  <string name="signature_title">Your signature</string>
-  <string name="reply_title">Default reply action</string>
-
-  <!-- Sync Preferences -->
-  <string name="sync_title">Sync email periodically</string>
-  <string name="attachment_title">Download incoming attachments</string>
-  <string name="attachment_summary_on">Automatically download attachments for incoming emails</string>
-  <string name="attachment_summary_off">Only download attachments when manually requested</string>
+  <!-- Dilo Prefs -->
+  <string name="pref_dilo_companion_width">pref_dilo_companion_width</string>
+  <string name="pref_dilo_companion_height">pref_dilo_companion_height</string>
+  <string name="pref_dilo_product_type">pref_dilo_product_type</string>
+  <string name="pref_dilo_fill_type">pref_dilo_fill_type</string>
+  <string name="pref_dilo_ad_position_type">pref_dilo_ad_position_type</string>
+  <string name="pref_dilo_duration">pref_dilo_duration</string>
+  <string name="pref_dilo_package_name">pref_dilo_package_name</string>
+  <string name="pref_dilo_epi_code">pref_dilo_epi_code</string>
+  <string name="pref_dilo_channel_name">pref_dilo_channel_name</string>
+  <string name="pref_dilo_episode_name">pref_dilo_episode_name</string>
+  <string name="pref_dilo_creator_id">pref_dilo_creator_id</string>
+  <string name="pref_dilo_creator_name">pref_dilo_creator_name</string>
+  <string name="pref_dilo_ad_target">pref_dilo_ad_target</string>
+  <string name="pref_dilo_companion_size">pref_dilo_companion_size</string>
+  <string name="pref_dilo_use_pause_in_notification">pref_dilo_use_pause_in_notification</string>
+  <string name="pref_dilo_use_progress_bar_in_notification">pref_dilo_use_progress_bar_in_notification</string>
+  <string name="pref_dilo_notification_title">pref_dilo_notification_title</string>
+  <string name="pref_dilo_notification_text">pref_dilo_notification_text</string>
+  <string name="pref_dilo_use_background">pref_dilo_use_background</string>
+  <string name="pref_dilo_ad_request_delay">pref_dilo_ad_request_delay</string>
+  <string name="pref_dilo_sdk_version">pref_dilo_sdk_version</string>
 </resources>

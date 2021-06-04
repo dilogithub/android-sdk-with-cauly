@@ -69,7 +69,7 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
     private boolean isPlaying = false;
     private boolean isMediaControllerShowing = false;
 
-    private SharedPreferences pref;
+    private SharedPreferences prefs;
 
     private ActivityContentBinding viewBinding;
 
@@ -89,7 +89,7 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
             }
         });
 
-        pref = PreferenceManager.getDefaultSharedPreferences(this);
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         contentIntent = getIntent();
 
@@ -99,7 +99,7 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
 
         contentWrapper = viewBinding.contentWrapper;
         contentTitle = viewBinding.contentTitle;
-        item = (DummyContent.DummyItem) getIntent().getSerializableExtra("item");
+        item = getIntent().getParcelableExtra("item");
         if (item != null) {
             contentTitle.setText(String.format("%s - %s", item.title, item.desc));
         }
@@ -122,7 +122,7 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
         play.setOnClickListener(v -> {
             // 로그 초기화
             log(LogFragment.CLEAR_LOG);
-            int adRequestDelay = Integer.parseInt(pref.getString("ad_request_delay", "0"));
+            int adRequestDelay = DiloSampleAppUtil.safeParseInt(prefs.getString(DiloSampleAppUtil.PREF_DILO_AD_REQUEST_DELAY, "0"), -1);
             if (adRequestDelay > 0) {
                 String msg = adRequestDelay + "초 요청 지연";
                 log(msg);
@@ -174,7 +174,7 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
         contentWrapper.setVisibility(View.INVISIBLE);
 
         Intent receiverIntent = new Intent(getApplication(), diloActionReceiver.getClass());
-        PendingIntent receiverPendingIntent = PendingIntent.getBroadcast(this, 0, receiverIntent, PendingIntent.FLAG_NO_CREATE);
+        PendingIntent receiverPendingIntent = PendingIntent.getBroadcast(getApplication(), 0, receiverIntent, PendingIntent.FLAG_NO_CREATE);
         if (receiverPendingIntent == null) {
             getApplication().registerReceiver(diloActionReceiver, DiloUtil.DILO_INTENT_FILTER);
         }
@@ -227,9 +227,7 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
                     }
 
                     @Override
-                    public void onFinish() {
-
-                    }
+                    public void onFinish() {}
                 };
 
                 log("컨텐츠 재생");
@@ -374,23 +372,27 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
         PendingIntent notificationIntent = PendingIntent.getActivity(
                 this,
                 0,
-                new Intent(getApplicationContext(), MainActivity.class),
+                new Intent(getApplication(), MainActivity.class)
+                        .setAction(Intent.ACTION_MAIN)
+                        .addCategory(Intent.CATEGORY_LAUNCHER)
+                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
         );
 
         // SharedPreferences 에서 값 읽어 옴(테스트 용)
-        final String epiCode = pref.getString("epi_code", "").trim();
-        final String bundleId = pref.getString("package_name", "").trim();
-        final String channelName = pref.getString("channel_name", "").trim();
-        final String episodeName = pref.getString("episode_name", "").trim();
-        final String creatorId = pref.getString("creator_id", "").trim();
-        final String creatorName = pref.getString("creator_name", "").trim();
-        final int duration = Integer.parseInt(pref.getString("duration", "15"));
-        final RequestParam.ProductType productType = RequestParam.ProductType.valueOf(pref.getString("product_type", "DILO_PLUS"));
-        final RequestParam.FillType fillType = RequestParam.FillType.valueOf(pref.getString("fill_type", "MULTI"));
-        final RequestParam.AdPositionType adPositionType = RequestParam.AdPositionType.valueOf(pref.getString("ad_position_type", "PRE"));
-        final boolean usePauseInNotification = pref.getBoolean("use_pause_in_notification", true);
-        final boolean useProgressBarInNotification = pref.getBoolean("use_progress_bar_in_notification", true);
+        final String epiCode     = prefs.getString(DiloSampleAppUtil.PREF_DILO_EPI_CODE, "").trim();
+        final String bundleId    = prefs.getString(DiloSampleAppUtil.PREF_DILO_PACKAGE_NAME, "").trim();
+        final String channelName = prefs.getString(DiloSampleAppUtil.PREF_DILO_CHANNEL_NAME, "").trim();
+        final String episodeName = prefs.getString(DiloSampleAppUtil.PREF_DILO_EPISODE_NAME, "").trim();
+        final String creatorId   = prefs.getString(DiloSampleAppUtil.PREF_DILO_CREATOR_ID, "").trim();
+        final String creatorName = prefs.getString(DiloSampleAppUtil.PREF_DILO_CREATOR_NAME, "").trim();
+
+        final int duration = DiloSampleAppUtil.safeParseInt(prefs.getString(DiloSampleAppUtil.PREF_DILO_DURATION, "15"), -1);
+        final RequestParam.ProductType productType       = RequestParam.ProductType.valueOf(prefs.getString(DiloSampleAppUtil.PREF_DILO_PRODUCT_TYPE, RequestParam.ProductType.DILO_PLUS.getValue()));
+        final RequestParam.FillType fillType             = RequestParam.FillType.valueOf(prefs.getString(DiloSampleAppUtil.PREF_DILO_FILL_TYPE, RequestParam.FillType.MULTI.getValue()));
+        final RequestParam.AdPositionType adPositionType = RequestParam.AdPositionType.valueOf(prefs.getString(DiloSampleAppUtil.PREF_DILO_AD_POSITION_TYPE, RequestParam.AdPositionType.PRE.getValue()));
+        final boolean usePauseInNotification       = prefs.getBoolean(DiloSampleAppUtil.PREF_DILO_USE_PAUSE_IN_NOTIFICATION, true);
+        final boolean useProgressBarInNotification = prefs.getBoolean(DiloSampleAppUtil.PREF_DILO_USE_PROGRESS_BAR_IN_NOTIFICATION, true);
 
         requestParamBuilder =
                 new RequestParam.Builder(this)
@@ -411,13 +413,13 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
                         .closeButton(companionCloseButton)               // 닫기 버튼 설정
                         .skipButton(skipButton)                          // Skip 버튼 설정
                         .notificationContentIntent(notificationIntent)   // Notification Click PendingIntent 설정
-                        .notificationContentTitle(pref.getString("notification_title", "")) // Notification Title 설정 (상단 텍스트)
-                        .notificationContentText(pref.getString("notification_text", ""));  // Notification Text 설정 (하단 텍스트)
+                        .notificationContentTitle(prefs.getString(DiloSampleAppUtil.PREF_DILO_NOTIFICATION_TITLE, "")) // Notification Title 설정 (상단 텍스트)
+                        .notificationContentText(prefs.getString(DiloSampleAppUtil.PREF_DILO_NOTIFICATION_TEXT, ""));  // Notification Text 설정 (하단 텍스트)
 
-        if (!pref.getBoolean("companion_size", false)) {
+        if (prefs.getBoolean(DiloSampleAppUtil.PREF_DILO_COMPANION_SIZE, false)) {
             requestParamBuilder.companionSize(
-                    Integer.parseInt(pref.getString("companion_width", "300")),
-                    Integer.parseInt(pref.getString("companion_height", "300"))
+                    DiloSampleAppUtil.safeParseInt(prefs.getString(DiloSampleAppUtil.PREF_DILO_COMPANION_WIDTH, "300"), 300),
+                    DiloSampleAppUtil.safeParseInt(prefs.getString(DiloSampleAppUtil.PREF_DILO_COMPANION_HEIGHT, "300"), 300)
             );
         }
 
@@ -432,11 +434,17 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
         log("광고 요청");
         log("========================================");
         log("광고 요청 정보");
-        log(String.format("패키지 명 : %s", bundleId));
-        log(String.format("에피소드  : %s", epiCode));
-        log(String.format("광고 상품 : %s", productType));
-        log(String.format("광고 갯수 : %s", fillType));
-        log(String.format("광고 길이 : %s", duration));
+        log(String.format("패키지     이름 : %s", bundleId));
+        log(String.format("에피소드   코드 : %s", epiCode));
+        log(String.format("광고       상품 : %s", productType));
+        log(String.format("광고       갯수 : %s", fillType));
+        log(String.format("광고       길이 : %s", duration));
+        log(String.format("광고  재생 시점 : %s", adPositionType.getValue()));
+        log(String.format("채널       이름 : %s", channelName));
+        log(String.format("에피소드   이름 : %s", episodeName));
+        log(String.format("크리에이터 이름 : %s", creatorName));
+        log(String.format("크리에이터 ID   : %s", creatorId));
+
         log("========================================");
 
         adManager.loadAd(requestParamBuilder.build());
@@ -595,7 +603,8 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
                         // 광고 플레이 시작 액션
                         case DiloUtil.ACTION_ON_AD_START:
                             skipOffset = 0;
-                            AdInfo adInfo = (AdInfo) intent.getSerializableExtra(DiloUtil.EXTRA_AD_INFO);
+                            AdInfo adInfo = intent.getParcelableExtra(DiloUtil.EXTRA_AD_INFO);
+
                             Intent i = new Intent(DiloSampleAppUtil.CONTENT_ACTION_AD)
                                     .addFlags(Intent.FLAG_RECEIVER_FOREGROUND)
                                     .putExtra("index", intent.getExtras().getInt("index"))
@@ -669,14 +678,17 @@ public class ContentActivity extends AppCompatActivity implements SurfaceHolder.
 
                         // 에러 발생 액션
                         case DiloUtil.ACTION_ON_ERROR:
-                            DiloError error = (DiloError) intent.getSerializableExtra(DiloUtil.EXTRA_ERROR);
-                            log(String.format("광고 요청 중 에러가 발생하였습니다\n\t타입: %s, 에러: %s, 상세: %s", error.type, error.error, error.detail));
-                            playContent();
+                            DiloError error = intent.getParcelableExtra(DiloUtil.EXTRA_ERROR);
+                            log(String.format("광고 요청 중 에러가 발생하였습니다\n\t타입: %s, 코드 :%d, 에러: %s, 상세: %s", error.type, error.code, error.error, error.detail));
+                            Toast.makeText(ContentActivity.this, String.format("에러 발생\n[%d] %s", error.code, error.error + " [" + error.detail + "]"), Toast.LENGTH_SHORT).show();
+                            if (error.code != DiloError.CODE_TOO_MANY_REQUEST) {
+                                playContent();
+                            }
                             break;
 
                         // 광고 진행 사항 업데이트 액션
                         case DiloUtil.ACTION_ON_TIME_UPDATE:
-                            Progress progress = (Progress) intent.getSerializableExtra(DiloUtil.EXTRA_PROGRESS);
+                            Progress progress = intent.getParcelableExtra(DiloUtil.EXTRA_PROGRESS);
 
                             int percent = (int) (progress.seconds * 100 / progress.duration);
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

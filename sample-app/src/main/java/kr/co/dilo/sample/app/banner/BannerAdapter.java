@@ -6,7 +6,6 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import kr.co.dilo.sample.app.databinding.RollingBannerBinding;
-import kr.co.dilo.sample.app.util.DiloSampleAppUtil;
 
 import java.util.List;
 
@@ -26,7 +25,7 @@ public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.imageView.setImageResource(items.get(position % items.size()));
-        holder.imageView.setOnClickListener(v -> DiloSampleAppUtil.openBrowser(v.getContext(), "https://www.dilo.co.kr"));
+//        holder.imageView.setOnClickListener(v -> DiloSampleAppUtil.openBrowser(v.getContext(), "https://www.dilo.co.kr"));
     }
 
     @Override
