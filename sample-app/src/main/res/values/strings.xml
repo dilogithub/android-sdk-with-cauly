@@ -1,5 +1,8 @@
 <resources>
   <string name="app_name">Sample-App</string>
+  <string name="title_home">홈</string>
+  <string name="title_logs">로그</string>
+  <string name="title_settings">설정</string>
   <!-- Dilo Prefs -->
   <string name="pref_dilo_companion_width">pref_dilo_companion_width</string>
   <string name="pref_dilo_companion_height">pref_dilo_companion_height</string>

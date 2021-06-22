@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <dimen name="companion_width">1000px</dimen>
-  <dimen name="companion_height">1000px</dimen>
+  <dimen name="companion_width">850px</dimen>
+  <dimen name="companion_height">850px</dimen>
 </resources>
