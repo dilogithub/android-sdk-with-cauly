@@ -24,8 +24,8 @@ allprojects {
             url "s3://maven.dilo.co.kr/release"
             credentials(AwsCredentials) {
                 // 가이드 문서에 기재
-                accessKey "AKIAWDHIQRYZCM64U2NM"
-                secretKey "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"
+                accessKey "XXXXXXXXXXX"
+                secretKey "YYYYYYYYYYYYYYYYYYYYYYY"
             }
         }
 
