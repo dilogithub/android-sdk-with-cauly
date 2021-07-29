@@ -8,10 +8,16 @@
 
 * Dilo SDK는 Android 4.1 (Jelly Bean, API Level 16)이상 기기에서 동작합니다
     - Android 5.0 (Lollipop, API 수준 21)이상 사용을 권장합니다
-  
+    
+
+* 최신 릴리즈 버전은 아래 버전에서 개발되었습니다
+    - ext.kotlin_version `1.5.10`
+    - com.android.tools.build:gradle `4.1.3`
+
 ## Release Note
 
-* [0.6 (2021/06/22)](sample-app/README.md)
+* [0.6.1 (2021/07/29)](sample-app/README.md)
+* [0.6 (2021/06/22)](https://github.com/dilogithub/android-sdk/blob/0.6/sample-app/README.md)
 * [0.5.4 (2021/06/04)](https://github.com/dilogithub/android-sdk/blob/0.5.4/sample-app/README.md)
 * [0.5.3 (2021/05/12)](https://github.com/dilogithub/android-sdk/blob/0.5.3/sample-app/README.md)
 * [0.5.2 (2021/05/10)](https://github.com/dilogithub/android-sdk/blob/0.5.2/sample-app/README.md)

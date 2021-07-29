@@ -9,13 +9,14 @@
             android:title="광고 요청"
             android:layout="@layout/preference_category"
     >
-        <SwitchPreference
-                android:key="@string/pref_dilo_ad_target"
-                android:title="광고 서버"
-                android:summaryOn="테스트"
-                android:summaryOff="운영"
-                android:defaultValue="false"
-                android:layout="@layout/preference_summary_right"
+        <ListPreference
+            android:entries="@array/pref_dilo_ad_target"
+            android:entryValues="@array/pref_dilo_ad_target_values"
+            android:key="@string/pref_dilo_ad_target"
+            android:title="광고 서버"
+            android:defaultValue="PROD"
+            android:layout="@layout/preference_summary_right"
+            tools:summary="운영"
         />
     </PreferenceCategory>
 

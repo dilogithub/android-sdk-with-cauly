@@ -1,39 +1,51 @@
 <resources>
-  <string-array name="product_type">
-    <item>DILO</item>
-    <item>DILO_PLUS</item>
-    <item>DILO_PLUS_ONLY</item>
-  </string-array>
+    <string-array name="pref_dilo_ad_target">
+        <item>운영</item>
+        <item>UAT</item>
+        <item>테스트</item>
+    </string-array>
 
-  <string-array name="product_type_values">
-    <item>DILO</item>
-    <item>DILO_PLUS</item>
-    <item>DILO_PLUS_ONLY</item>
-  </string-array>
+    <string-array name="pref_dilo_ad_target_values">
+        <item>PROD</item>
+        <item>UAT</item>
+        <item>TEST</item>
+    </string-array>
 
-  <string-array name="fill_type">
-    <item>SINGLE</item>
-    <item>SINGLE_ANY</item>
-    <item>MULTI</item>
-  </string-array>
+    <string-array name="product_type">
+        <item>DILO</item>
+        <item>DILO_PLUS</item>
+        <item>DILO_PLUS_ONLY</item>
+    </string-array>
 
-  <string-array name="fill_type_values">
-    <item>SINGLE</item>
-    <item>SINGLE_ANY</item>
-    <item>MULTI</item>
-  </string-array>
+    <string-array name="product_type_values">
+        <item>DILO</item>
+        <item>DILO_PLUS</item>
+        <item>DILO_PLUS_ONLY</item>
+    </string-array>
 
-  <string-array name="ad_position_type">
-    <item>PRE</item>
-    <item>MID</item>
-    <item>POST</item>
-  </string-array>
+    <string-array name="fill_type">
+        <item>SINGLE</item>
+        <item>SINGLE_ANY</item>
+        <item>MULTI</item>
+    </string-array>
 
-  <string-array name="ad_position_type_values">
-    <item>PRE</item>
-    <item>MID</item>
-    <item>POST</item>
-  </string-array>
+    <string-array name="fill_type_values">
+        <item>SINGLE</item>
+        <item>SINGLE_ANY</item>
+        <item>MULTI</item>
+    </string-array>
+
+    <string-array name="ad_position_type">
+        <item>PRE</item>
+        <item>MID</item>
+        <item>POST</item>
+    </string-array>
+
+    <string-array name="ad_position_type_values">
+        <item>PRE</item>
+        <item>MID</item>
+        <item>POST</item>
+    </string-array>
 
 
 </resources>
