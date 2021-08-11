@@ -14,7 +14,7 @@ import kr.co.dilo.sdk.RequestParam
  */
 class SettingsFragment : PreferenceFragmentCompat() {
 
-    private var prefs: SharedPreferences? = null
+    private lateinit var prefs: SharedPreferences
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.fragment_settings, rootKey)
@@ -40,6 +40,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         val useBackground:                SwitchPreference? = findPreference(DiloSampleAppUtil.PREF_DILO_USE_BACKGROUND)
         val adRequestDelay:             EditTextPreference? = findPreference(DiloSampleAppUtil.PREF_DILO_AD_REQUEST_DELAY)
         val sdkVersion:                         Preference? = findPreference(DiloSampleAppUtil.PREF_DILO_SDK_VERSION)
+        val albumArtUri:                EditTextPreference? = findPreference(DiloSampleAppUtil.PREF_DILO_ALBUM_ART_URI)
 
         sdkVersion?.summary = "${DiloUtil.DILO_SDK_VERSION} / ${DiloUtil.DILO_SDK_BUILD_TYPE.uppercase()}"
 
@@ -62,6 +63,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         initProperty(notificationTitle, DiloSampleAppUtil.PREF_DILO_NOTIFICATION_TITLE, getString(R.string.app_name))
         initProperty(notificationText,DiloSampleAppUtil.PREF_DILO_NOTIFICATION_TEXT, "${getString(R.string.app_name)} 후원하는 광고 재생 중")
         initProperty(adRequestDelay, DiloSampleAppUtil.PREF_DILO_AD_REQUEST_DELAY, "0")
+        initProperty(albumArtUri, DiloSampleAppUtil.PREF_DILO_ALBUM_ART_URI, "http://test.dilo.co.kr:18001/download/icon")
 
         // 숫자 유형만 받도록 설정
         companionWidth?.setOnBindEditTextListener(setInputType(InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL))
@@ -85,7 +87,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
      */
     private fun initProperty(preference: Preference?, key: String, defValue: String) {
         // 초기값 설정
-        val s = prefs!!.getString(key, defValue)
+        val s = prefs.getString(key, defValue)
         preference?.summary = s
         prefHandle(preference, s)
 

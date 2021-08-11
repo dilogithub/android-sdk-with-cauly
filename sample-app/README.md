@@ -50,12 +50,38 @@
 
 ## [개정 이력](#목차)
 
-### 0.6.1 - 2021/07/29
+### 0.6.2 - 2021/08/11
+
+#### 수정
+
+* SDK
+    * 광고 재생 시 MediaSession에 광고 메타데이터 정보 업데이트 추가
+        1. `RequestParam.Builder`에 앨범 아트 URI를 전달받는 메소드 추가
+            * `albumArtUri(albumArtUri: String?)`<br><br>
+            
+        2. `MediaBrowserServiceCompat`을 구현한 `DiloMediaBrowserService` 작성
+            DiloMediaBrowserService의 MediaSession에 아래 정보가 설정
+              - MediaMetadataCompat.METADATA_KEY_ARTIST : RequestParam.Builder().notificationContentTitle
+              - MediaMetadataCompat.METADATA_KEY_TITLE : RequestParam.Builder().notificationContentText
+              - MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI : RequestParam.Builder().albumArtUri
+              - MediaMetadataCompat.METADATA_KEY_ALBUM_ART : 앨범 아트 Bitmap
+              - MediaMetadataCompat.METADATA_KEY_DURATION : 광고 길이
+
+
+* 샘플앱
+    - '설정'에 앨범 URI를 입력받는 EditText 추가
+
+---
+
+<details>
+<summary>0.6.1 - 2021/07/29</summary>
 
 #### 수정
 
 * SDK
     - 안정성 개선
+
+</details>
 
 ---
 
@@ -243,7 +269,7 @@ allprojects {
 ```javascript
 dependencies {    
     ...
-    implementation 'kr.co.dilo:dilo-sdk:0.6'
+    implementation 'kr.co.dilo:dilo-sdk:0.6.2'
 }
 ```
 
@@ -457,6 +483,12 @@ class RequestParam {
         fun notificationContentTitle(notificationContentTitle: String?): Builder // Notification의 타이틀 문구를 설정합니다
         fun notificationContentText(notificationContentText: String?): Builder   // Notification의 텍스트 문구를 설정합니다
 
+        /**
+         * 앨범 아트 URI
+         *     ※ 설정하지 않으면 딜로 이미지가 들어갑니다
+         */
+        fun albumArtUri(albumArtUri: String?): Builder
+        
         fun setFlags(@Flags flags: Int): Builder    // 플래그를 지정합니다
         fun addFlags(@Flags flags: Int): Builder    // 플래그를 추가합니다
         fun removeFlags(@Flags flags: Int): Builder // 플래그를 삭제합니다

@@ -25,4 +25,5 @@
   <string name="pref_dilo_use_background">pref_dilo_use_background</string>
   <string name="pref_dilo_ad_request_delay">pref_dilo_ad_request_delay</string>
   <string name="pref_dilo_sdk_version">pref_dilo_sdk_version</string>
+  <string name="pref_dilo_album_art_uri">pref_dilo_album_art_uri</string>
 </resources>

@@ -1,13 +1,13 @@
 <PreferenceScreen
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/setting_preferences"
-        android:fragment="kr.co.dilo.sample.app.ui.fragment.SettingsFragment"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/setting_preferences"
+    android:fragment="kr.co.dilo.sample.app.ui.fragment.SettingsFragment"
 >
 
     <PreferenceCategory
-            android:title="광고 요청"
-            android:layout="@layout/preference_category"
+        android:title="광고 요청"
+        android:layout="@layout/preference_category"
     >
         <ListPreference
             android:entries="@array/pref_dilo_ad_target"
@@ -21,205 +21,212 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-            android:title="컴패니언 설정"
-            android:layout="@layout/preference_category"
+        android:title="컴패니언 설정"
+        android:layout="@layout/preference_category"
     >
 
         <SwitchPreference
-                android:key="@string/pref_dilo_companion_size"
-                android:title="크기"
-                android:summaryOn="수동 설정"
-                android:summaryOff="자동 설정"
-                android:defaultValue="false"
-                android:layout="@layout/preference_summary_right"
+            android:key="@string/pref_dilo_companion_size"
+            android:title="크기"
+            android:summaryOn="수동 설정"
+            android:summaryOff="자동 설정"
+            android:defaultValue="false"
+            android:layout="@layout/preference_summary_right"
         />
 
         <EditTextPreference
-                android:key="@string/pref_dilo_companion_width"
-                android:dependency="@string/pref_dilo_companion_size"
-                android:title="넓이"
-                android:layout="@layout/preference_summary_right"
-                tools:summary="500"
+            android:key="@string/pref_dilo_companion_width"
+            android:dependency="@string/pref_dilo_companion_size"
+            android:title="넓이"
+            android:layout="@layout/preference_summary_right"
+            tools:summary="500"
         />
 
         <EditTextPreference
-                android:key="@string/pref_dilo_companion_height"
-                android:dependency="@string/pref_dilo_companion_size"
-                android:title="높이"
-                android:layout="@layout/preference_summary_right"
-                tools:summary="500"
+            android:key="@string/pref_dilo_companion_height"
+            android:dependency="@string/pref_dilo_companion_size"
+            android:title="높이"
+            android:layout="@layout/preference_summary_right"
+            tools:summary="500"
         />
     </PreferenceCategory>
 
     <PreferenceCategory
-            android:title="광고 설정"
-            android:layout="@layout/preference_category"
+        android:title="광고 설정"
+        android:layout="@layout/preference_category"
     >
 
         <ListPreference
-                android:entries="@array/product_type"
-                android:entryValues="@array/product_type_values"
-                android:key="@string/pref_dilo_product_type"
-                android:title="광고 상품 *"
-                android:defaultValue="DILO_PLUS"
-                android:layout="@layout/preference_summary_right"
-                tools:summary="DILO_PLUS_ONLY"
+            android:entries="@array/product_type"
+            android:entryValues="@array/product_type_values"
+            android:key="@string/pref_dilo_product_type"
+            android:title="광고 상품 *"
+            android:defaultValue="DILO_PLUS"
+            android:layout="@layout/preference_summary_right"
+            tools:summary="DILO_PLUS_ONLY"
         />
 
         <ListPreference
-                android:entries="@array/fill_type"
-                android:entryValues="@array/fill_type_values"
-                android:key="@string/pref_dilo_fill_type"
-                android:title="광고 갯수 *"
-                android:defaultValue="MULTI"
-                android:layout="@layout/preference_summary_right"
-                tools:summary="MULTI"
+            android:entries="@array/fill_type"
+            android:entryValues="@array/fill_type_values"
+            android:key="@string/pref_dilo_fill_type"
+            android:title="광고 갯수 *"
+            android:defaultValue="MULTI"
+            android:layout="@layout/preference_summary_right"
+            tools:summary="MULTI"
         />
 
         <ListPreference
-                android:entries="@array/ad_position_type"
-                android:entryValues="@array/ad_position_type_values"
-                android:key="@string/pref_dilo_ad_position_type"
-                android:title="광고 위치 *"
-                android:defaultValue="PRE"
-                android:layout="@layout/preference_summary_right"
-                tools:summary="PRE"
+            android:entries="@array/ad_position_type"
+            android:entryValues="@array/ad_position_type_values"
+            android:key="@string/pref_dilo_ad_position_type"
+            android:title="광고 위치 *"
+            android:defaultValue="PRE"
+            android:layout="@layout/preference_summary_right"
+            tools:summary="PRE"
         />
 
         <EditTextPreference
-                android:key="@string/pref_dilo_duration"
-                android:title="광고 길이 (초) *"
-                android:inputType="number"
-                android:defaultValue="15"
-                android:layout="@layout/preference_summary_right"
-                tools:summary="15"
+            android:key="@string/pref_dilo_duration"
+            android:title="광고 길이 (초) *"
+            android:inputType="number"
+            android:defaultValue="15"
+            android:layout="@layout/preference_summary_right"
+            tools:summary="15"
         />
 
     </PreferenceCategory>
 
     <PreferenceCategory
-            android:title="요청 키"
-            android:layout="@layout/preference_category"
+        android:title="요청 키"
+        android:layout="@layout/preference_category"
     >
 
         <EditTextPreference
-                android:key="@string/pref_dilo_package_name"
-                android:title="패키지 명 *"
-                android:defaultValue="com.queen.sampleapp"
-                android:layout="@layout/preference_summary_right"
-                tools:summary="com.queen.sampleapp"
+            android:key="@string/pref_dilo_package_name"
+            android:title="패키지 명 *"
+            android:defaultValue="com.queen.sampleapp"
+            android:layout="@layout/preference_summary_right"
+            tools:summary="com.queen.sampleapp"
         />
 
         <EditTextPreference
-                android:key="@string/pref_dilo_epi_code"
-                android:title="에피소드 코드 *"
-                android:defaultValue="test_live"
-                android:layout="@layout/preference_summary_right"
-                tools:summary="test_live"
+            android:key="@string/pref_dilo_epi_code"
+            android:title="에피소드 코드 *"
+            android:defaultValue="test_live"
+            android:layout="@layout/preference_summary_right"
+            tools:summary="test_live"
         />
 
         <EditTextPreference
-                android:key="@string/pref_dilo_channel_name"
-                android:title="채널 이름 *"
-                android:defaultValue="테스트 채널"
-                android:layout="@layout/preference_summary_right"
-                tools:summary="테스트 채널"
+            android:key="@string/pref_dilo_channel_name"
+            android:title="채널 이름 *"
+            android:defaultValue="테스트 채널"
+            android:layout="@layout/preference_summary_right"
+            tools:summary="테스트 채널"
         />
 
         <EditTextPreference
-                android:key="@string/pref_dilo_episode_name"
-                android:title="에피소드 이름 *"
-                android:defaultValue="테스트 에피소드"
-                android:layout="@layout/preference_summary_right"
-                tools:summary="테스트 에피소드"
+            android:key="@string/pref_dilo_episode_name"
+            android:title="에피소드 이름 *"
+            android:defaultValue="테스트 에피소드"
+            android:layout="@layout/preference_summary_right"
+            tools:summary="테스트 에피소드"
         />
 
         <EditTextPreference
-                android:key="@string/pref_dilo_creator_id"
-                android:title="크리에이터 ID (식별자) *"
-                android:defaultValue="tester"
-                android:layout="@layout/preference_summary_right"
-                tools:summary="tester"
+            android:key="@string/pref_dilo_creator_id"
+            android:title="크리에이터 ID (식별자) *"
+            android:defaultValue="tester"
+            android:layout="@layout/preference_summary_right"
+            tools:summary="tester"
         />
 
         <EditTextPreference
-                android:key="@string/pref_dilo_creator_name"
-                android:title="크리에이터 이름 *"
-                android:defaultValue="테스터"
-                android:layout="@layout/preference_summary_right"
-                tools:summary="테스터"
+            android:key="@string/pref_dilo_creator_name"
+            android:title="크리에이터 이름 *"
+            android:defaultValue="테스터"
+            android:layout="@layout/preference_summary_right"
+            tools:summary="테스터"
         />
     </PreferenceCategory>
 
     <PreferenceCategory
-            android:title="노티피케이션"
-            android:layout="@layout/preference_category"
+        android:title="노티피케이션"
+        android:layout="@layout/preference_category"
     >
         <SwitchPreference
-                android:key="@string/pref_dilo_use_pause_in_notification"
-                android:title="일시중지/재개 사용"
-                android:summary="일시중지/재개 가능한 버튼이 나타납니다"
-                android:defaultValue="false"
-                android:layout="@layout/preference_normal"
+            android:key="@string/pref_dilo_use_pause_in_notification"
+            android:title="일시중지/재개 사용"
+            android:summary="일시중지/재개 가능한 버튼이 나타납니다"
+            android:defaultValue="false"
+            android:layout="@layout/preference_normal"
         />
 
         <SwitchPreference
-                android:key="@string/pref_dilo_use_progress_bar_in_notification"
-                android:title="프로그레스 바 사용"
-                android:summary="광고 진행률을 보여주는 프로그레스 바가 나타납니다"
-                android:defaultValue="false"
-                android:layout="@layout/preference_normal"
+            android:key="@string/pref_dilo_use_progress_bar_in_notification"
+            android:title="프로그레스 바 사용"
+            android:summary="광고 진행률을 보여주는 프로그레스 바가 나타납니다"
+            android:defaultValue="false"
+            android:layout="@layout/preference_normal"
         />
 
         <EditTextPreference
-                android:key="@string/pref_dilo_notification_title"
-                android:title="타이틀"
-                android:layout="@layout/preference_summary_right"
-                tools:summary="노티피케이션 타이틀"
+            android:key="@string/pref_dilo_notification_title"
+            android:title="타이틀"
+            android:layout="@layout/preference_summary_right"
+            tools:summary="노티피케이션 타이틀"
         />
 
         <EditTextPreference
-                android:key="@string/pref_dilo_notification_text"
-                android:title="텍스트"
-                android:layout="@layout/preference_summary_right"
-                tools:summary="노티피케이션 텍스트"
+            android:key="@string/pref_dilo_notification_text"
+            android:title="텍스트"
+            android:layout="@layout/preference_summary_right"
+            tools:summary="노티피케이션 텍스트"
         />
 
     </PreferenceCategory>
 
     <PreferenceCategory
-            android:title="기타"
-            android:summary="테스트용 세팅"
-            android:layout="@layout/preference_category"
+        android:title="기타"
+        android:summary="테스트용 세팅"
+        android:layout="@layout/preference_category"
     >
         <EditTextPreference
-                android:key="@string/pref_dilo_ad_request_delay"
-                android:title="광고 요청 딜레이 (초)"
-                android:defaultValue="0"
-                android:layout="@layout/preference_summary_right"
-                tools:summary="0"
+            android:key="@string/pref_dilo_album_art_uri"
+            android:title="앨범 URI (Automotive)"
+            android:layout="@layout/preference_summary_right"
+            tools:summary="1234"
+        />
+
+        <EditTextPreference
+            android:key="@string/pref_dilo_ad_request_delay"
+            android:title="광고 요청 딜레이 (초)"
+            android:defaultValue="0"
+            android:layout="@layout/preference_summary_right"
+            tools:summary="0"
         />
 
         <SwitchPreference
-                android:key="@string/pref_dilo_use_background"
-                android:title="앱 강제종료에도 서비스 실행"
-                android:defaultValue="true"
-                android:layout="@layout/preference_summary_right"
-                android:summaryOn="예"
-                android:summaryOff="아니오"
+            android:key="@string/pref_dilo_use_background"
+            android:title="앱 강제종료에도 서비스 실행"
+            android:defaultValue="true"
+            android:layout="@layout/preference_summary_right"
+            android:summaryOn="예"
+            android:summaryOff="아니오"
         />
     </PreferenceCategory>
 
     <!-- 항상 제일 아래 -->
     <PreferenceCategory
-            android:title="정보"
-            android:layout="@layout/preference_category"
+        android:title="정보"
+        android:layout="@layout/preference_category"
     >
         <Preference
-                android:key="@string/pref_dilo_sdk_version"
-                android:title="SDK 버전"
-                android:layout="@layout/preference_summary_right"
-                tools:summary="0.1"
+            android:key="@string/pref_dilo_sdk_version"
+            android:title="SDK 버전"
+            android:layout="@layout/preference_summary_right"
+            tools:summary="0.1"
         />
     </PreferenceCategory>
 

@@ -37,6 +37,7 @@ object DiloSampleAppUtil {
     val PREF_DILO_USE_BACKGROUND: String = SampleApplication.instance.getString(R.string.pref_dilo_use_background)
     val PREF_DILO_AD_REQUEST_DELAY: String = SampleApplication.instance.getString(R.string.pref_dilo_ad_request_delay)
     val PREF_DILO_SDK_VERSION: String = SampleApplication.instance.getString(R.string.pref_dilo_sdk_version)
+    val PREF_DILO_ALBUM_ART_URI: String = SampleApplication.instance.getString(R.string.pref_dilo_album_art_uri)
 }
 
 /**
