@@ -73,30 +73,40 @@ class ContentActivity : AppCompatActivity(), SurfaceHolder.Callback {
     private lateinit var log: EditText
 
     // Automotive 지원을 위한 객체
-    private lateinit var mediaBrowser: MediaBrowserCompat
-
+    private var mediaBrowser: MediaBrowserCompat? = null
+    // Automotive 지원을 위한 Callback
     private val mediaBrowserConnectionCallback = object : MediaBrowserCompat.ConnectionCallback() {
         override fun onConnected() {
-            val mediaBrowserController = MediaControllerCompat(this@ContentActivity, mediaBrowser.sessionToken)
-            mediaBrowserController.registerCallback(object: MediaControllerCompat.Callback() {
-                override fun onMetadataChanged(metadata: MediaMetadataCompat?) {
-                    debug("""
-                        MediaBrowserCompat.ConnectionCallback.onMetadataChanged() :: 
-                        ARTIST : ${metadata?.getString(MediaMetadataCompat.METADATA_KEY_ARTIST)}, 
-                        TITLE : ${metadata?.getString(MediaMetadataCompat.METADATA_KEY_TITLE)}, 
-                        ALBUM URI : ${metadata?.getString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI)}""".trimIndent())
-                }
-            })
-            MediaControllerCompat.setMediaController(this@ContentActivity, mediaBrowserController)
-            debug("ContentActivity :: mediaBrowserConnectionCallback Connected")
+            debug("ContentActivity.MediaBrowserCompat.ConnectionCallback :: onConnected")
+            if (mediaBrowser == null) {
+                debug("ContentActivity.MediaBrowserCompat.ConnectionCallback :: onConnected / mediaBrowser is null")
+                return
+            }
+
+            mediaBrowser?.let {
+                val mediaBrowserController = MediaControllerCompat(this@ContentActivity, it.sessionToken)
+
+                debug("ContentActivity.MediaBrowserCompat.ConnectionCallback.onConnected() :: ${it.sessionToken}")
+                mediaBrowserController.registerCallback(object: MediaControllerCompat.Callback() {
+                    override fun onMetadataChanged(metadata: MediaMetadataCompat?) {
+                        debug("""
+                        ContentActivity.MediaBrowserCompat.ConnectionCallback.onMetadataChanged() :: 
+                        ARTIST : ${metadata?.getString(MediaMetadataCompat.METADATA_KEY_ARTIST)} 
+                        TITLE : ${metadata?.getString(MediaMetadataCompat.METADATA_KEY_TITLE)}
+                        ALBUM URI : ${metadata?.getString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI)}
+                        """.trimIndent())
+                    }
+                })
+                MediaControllerCompat.setMediaController(this@ContentActivity, mediaBrowserController)
+            }
         }
 
         override fun onConnectionSuspended() {
-            debug("ContentActivity :: mediaBrowserConnectionCallback onConnectionSuspended")
+            debug("ContentActivity.MediaBrowserCompat.ConnectionCallback :: onConnectionSuspended")
         }
 
         override fun onConnectionFailed() {
-            debug("ContentActivity :: mediaBrowserConnectionCallback onConnectionFailed")
+            debug("ContentActivity.MediaBrowserCompat.ConnectionCallback :: onConnectionFailed")
         }
     }
 
@@ -112,8 +122,6 @@ class ContentActivity : AppCompatActivity(), SurfaceHolder.Callback {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityContentBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
-
-        mediaBrowser = MediaBrowserCompat(this, ComponentName(this, DiloMediaBrowserService::class.java), mediaBrowserConnectionCallback, null)
 
         prefs = androidx.preference.PreferenceManager.getDefaultSharedPreferences(this)
         contentIntent = intent
@@ -440,12 +448,14 @@ class ContentActivity : AppCompatActivity(), SurfaceHolder.Callback {
         log("크리에이터 ID   : $creatorId")
         log("========================================")
 
-        if (mediaBrowser.isConnected) {
-            mediaBrowser.disconnect()
-            mediaBrowser = MediaBrowserCompat(this, ComponentName(this, DiloMediaBrowserService::class.java), mediaBrowserConnectionCallback, null)
+        mediaBrowser?.let {
+            if (it.isConnected) {
+                it.disconnect()
+            }
         }
 
-        mediaBrowser.connect()
+        mediaBrowser = MediaBrowserCompat(this, ComponentName(this, DiloMediaBrowserService::class.java), mediaBrowserConnectionCallback, null)
+        mediaBrowser?.connect()
 
         // 광고 로드
         adManager.loadAd(requestParamBuilder.build())
@@ -712,7 +722,6 @@ class ContentActivity : AppCompatActivity(), SurfaceHolder.Callback {
                         skipButton.visibility = View.GONE
                         adCount.visibility = View.GONE
                         playContent()
-                        mediaBrowser.disconnect()
                     }
                 }
             }

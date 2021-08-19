@@ -50,7 +50,17 @@
 
 ## [개정 이력](#목차)
 
-### 0.6.2 - 2021/08/11
+### 0.6.3 - 2021/08/19
+
+* SDK
+    * 블루투스 장치에서 광고 재생 시 광고를 일시중지/재개할 수 있는 기능을 추가하였습니다
+        - 이 기능은 노티피케이션 일시중지/재개 옵션과 함께 동작합니다
+        - 이 기능을 설정하기위해는 `RequestParam.Builder().setFlags(RequestParam.FLAG_USE_PAUSE_IN_NOTIFICATION)`를 설정하시기 바랍니다
+
+---
+
+<details>
+<summary>0.6.2 - 2021/08/11</summary>
 
 #### 수정
 
@@ -58,18 +68,20 @@
     * 광고 재생 시 MediaSession에 광고 메타데이터 정보 업데이트 추가
         1. `RequestParam.Builder`에 앨범 아트 URI를 전달받는 메소드 추가
             * `albumArtUri(albumArtUri: String?)`<br><br>
-            
+
         2. `MediaBrowserServiceCompat`을 구현한 `DiloMediaBrowserService` 작성
-            DiloMediaBrowserService의 MediaSession에 아래 정보가 설정
-              - MediaMetadataCompat.METADATA_KEY_ARTIST : RequestParam.Builder().notificationContentTitle
-              - MediaMetadataCompat.METADATA_KEY_TITLE : RequestParam.Builder().notificationContentText
-              - MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI : RequestParam.Builder().albumArtUri
-              - MediaMetadataCompat.METADATA_KEY_ALBUM_ART : 앨범 아트 Bitmap
-              - MediaMetadataCompat.METADATA_KEY_DURATION : 광고 길이
+           DiloMediaBrowserService의 MediaSession에 아래 정보가 설정
+            - MediaMetadataCompat.METADATA_KEY_ARTIST : RequestParam.Builder().notificationContentTitle
+            - MediaMetadataCompat.METADATA_KEY_TITLE : RequestParam.Builder().notificationContentText
+            - MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI : RequestParam.Builder().albumArtUri
+            - MediaMetadataCompat.METADATA_KEY_ALBUM_ART : 앨범 아트 Bitmap
+            - MediaMetadataCompat.METADATA_KEY_DURATION : 광고 길이
 
 
 * 샘플앱
     - '설정'에 앨범 URI를 입력받는 EditText 추가
+
+</details>
 
 ---
 
@@ -155,7 +167,7 @@ INTENT_KEY_MESSAGE|EXTRA_MESSAGE
     - SKIP에 대한 액션 전달
         * 변경 전 : SKIP 시 `ON_AD_SKIPPED` 액션 전달
         * 변경 후 : SKIP 시 `ON_AD_SKIPPED` 액션 전달 후 바로 `ON_AD_COMPLETED`(광고 재생 완료) 액션 전달
-    
+
 
 * 데이터 클래스 변경 사항
     - `AdInfo` `DiloError` `Progress` 클래스의 implements 클래스가 변경되었습니다 `Serializable` -> `Parcelable`
@@ -269,7 +281,7 @@ allprojects {
 ```javascript
 dependencies {    
     ...
-    implementation 'kr.co.dilo:dilo-sdk:0.6.2'
+    implementation 'kr.co.dilo:dilo-sdk:0.6'
 }
 ```
 
@@ -833,7 +845,7 @@ ON_SVC_DESTROYED|서비스 종료| | 딜로 SDK 서비스 종료
 > 3. `ON_ALL_AD_COMPLETED` 또는 `ON_SVC_DESTROYED` 발생 시 App의 컨텐츠를 재생해야하므로 둘 중 한 액션은 항상 등록하시기 바랍니다
 > 4. `ON_MESSAGE` 액션 발생 시 App으로 메시지를 전달하므로 개발하는 동안에는 등록하시기를 권고합니다, 메시지만을 전달하므로 이 액션 수신 시 광고 제어 메소드(AdManager의 메소드 play(), release() 등)를 호출하지 마시기 바랍니다
 > 5. Companion 닫기 버튼(ViewGroup)의 클릭 시 이벤트 설정은 setOnClickListener가 아닌 `ON_COMPANION_CLOSED` 액션을 수신하여 처리하시기 바랍니다. 리스너의 설정은
-   무시됩니다
+     무시됩니다
 
 ### [광고 액션 수신 시퀀스 다이어그램](#목차)
 
