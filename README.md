@@ -16,7 +16,8 @@
 
 ## Release Note
 
-* [0.6.4 (2021/09/06)](sample-app/README.md)
+* [0.6.5 (2021/09/08)](sample-app/README.md)
+* [0.6.4 (2021/09/06)](https://github.com/dilogithub/android-sdk/blob/0.6.4/sample-app/README.md)
 * [0.6.3 (2021/08/19)](https://github.com/dilogithub/android-sdk/blob/0.6.3/sample-app/README.md)
 * [0.6.2 (2021/08/11)](https://github.com/dilogithub/android-sdk/blob/0.6.2/sample-app/README.md)
 * [0.6.1 (2021/07/29)](https://github.com/dilogithub/android-sdk/blob/0.6.1/sample-app/README.md)

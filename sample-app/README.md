@@ -50,10 +50,19 @@
 
 ## [개정 이력](#목차)
 
-### 0.6.4 - 2021/09/06
+### 0.6.5 - 2021/09/08
+
+* SDK
+    * `MediaBrowserService` 안정성 개선
+
+---
+
+<details>
+<summary>0.6.4 - 2021/09/06</summary>
 
 * SDK
     * `MediaBrowserCompat.subscribe()` 메소드 호출로 `onChildrenLoaded()` 콜백 시 크래시가 발생하는 현상 수정
+</details>
 
 ---
 
