@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
 
         // contentActionReceiver 가 등록되어있지 않다면 등록
         val receiverIntent = Intent(this, contentActionReceiver.javaClass)
-        val receiverPendingIntent = PendingIntent.getBroadcast(this, 0, receiverIntent, PendingIntent.FLAG_NO_CREATE)
+        val receiverPendingIntent = PendingIntent.getBroadcast(this, 0, receiverIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_NO_CREATE)
         if (receiverPendingIntent == null) {
             val filter = IntentFilter().apply {
                 addAction(DiloSampleAppUtil.CONTENT_ACTION_PLAY_END)

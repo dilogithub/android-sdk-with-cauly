@@ -84,6 +84,11 @@ class ContentActivity : AppCompatActivity(), SurfaceHolder.Callback {
             }
 
             mediaBrowser?.let {
+                if (it.sessionToken == null) {
+                    debug("ContentActivity.MediaBrowserCompat.ConnectionCallback.onConnected() :: Session Token is null")
+                    return
+                }
+
                 val mediaBrowserController = MediaControllerCompat(this@ContentActivity, it.sessionToken)
 
                 debug("ContentActivity.MediaBrowserCompat.ConnectionCallback.onConnected() :: ${it.sessionToken}")
@@ -216,7 +221,7 @@ class ContentActivity : AppCompatActivity(), SurfaceHolder.Callback {
 
         contentWrapper.visibility = View.INVISIBLE
         val receiverIntent = Intent(application, diloActionReceiver.javaClass)
-        val receiverPendingIntent: PendingIntent? = PendingIntent.getBroadcast(application, 0, receiverIntent, PendingIntent.FLAG_NO_CREATE)
+        val receiverPendingIntent: PendingIntent? = PendingIntent.getBroadcast(application, 0, receiverIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_NO_CREATE)
         if (receiverPendingIntent == null) {
             application.registerReceiver(diloActionReceiver, DiloUtil.DILO_INTENT_FILTER)
         }
