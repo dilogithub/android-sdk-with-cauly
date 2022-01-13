@@ -74,6 +74,7 @@ class ContentActivity : AppCompatActivity(), SurfaceHolder.Callback {
 
     // Automotive 지원을 위한 객체
     private var mediaBrowser: MediaBrowserCompat? = null
+
     // Automotive 지원을 위한 Callback
     private val mediaBrowserConnectionCallback = object : MediaBrowserCompat.ConnectionCallback() {
         override fun onConnected() {
@@ -92,14 +93,16 @@ class ContentActivity : AppCompatActivity(), SurfaceHolder.Callback {
                 val mediaBrowserController = MediaControllerCompat(this@ContentActivity, it.sessionToken)
 
                 debug("ContentActivity.MediaBrowserCompat.ConnectionCallback.onConnected() :: ${it.sessionToken}")
-                mediaBrowserController.registerCallback(object: MediaControllerCompat.Callback() {
+                mediaBrowserController.registerCallback(object : MediaControllerCompat.Callback() {
                     override fun onMetadataChanged(metadata: MediaMetadataCompat?) {
-                        debug("""
+                        debug(
+                            """
                         ContentActivity.MediaBrowserCompat.ConnectionCallback.onMetadataChanged() :: 
                         ARTIST : ${metadata?.getString(MediaMetadataCompat.METADATA_KEY_ARTIST)} 
                         TITLE : ${metadata?.getString(MediaMetadataCompat.METADATA_KEY_TITLE)}
                         ALBUM URI : ${metadata?.getString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI)}
-                        """.trimIndent())
+                        """.trimIndent()
+                        )
                     }
                 })
                 MediaControllerCompat.setMediaController(this@ContentActivity, mediaBrowserController)
@@ -221,7 +224,8 @@ class ContentActivity : AppCompatActivity(), SurfaceHolder.Callback {
 
         contentWrapper.visibility = View.INVISIBLE
         val receiverIntent = Intent(application, diloActionReceiver.javaClass)
-        val receiverPendingIntent: PendingIntent? = PendingIntent.getBroadcast(application, 0, receiverIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_NO_CREATE)
+        val receiverPendingIntent: PendingIntent? =
+            PendingIntent.getBroadcast(application, 0, receiverIntent, DiloUtil.setPendingIntentFlagsWithImmutableFlag(PendingIntent.FLAG_NO_CREATE))
         if (receiverPendingIntent == null) {
             application.registerReceiver(diloActionReceiver, DiloUtil.DILO_INTENT_FILTER)
         }
@@ -245,7 +249,7 @@ class ContentActivity : AppCompatActivity(), SurfaceHolder.Callback {
     override fun surfaceCreated(holder: SurfaceHolder) {
         debug("ContentActivity.surfaceCreated()")
 
-        mediaPlayer?.run mediaPlayer@ {
+        mediaPlayer?.run mediaPlayer@{
             try {
                 setDisplay(holder)
             } catch (e: IllegalStateException) {
@@ -348,7 +352,8 @@ class ContentActivity : AppCompatActivity(), SurfaceHolder.Callback {
             }
             try {
                 prepareAsync()
-            } catch (ignored: IllegalStateException) {}
+            } catch (ignored: IllegalStateException) {
+            }
         }
     }
 
@@ -368,31 +373,39 @@ class ContentActivity : AppCompatActivity(), SurfaceHolder.Callback {
                 .setAction(Intent.ACTION_MAIN)
                 .addCategory(Intent.CATEGORY_LAUNCHER)
                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            DiloUtil.setPendingIntentFlagsWithImmutableFlag(PendingIntent.FLAG_UPDATE_CURRENT)
         )
 
         // SharedPreferences 에서 값 읽어 옴(테스트 용)
-        val epiCode:     String = prefs.getString(DiloSampleAppUtil.PREF_DILO_EPI_CODE, "")!!.trim()
-        val bundleId:    String = prefs.getString(DiloSampleAppUtil.PREF_DILO_PACKAGE_NAME, "")!!.trim()
+        val epiCode: String = prefs.getString(DiloSampleAppUtil.PREF_DILO_EPI_CODE, "")!!.trim()
+        val bundleId: String = prefs.getString(DiloSampleAppUtil.PREF_DILO_PACKAGE_NAME, "")!!.trim()
         val channelName: String = prefs.getString(DiloSampleAppUtil.PREF_DILO_CHANNEL_NAME, "")!!.trim()
         val episodeName: String = prefs.getString(DiloSampleAppUtil.PREF_DILO_EPISODE_NAME, "")!!.trim()
-        val creatorId:   String = prefs.getString(DiloSampleAppUtil.PREF_DILO_CREATOR_ID, "")!!.trim()
+        val creatorId: String = prefs.getString(DiloSampleAppUtil.PREF_DILO_CREATOR_ID, "")!!.trim()
         val creatorName: String = prefs.getString(DiloSampleAppUtil.PREF_DILO_CREATOR_NAME, "")!!.trim()
-        val duration:       Int = prefs.getString(DiloSampleAppUtil.PREF_DILO_DURATION, "15").safeParseInt(-1)
+        val duration: Int = prefs.getString(DiloSampleAppUtil.PREF_DILO_DURATION, "15").safeParseInt(-1)
         val albumArtUri: String = prefs.getString(DiloSampleAppUtil.PREF_DILO_ALBUM_ART_URI, "")!!.trim()
 
         val productType: RequestParam.ProductType = RequestParam.ProductType.valueOf(
-            prefs.getString(DiloSampleAppUtil.PREF_DILO_PRODUCT_TYPE, RequestParam.ProductType.DILO_PLUS.value.uppercase())!!
+            prefs.getString(
+                DiloSampleAppUtil.PREF_DILO_PRODUCT_TYPE,
+                RequestParam.ProductType.DILO_PLUS.value.uppercase()
+            )!!
         )
         val fillType: RequestParam.FillType = RequestParam.FillType.valueOf(
             prefs.getString(DiloSampleAppUtil.PREF_DILO_FILL_TYPE, RequestParam.FillType.MULTI.value.uppercase())!!
         )
         val adPositionType: RequestParam.AdPositionType = RequestParam.AdPositionType.valueOf(
-            prefs.getString(DiloSampleAppUtil.PREF_DILO_AD_POSITION_TYPE, RequestParam.AdPositionType.PRE.value.uppercase())!!
+            prefs.getString(
+                DiloSampleAppUtil.PREF_DILO_AD_POSITION_TYPE,
+                RequestParam.AdPositionType.PRE.value.uppercase()
+            )!!
         )
 
-        val usePauseInNotification:       Boolean = prefs.getBoolean(DiloSampleAppUtil.PREF_DILO_USE_PAUSE_IN_NOTIFICATION, true)
-        val useProgressBarInNotification: Boolean = prefs.getBoolean(DiloSampleAppUtil.PREF_DILO_USE_PROGRESS_BAR_IN_NOTIFICATION, true)
+        val usePauseInNotification: Boolean =
+            prefs.getBoolean(DiloSampleAppUtil.PREF_DILO_USE_PAUSE_IN_NOTIFICATION, true)
+        val useProgressBarInNotification: Boolean =
+            prefs.getBoolean(DiloSampleAppUtil.PREF_DILO_USE_PROGRESS_BAR_IN_NOTIFICATION, true)
 
         val requestParamBuilder: RequestParam.Builder = RequestParam.Builder(this).apply {
             // 필수 항목
@@ -415,10 +428,10 @@ class ContentActivity : AppCompatActivity(), SurfaceHolder.Callback {
             albumArtUri(albumArtUri) // 앨범 URI 설정 (Automotive)
             notificationContentIntent(notificationIntent) // Notification Click PendingIntent 설정
             notificationContentTitle(                     // Notification Title 설정 (상단 텍스트)
-                prefs.getString(DiloSampleAppUtil.PREF_DILO_NOTIFICATION_TITLE,"")
+                prefs.getString(DiloSampleAppUtil.PREF_DILO_NOTIFICATION_TITLE, "")
             )
             notificationContentText(                      // Notification Text 설정 (하단 텍스트)
-                prefs.getString(DiloSampleAppUtil.PREF_DILO_NOTIFICATION_TEXT,"")
+                prefs.getString(DiloSampleAppUtil.PREF_DILO_NOTIFICATION_TEXT, "")
             )
 
             // 컴패니언 사이즈 수동 설정
@@ -459,7 +472,12 @@ class ContentActivity : AppCompatActivity(), SurfaceHolder.Callback {
             }
         }
 
-        mediaBrowser = MediaBrowserCompat(this, ComponentName(this, DiloMediaBrowserService::class.java), mediaBrowserConnectionCallback, null)
+        mediaBrowser = MediaBrowserCompat(
+            this,
+            ComponentName(this, DiloMediaBrowserService::class.java),
+            mediaBrowserConnectionCallback,
+            null
+        )
         mediaBrowser?.connect()
 
         // 광고 로드
@@ -615,7 +633,11 @@ class ContentActivity : AppCompatActivity(), SurfaceHolder.Callback {
                         log("길이     : ${adInfo?.duration}초")
                         log("광고 수  : ${adInfo?.currentOffset}/${adInfo?.totalCount}")
                         log("컴패니언 : ${if (adInfo?.hasCompanion == true) "있음" else "없음"}")
-                        log("스킵 " + if (adInfo?.skipOffset != 0L) "가능 ${adInfo?.skipOffset?.toDouble().toTimeString()}" else "불가능")
+                        log(
+                            "스킵 " + if (adInfo?.skipOffset != 0L) "가능 ${
+                                adInfo?.skipOffset?.toDouble().toTimeString()
+                            }" else "불가능"
+                        )
                         log("========================================")
                         log("재생이 시작되었습니다")
                         skipOffset = adInfo?.skipOffset ?: 0L
@@ -672,7 +694,7 @@ class ContentActivity : AppCompatActivity(), SurfaceHolder.Callback {
                     DiloUtil.ACTION_ON_TIME_UPDATE -> {
                         val progress: Progress? = intent.getParcelableExtra(DiloUtil.EXTRA_PROGRESS)
 
-                        val percent: Int = progress?.run {seconds * 100 / duration}?.toInt() ?: 0
+                        val percent: Int = progress?.run { seconds * 100 / duration }?.toInt() ?: 0
 
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                             progressBar.setProgress(percent, false)
