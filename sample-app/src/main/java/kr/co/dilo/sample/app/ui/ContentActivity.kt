@@ -84,6 +84,9 @@ class ContentActivity : AppCompatActivity(), SurfaceHolder.Callback {
             }
 
             mediaBrowser?.let {
+                if (!it.isConnected) {
+                    return
+                }
                 if (it.sessionToken == null) {
                     debug("ContentActivity.MediaBrowserCompat.ConnectionCallback.onConnected() :: Session Token is null")
                     return
@@ -130,7 +133,7 @@ class ContentActivity : AppCompatActivity(), SurfaceHolder.Callback {
 
         prefs = androidx.preference.PreferenceManager.getDefaultSharedPreferences(this)
         contentIntent = intent
-        adManager = SampleApplication.instance.adManager
+        adManager = AdManager(this)
         contentWrapper = viewBinding.contentWrapper
 
         log = viewBinding.logArea
@@ -221,7 +224,8 @@ class ContentActivity : AppCompatActivity(), SurfaceHolder.Callback {
 
         contentWrapper.visibility = View.INVISIBLE
         val receiverIntent = Intent(application, diloActionReceiver.javaClass)
-        val receiverPendingIntent: PendingIntent? = PendingIntent.getBroadcast(application, 0, receiverIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_NO_CREATE)
+        val receiverPendingIntent: PendingIntent? =
+            PendingIntent.getBroadcast(application, 0, receiverIntent, DiloUtil.setPendingIntentFlagsWithImmutableFlag(PendingIntent.FLAG_NO_CREATE))
         if (receiverPendingIntent == null) {
             application.registerReceiver(diloActionReceiver, DiloUtil.DILO_INTENT_FILTER)
         }
@@ -368,7 +372,7 @@ class ContentActivity : AppCompatActivity(), SurfaceHolder.Callback {
                 .setAction(Intent.ACTION_MAIN)
                 .addCategory(Intent.CATEGORY_LAUNCHER)
                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            DiloUtil.setPendingIntentFlagsWithImmutableFlag(PendingIntent.FLAG_UPDATE_CURRENT)
         )
 
         // SharedPreferences 에서 값 읽어 옴(테스트 용)
@@ -471,6 +475,12 @@ class ContentActivity : AppCompatActivity(), SurfaceHolder.Callback {
      */
     private fun playContent() {
         debug("ContentActivity.playContent()")
+
+        // 광고 실행중이면 컨텐츠 재생 무시
+        if (adManager.isPlaying) {
+            return
+        }
+
         sendBroadcast(contentPlayIntent)
 
         contentWrapper.visibility = View.VISIBLE
@@ -556,7 +566,7 @@ class ContentActivity : AppCompatActivity(), SurfaceHolder.Callback {
                 when (action) {
                     // 컴패니언 리로드 액션
                     DiloUtil.ACTION_RELOAD_COMPANION ->
-                        if (adManager.reloadCompanion(companionAdView, companionCloseButton) == true) {
+                        if (adManager.reloadCompanion(companionAdView, companionCloseButton)) {
                             adWrapper.visibility = View.VISIBLE
                         }
 

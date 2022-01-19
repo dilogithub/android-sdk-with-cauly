@@ -4,11 +4,8 @@ import android.app.Application
 import androidx.preference.PreferenceManager
 import kr.co.dilo.sample.app.R
 import kr.co.dilo.sample.app.util.debug
-import kr.co.dilo.sdk.AdManager
 
 class SampleApplication : Application() {
-
-    lateinit var adManager: AdManager
 
     override fun onCreate() {
         super.onCreate()
@@ -31,7 +28,6 @@ class SampleApplication : Application() {
 //                    .build()
 //            )
 //        }
-        adManager = AdManager(this)
     }
 
     companion object {

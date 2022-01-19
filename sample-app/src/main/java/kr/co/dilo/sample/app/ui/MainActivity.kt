@@ -24,6 +24,7 @@ import kr.co.dilo.sample.app.util.DiloSampleAppUtil
 import kr.co.dilo.sample.app.util.debug
 import kr.co.dilo.sample.app.util.toTimeString
 import kr.co.dilo.sdk.AdManager
+import kr.co.dilo.sdk.DiloUtil
 import kotlin.system.exitProcess
 
 /**
@@ -48,7 +49,7 @@ class MainActivity : AppCompatActivity() {
 
         // contentActionReceiver 가 등록되어있지 않다면 등록
         val receiverIntent = Intent(this, contentActionReceiver.javaClass)
-        val receiverPendingIntent = PendingIntent.getBroadcast(this, 0, receiverIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_NO_CREATE)
+        val receiverPendingIntent = PendingIntent.getBroadcast(this, 0, receiverIntent, DiloUtil.setPendingIntentFlagsWithImmutableFlag(PendingIntent.FLAG_NO_CREATE))
         if (receiverPendingIntent == null) {
             val filter = IntentFilter().apply {
                 addAction(DiloSampleAppUtil.CONTENT_ACTION_PLAY_END)
@@ -116,7 +117,7 @@ class MainActivity : AppCompatActivity() {
 
         // 앱 강제 종료 허용 여부에 따라 서비스 및 프로세스 종료
         if (!prefs.getBoolean(DiloSampleAppUtil.PREF_DILO_USE_BACKGROUND, true)) {
-            val adManager: AdManager = SampleApplication.instance.adManager
+            val adManager = AdManager(this)
             adManager.release()
             Handler(Looper.getMainLooper())
                 .postDelayed({ exitApplication() }, 500)
