@@ -16,6 +16,7 @@
 
 ## Release Note
 
+* [0.6.8 (2022/02/08)](https://dilogithub.github.io/android/0.6.8.html)
 * [0.6.7 (2022/01/19)](https://dilogithub.github.io/android/0.6.7.html)
 * [0.6.6 (2021/12/01)](https://dilogithub.github.io/android/0.6.6.html)
 * [0.6.5 (2021/09/08)](https://github.com/dilogithub/android-sdk/blob/0.6.5/sample-app/README.md)
