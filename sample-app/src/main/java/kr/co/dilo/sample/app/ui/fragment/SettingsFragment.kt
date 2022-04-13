@@ -63,7 +63,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         initProperty(notificationTitle, DiloSampleAppUtil.PREF_DILO_NOTIFICATION_TITLE, getString(R.string.app_name))
         initProperty(notificationText,DiloSampleAppUtil.PREF_DILO_NOTIFICATION_TEXT, "${getString(R.string.app_name)} 후원하는 광고 재생 중")
         initProperty(adRequestDelay, DiloSampleAppUtil.PREF_DILO_AD_REQUEST_DELAY, "0")
-        initProperty(albumArtUri, DiloSampleAppUtil.PREF_DILO_ALBUM_ART_URI, "http://test.dilo.co.kr:18001/download/icon")
+        initProperty(albumArtUri, DiloSampleAppUtil.PREF_DILO_ALBUM_ART_URI, "https://test-center.dilo.co.kr/download/dilo_icon")
 
         // 숫자 유형만 받도록 설정
         companionWidth?.setOnBindEditTextListener(setInputType(InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL))

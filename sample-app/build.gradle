@@ -4,7 +4,7 @@ plugins {
 }
 
 ext {
-    diloSdkVersion = '0.6.9'
+    diloSdkVersion = '0.6.10'
 }
 
 android {
