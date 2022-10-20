@@ -13,8 +13,8 @@
   - ext.kotlin_version `1.5.10`
   - com.android.tools.build:gradle `4.2.0`
 
-* 카울리SDK 관련 자세한 사항은 아래의 링크를 확인해 주세요.
-[카울리 SDK 가이드](https://github.com/cauly/Android-SDK)
+* 카울리SDK 관련 자세한 사항은 [카울리 SDK 가이드](https://github.com/cauly/Android-SDK)를 확인해 주세요.
+
 
 ---
 
