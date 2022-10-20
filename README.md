@@ -1,4 +1,4 @@
-# Dilo Android SDK
+# Dilo Android SDK with Cauly SDK
 
 * 최신 버전의 SDK 사용을 권장합니다
 
