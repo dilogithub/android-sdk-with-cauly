@@ -24,8 +24,17 @@ allprojects {
             url "s3://maven.dilo.co.kr/release"
             credentials(AwsCredentials) {
                 // 가이드 문서에 기재
-                accessKey "XXXXXXXXXXX"
-                secretKey "YYYYYYYYYYYYYYYYYYYYYYY"
+                accessKey "AKIAWDHIQRYZCM64U2NM"
+                secretKey "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"
+            }
+        }
+
+        // Cauly Maven Repository
+        maven {
+            url "s3://repo.cauly.net/releases"
+            credentials(AwsCredentials) {
+                accessKey "AKIAWRZUK5MFKYVSUOLB"
+                secretKey "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"
             }
         }
 

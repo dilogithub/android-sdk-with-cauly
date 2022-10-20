@@ -16,6 +16,10 @@ import android.widget.*
 import android.widget.MediaController.MediaPlayerControl
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.fsn.cauly.CaulyAdInfo
+import com.fsn.cauly.CaulyAdInfoBuilder
+import com.fsn.cauly.CaulyInterstitialAd
+import com.fsn.cauly.CaulyInterstitialAdListener
 import kr.co.dilo.sample.app.R
 import kr.co.dilo.sample.app.databinding.ActivityContentBinding
 import kr.co.dilo.sample.app.ui.content.DummyContent
@@ -31,7 +35,7 @@ import kr.co.dilo.sdk.model.Progress
 /**
  * 광고와 컨텐츠(샘플 영상)을 보여주는 액티비티
  */
-class ContentActivity : AppCompatActivity(), SurfaceHolder.Callback {
+class ContentActivity : AppCompatActivity(), SurfaceHolder.Callback, CaulyInterstitialAdListener {
 
     // Content
     private lateinit var contentWrapper: ViewGroup
@@ -71,6 +75,10 @@ class ContentActivity : AppCompatActivity(), SurfaceHolder.Callback {
     private lateinit var prefs: SharedPreferences
     private lateinit var viewBinding: ActivityContentBinding
     private lateinit var log: EditText
+
+    // Cauly 전면 광고
+    private var caulyInterstitialAd: CaulyInterstitialAd? = null
+    private var showCaulyInterstitial: Boolean = false
 
     // Automotive 지원을 위한 객체
     private var mediaBrowser: MediaBrowserCompat? = null
@@ -165,6 +173,16 @@ class ContentActivity : AppCompatActivity(), SurfaceHolder.Callback {
         totalTime = viewBinding.totalTime
         adCount = viewBinding.adCount
         playInfoWrapper = viewBinding.playInfo
+
+        // Dilo 광고 없거나 오류시 Cauly 전면 광고 Fallback
+        val adInfo: CaulyAdInfo = CaulyAdInfoBuilder(getString(R.string.cauly_interstitial_app_code))
+            .build()
+
+        caulyInterstitialAd = CaulyInterstitialAd().apply {
+            setAdInfo(adInfo)
+            setInterstialAdListener(this@ContentActivity)
+        }
+
         play.setOnClickListener {
             // 로그 초기화
             log(CLEAR_LOG)
@@ -654,6 +672,8 @@ class ContentActivity : AppCompatActivity(), SurfaceHolder.Callback {
                         Toast.makeText(this@ContentActivity, "광고가 없습니다 (No Fill)", Toast.LENGTH_SHORT).show()
                         adWrapper.visibility = View.INVISIBLE
                         playContent()
+
+                        requestCaulyInterstitialAd()
                     }
 
                     // 스킵 가능한 광고일 때 스킵 가능 시점 도달 액션
@@ -676,6 +696,8 @@ class ContentActivity : AppCompatActivity(), SurfaceHolder.Callback {
                         if (error?.code != DiloError.CODE_TOO_MANY_REQUEST) {
                             playContent()
                         }
+
+                        requestCaulyInterstitialAd()
                     }
 
                     // 광고 진행 사항 업데이트 액션
@@ -754,5 +776,37 @@ class ContentActivity : AppCompatActivity(), SurfaceHolder.Callback {
             editableText?.insert(0, msg)
             debug(msg)
         }
+    }
+
+    fun requestCaulyInterstitialAd() {
+        caulyInterstitialAd?.let {
+            it.requestInterstitialAd(this)
+            showCaulyInterstitial = true
+        }
+    }
+
+    override fun onReceiveInterstitialAd(ad: CaulyInterstitialAd?, isChargeableAd: Boolean) {
+        Toast.makeText(this, "Cauly 전면 광고 대체 실행", Toast.LENGTH_SHORT).show()
+
+        if (showCaulyInterstitial) {
+            ad?.show()
+
+//            Handler(Looper.getMainLooper())
+//                .postDelayed({ ad?.cancel() }, 3000)
+        } else {
+            ad?.cancel()
+        }
+    }
+
+    override fun onFailedToReceiveInterstitialAd(ad: CaulyInterstitialAd?, errorCode: Int, errorMsg: String?) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onClosedInterstitialAd(ad: CaulyInterstitialAd?) {
+        showCaulyInterstitial = false
+    }
+
+    override fun onLeaveInterstitialAd(ad: CaulyInterstitialAd?) {
+        showCaulyInterstitial = false
     }
 }

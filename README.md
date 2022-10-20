@@ -39,22 +39,7 @@ Google Play의 `데이터 보안정책 업데이트`에 따라, 앱 개발사(�
 
 ## Release Note
 
-* [0.6.10 (2022/04/13)](https://dilogithub.github.io/android/0.6.10.html)
-* [0.6.9 (2022/02/14)](https://dilogithub.github.io/android/0.6.9.html)
-* [0.6.8 (2022/02/08)](https://dilogithub.github.io/android/0.6.8.html)
-* [0.6.7 (2022/01/19)](https://dilogithub.github.io/android/0.6.7.html)
-* [0.6.6 (2021/12/01)](https://dilogithub.github.io/android/0.6.6.html)
-* [0.6.5 (2021/09/08)](https://github.com/dilogithub/android-sdk/blob/0.6.5/sample-app/README.md)
-* [0.6.4 (2021/09/06)](https://github.com/dilogithub/android-sdk/blob/0.6.4/sample-app/README.md)
-* [0.6.3 (2021/08/19)](https://github.com/dilogithub/android-sdk/blob/0.6.3/sample-app/README.md)
-* [0.6.2 (2021/08/11)](https://github.com/dilogithub/android-sdk/blob/0.6.2/sample-app/README.md)
-* [0.6.1 (2021/07/29)](https://github.com/dilogithub/android-sdk/blob/0.6.1/sample-app/README.md)
-* [0.6 (2021/06/22)](https://github.com/dilogithub/android-sdk/blob/0.6/sample-app/README.md)
-* [0.5.4 (2021/06/04)](https://github.com/dilogithub/android-sdk/blob/0.5.4/sample-app/README.md)
-* [0.5.3 (2021/05/12)](https://github.com/dilogithub/android-sdk/blob/0.5.3/sample-app/README.md)
-* [0.5.2 (2021/05/10)](https://github.com/dilogithub/android-sdk/blob/0.5.2/sample-app/README.md)
-* [0.5.1 (2021/04/15)](https://github.com/dilogithub/android-sdk/blob/0.5.1/sample-app/README.md)
-* [0.5 (2021/04/01)](https://github.com/dilogithub/android-sdk/blob/0.5/sample-app/README.md)
+* [0.6.10 (2022/04/13)](https://dilogithub.github.io/android/0.6.10-with-cauly.html)
 
 ## 문의
 
