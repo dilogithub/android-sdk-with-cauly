@@ -80,7 +80,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
-    // Cauly 전면 광고
+    // 카울리 전면 광고
     implementation 'com.fsn.cauly:cauly-sdk:3.5.22'
 
     implementation "kr.co.dilo:dilo-sdk:$diloSdkVersion"

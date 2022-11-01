@@ -41,6 +41,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         val adRequestDelay:             EditTextPreference? = findPreference(DiloSampleAppUtil.PREF_DILO_AD_REQUEST_DELAY)
         val sdkVersion:                         Preference? = findPreference(DiloSampleAppUtil.PREF_DILO_SDK_VERSION)
         val albumArtUri:                EditTextPreference? = findPreference(DiloSampleAppUtil.PREF_DILO_ALBUM_ART_URI)
+        val noAdsFallback:                  ListPreference? = findPreference(DiloSampleAppUtil.PREF_DILO_NO_ADS_FALLBACK)
 
         sdkVersion?.summary = "${DiloUtil.DILO_SDK_VERSION} / ${DiloUtil.DILO_SDK_BUILD_TYPE.uppercase()}"
 
@@ -64,6 +65,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         initProperty(notificationText,DiloSampleAppUtil.PREF_DILO_NOTIFICATION_TEXT, "${getString(R.string.app_name)} 후원하는 광고 재생 중")
         initProperty(adRequestDelay, DiloSampleAppUtil.PREF_DILO_AD_REQUEST_DELAY, "0")
         initProperty(albumArtUri, DiloSampleAppUtil.PREF_DILO_ALBUM_ART_URI, "https://test-center.dilo.co.kr/download/dilo_icon")
+        initProperty(noAdsFallback, DiloSampleAppUtil.PREF_DILO_NO_ADS_FALLBACK, "NONE")
 
         // 숫자 유형만 받도록 설정
         companionWidth?.setOnBindEditTextListener(setInputType(InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL))

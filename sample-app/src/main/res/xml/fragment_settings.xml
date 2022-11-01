@@ -215,6 +215,16 @@
             android:summaryOn="예"
             android:summaryOff="아니오"
         />
+
+        <ListPreference
+            android:entries="@array/pref_dilo_no_ads_fallback"
+            android:entryValues="@array/pref_dilo_no_ads_fallback_values"
+            android:key="@string/pref_dilo_no_ads_fallback"
+            android:title="딜로 광고 없을 시 대체 광고 실행"
+            android:defaultValue="NONE"
+            android:layout="@layout/preference_summary_right"
+            tools:summary="없음"
+        />
     </PreferenceCategory>
 
     <!-- 항상 제일 아래 -->

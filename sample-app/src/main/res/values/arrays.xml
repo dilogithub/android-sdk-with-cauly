@@ -47,5 +47,16 @@
         <item>POST</item>
     </string-array>
 
+    <string-array name="pref_dilo_no_ads_fallback">
+        <item>없음</item>
+        <item>카울리 전면 광고</item>
+        <item>카울리 배너 광고</item>
+    </string-array>
+
+    <string-array name="pref_dilo_no_ads_fallback_values">
+        <item>NONE</item>
+        <item>CAULY_INTERSTITIAL</item>
+        <item>CAULY_BANNER</item>
+    </string-array>
 
 </resources>

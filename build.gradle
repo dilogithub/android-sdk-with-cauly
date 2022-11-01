@@ -29,7 +29,7 @@ allprojects {
             }
         }
 
-        // Cauly Maven Repository
+        // 카울리 Maven Repository
         maven {
             url "s3://repo.cauly.net/releases"
             credentials(AwsCredentials) {

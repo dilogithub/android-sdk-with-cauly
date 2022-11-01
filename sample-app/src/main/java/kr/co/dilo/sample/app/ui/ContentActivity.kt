@@ -8,18 +8,12 @@ import android.os.*
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaControllerCompat
-import android.view.SurfaceHolder
-import android.view.SurfaceView
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.*
 import android.widget.MediaController.MediaPlayerControl
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.fsn.cauly.CaulyAdInfo
-import com.fsn.cauly.CaulyAdInfoBuilder
-import com.fsn.cauly.CaulyInterstitialAd
-import com.fsn.cauly.CaulyInterstitialAdListener
+import com.fsn.cauly.*
 import kr.co.dilo.sample.app.R
 import kr.co.dilo.sample.app.databinding.ActivityContentBinding
 import kr.co.dilo.sample.app.ui.content.DummyContent
@@ -35,7 +29,7 @@ import kr.co.dilo.sdk.model.Progress
 /**
  * 광고와 컨텐츠(샘플 영상)을 보여주는 액티비티
  */
-class ContentActivity : AppCompatActivity(), SurfaceHolder.Callback, CaulyInterstitialAdListener {
+class ContentActivity : AppCompatActivity(), SurfaceHolder.Callback, CaulyInterstitialAdListener, CaulyAdViewListener {
 
     // Content
     private lateinit var contentWrapper: ViewGroup
@@ -76,9 +70,12 @@ class ContentActivity : AppCompatActivity(), SurfaceHolder.Callback, CaulyInters
     private lateinit var viewBinding: ActivityContentBinding
     private lateinit var log: EditText
 
-    // Cauly 전면 광고
+    // 카울리 전면 광고
     private var caulyInterstitialAd: CaulyInterstitialAd? = null
     private var showCaulyInterstitial: Boolean = false
+
+    // 카울리 배너 광고
+    private var caulyBannerAd: CaulyAdView? = null
 
     // Automotive 지원을 위한 객체
     private var mediaBrowser: MediaBrowserCompat? = null
@@ -174,13 +171,20 @@ class ContentActivity : AppCompatActivity(), SurfaceHolder.Callback, CaulyInters
         adCount = viewBinding.adCount
         playInfoWrapper = viewBinding.playInfo
 
-        // Dilo 광고 없거나 오류시 Cauly 전면 광고 Fallback
-        val adInfo: CaulyAdInfo = CaulyAdInfoBuilder(getString(R.string.cauly_interstitial_app_code))
-            .build()
-
+        // Dilo 광고 없거나 오류시 카울리 전면 광고 Fallback
         caulyInterstitialAd = CaulyInterstitialAd().apply {
-            setAdInfo(adInfo)
+            setAdInfo(CaulyAdInfoBuilder(getString(R.string.cauly_interstitial_app_code))
+                .build()
+            )
             setInterstialAdListener(this@ContentActivity)
+        }
+
+        // 카울리 배너 광고 닫기 버튼 클릭 이벤트
+        viewBinding.caulyBannerClose.setOnClickListener {
+            caulyBannerAd?.destroy()
+            caulyBannerAd = null
+            viewBinding.caulyBanner.removeAllViews()
+            viewBinding.caulyBannerWrapper.visibility = View.GONE
         }
 
         play.setOnClickListener {
@@ -673,7 +677,8 @@ class ContentActivity : AppCompatActivity(), SurfaceHolder.Callback, CaulyInters
                         adWrapper.visibility = View.INVISIBLE
                         playContent()
 
-                        requestCaulyInterstitialAd()
+                        // 카울리 배너/전면 광고 요청
+                        requestCaulyAd()
                     }
 
                     // 스킵 가능한 광고일 때 스킵 가능 시점 도달 액션
@@ -697,7 +702,8 @@ class ContentActivity : AppCompatActivity(), SurfaceHolder.Callback, CaulyInters
                             playContent()
                         }
 
-                        requestCaulyInterstitialAd()
+                        // 카울리 배너/전면 광고 요청
+                        requestCaulyAd()
                     }
 
                     // 광고 진행 사항 업데이트 액션
@@ -778,35 +784,102 @@ class ContentActivity : AppCompatActivity(), SurfaceHolder.Callback, CaulyInters
         }
     }
 
-    fun requestCaulyInterstitialAd() {
-        caulyInterstitialAd?.let {
-            it.requestInterstitialAd(this)
-            showCaulyInterstitial = true
+    // 카울리 전면/배너 광고 요청 메소드
+    fun requestCaulyAd() {
+        val fallback: String = prefs.getString(DiloSampleAppUtil.PREF_DILO_NO_ADS_FALLBACK, "NONE")!!.trim()
+
+        when(fallback) {
+            "CAULY_INTERSTITIAL" -> {
+                // Dilo 광고 없거나 오류시 카울리 전면 광고 Fallback
+                caulyInterstitialAd?.let {
+                    it.requestInterstitialAd(this)
+                    showCaulyInterstitial = true
+                }
+            }
+
+            "CAULY_BANNER" -> {
+                // Dilo 광고 없거나 오류시 카울리 배너 광고 Fallback
+                caulyBannerAd = CaulyAdView(this).apply {
+                    setAdInfo(CaulyAdInfoBuilder(getString(R.string.cauly_banner_app_code))
+                        .bannerHeight(CaulyAdInfoBuilder.FIXED)
+                        .setBannerSize(300, 250)
+                        .build()
+                    )
+                    setAdViewListener(this@ContentActivity)
+
+                    val rootView = viewBinding.caulyBanner
+                    val params: RelativeLayout.LayoutParams = RelativeLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
+                    )
+                    rootView.removeAllViews()
+                    rootView.addView(this, params)
+                }
+            }
+
+            "NONE" -> {
+                log("카울리 대체 광고 무시됨")
+            }
         }
     }
 
+    //////////////////////////////
+    // 카울리 전면 광고 Callback
+    //////////////////////////////
+    // 카울리 전면 광고의 경우, 광고 수신 후 자동으로 노출되지 않으므로,
+    // 반드시 onReceiveInterstitialAd 메소드에서 노출 처리해 주어야 한다
     override fun onReceiveInterstitialAd(ad: CaulyInterstitialAd?, isChargeableAd: Boolean) {
-        Toast.makeText(this, "Cauly 전면 광고 대체 실행", Toast.LENGTH_SHORT).show()
+        log("카울리 전면 광고 대체 실행")
 
         if (showCaulyInterstitial) {
             ad?.show()
 
-//            Handler(Looper.getMainLooper())
-//                .postDelayed({ ad?.cancel() }, 3000)
+            // n초 후 전면 광고 닫기
+//             Handler(Looper.getMainLooper())
+//                 .postDelayed({ ad?.cancel() }, n * 1000)
         } else {
             ad?.cancel()
         }
     }
 
+    // 전면 광고 수신 실패할 경우 호출됨
     override fun onFailedToReceiveInterstitialAd(ad: CaulyInterstitialAd?, errorCode: Int, errorMsg: String?) {
         TODO("Not yet implemented")
     }
 
+    // 전면 광고가 닫힌 경우 호출됨
     override fun onClosedInterstitialAd(ad: CaulyInterstitialAd?) {
         showCaulyInterstitial = false
     }
 
     override fun onLeaveInterstitialAd(ad: CaulyInterstitialAd?) {
         showCaulyInterstitial = false
+    }
+
+    //////////////////////////////
+    // 카울리 배너 광고 Callback
+    //////////////////////////////
+    // 광고 동작에 대해 별도 처리가 필요 없는 경우,
+    // Activity의 "implements CaulyAdViewListener" 부분 제거하고 생략 가능
+
+    // 광고 수신 성공 & 노출된 경우 호출됨
+    override fun onReceiveAd(adView: CaulyAdView?, isChargeableAd: Boolean) {
+        log("카울리 배너 광고 대체 실행")
+        viewBinding.caulyBannerWrapper.visibility = View.VISIBLE
+    }
+
+    // 배너 광고 수신 실패할 경우 호출됨
+    override fun onFailedToReceiveAd(adView: CaulyAdView?, errorCode: Int, errorMsg: String?) {
+        log("카울리 배너 광고 - [$errorCode] $errorMsg")
+        viewBinding.caulyBannerWrapper.visibility = View.GONE
+    }
+
+    // 광고 배너를 클릭하여 WebView를 통해 랜딩 페이지가 열린 경우 호출됨
+    override fun onShowLandingScreen(adView: CaulyAdView?) {
+        TODO("Not yet implemented")
+    }
+
+    // 광고 배너를 클릭하여 WebView를 통해 열린 랜딩 페이지가 닫힌 경우 호출됨
+    override fun onCloseLandingScreen(adView: CaulyAdView?) {
+        TODO("Not yet implemented")
     }
 }
