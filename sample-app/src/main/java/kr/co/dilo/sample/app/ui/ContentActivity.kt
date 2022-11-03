@@ -181,6 +181,9 @@ class ContentActivity : AppCompatActivity(), SurfaceHolder.Callback, CaulyInters
 
         // 카울리 배너 광고 닫기 버튼 클릭 이벤트
         viewBinding.caulyBannerClose.setOnClickListener {
+            // 배너 광고 닫기 시 완전한 리소스 반환을 위해 아래와 같이 처리 필요
+            //   1. CaulyAdView destory() 호출 및 null 처리
+            //   2. 카울리 배너 Root View의 removeAllViews() 호출
             caulyBannerAd?.destroy()
             caulyBannerAd = null
             viewBinding.caulyBanner.removeAllViews()
